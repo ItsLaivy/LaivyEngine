@@ -37,7 +37,7 @@ public abstract class GameComponent implements Cloneable {
 
     private boolean visible = true;
 
-    private @NotNull ComponentAlign align;
+    private @NotNull GameComponent.Alignment align;
 
     private @Nullable Color color;
     private @Range(from = 0, to = 100) int opacity;
@@ -59,7 +59,7 @@ public abstract class GameComponent implements Cloneable {
         background = new Background(null, 100);
 
         this.game = game;
-        this.align = ComponentAlign.NORMAL;
+        this.align = Alignment.NORMAL;
 
         dimensions.put(null, new Dimension(0, 0));
     }
@@ -110,10 +110,10 @@ public abstract class GameComponent implements Cloneable {
         this.color = color;
     }
 
-    public @NotNull ComponentAlign getAlign() {
+    public @NotNull GameComponent.Alignment getAlign() {
         return align;
     }
-    public void setAlign(@NotNull ComponentAlign align) {
+    public void setAlign(@NotNull GameComponent.Alignment align) {
         this.align = align;
     }
 
@@ -145,19 +145,8 @@ public abstract class GameComponent implements Cloneable {
     public @NotNull Location getLocation() {
         return location;
     }
-
-    @WindowThread
     public void setLocation(@NotNull Location location) {
-        if (!getGame().getGraphics().isWindowThread()) {
-            throw new UnsupportedThreadException("GameWindow");
-        }
-
-        GameWindow window = game.getGraphics().getWindow();
-        boolean contains = window.getComponents().contains(this);
-
-        if (contains) window.getComponents().remove(this);
         this.location = location;
-        if (contains) window.getComponents().add(this);
     }
 
     @ApiStatus.Internal
@@ -265,11 +254,7 @@ public abstract class GameComponent implements Cloneable {
             throw new LaivyEngineException(new IllegalArgumentException("Essa janela inserida não pertence ao jogo desse componente"), "Redimensionar componentes");
         }
 
-        boolean contains = window != null && window.getComponents().contains(this);
-
-        if (contains) window.getComponents().remove(this);
         getDimensions().put(window, dimension);
-        if (contains) window.getComponents().add(this);
     }
 
     /**
@@ -303,20 +288,20 @@ public abstract class GameComponent implements Cloneable {
         }
     }
 
-    public enum ComponentAlign {
+    public enum Alignment {
         NORMAL(new AffineTransform()),
         FLIPPED_VERTICALLY(AffineTransform.getScaleInstance(1, -1)),
         FLIPPED_HORIZONTALLY(AffineTransform.getScaleInstance(-1, 1)),
         FLIPPED_VERTICALLY_HORIZONTALLY(AffineTransform.getScaleInstance(-1, -1)),
         ;
 
-        private final @NotNull AffineTransform transform;
+        private final @Nullable AffineTransform transform;
 
-        ComponentAlign(@NotNull AffineTransform transform) {
+        Alignment(@Nullable AffineTransform transform) {
             this.transform = transform;
         }
 
-        public @NotNull AffineTransform getTransform() {
+        public @Nullable AffineTransform getTransform() {
             return transform;
         }
     }

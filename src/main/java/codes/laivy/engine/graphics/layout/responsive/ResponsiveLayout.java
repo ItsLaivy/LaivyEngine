@@ -1,12 +1,10 @@
 package codes.laivy.engine.graphics.layout.responsive;
 
-import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.responsive.disposition.ResponsiveDisposition;
 import codes.laivy.engine.graphics.window.GameWindow;
-import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -60,70 +58,7 @@ public class ResponsiveLayout extends GameLayout {
                 throw new IllegalStateException("The component '" + component + "' doesn't have the ResponsiveDisposition. All the components needs the ResponsiveDisposition when the ResponsiveLayout is active.");
             }
             ResponsiveDisposition disposition = (ResponsiveDisposition) component.getDisposition();
-
-            // Coordinates
-            Dimension defaultCompDimension = component.getDimension(null);
-
-            Dimension dimension = defaultCompDimension.clone();
-            Location location = component.getLocation().clone();
-            int offsetX = component.getOffsetX();
-            int offsetY = component.getOffsetY();
-
-            if ((getWindow().getAvailableSize().getWidth() != getReferenceSize().getWidth() || getWindow().getAvailableSize().getHeight() != getReferenceSize().getHeight())) {
-                if (isCubicResizing()) {
-                    dimension = new Dimension(
-                            (int) MathUtils.rthree(getReferenceSize().getWidth() + getReferenceSize().getHeight(), defaultCompDimension.getWidth(), getWindow().getAvailableSize().getWidth() + getWindow().getAvailableSize().getHeight()),
-                            (int) MathUtils.rthree(getReferenceSize().getWidth() + getReferenceSize().getHeight(), defaultCompDimension.getHeight(), getWindow().getAvailableSize().getWidth() + getWindow().getAvailableSize().getHeight())
-                    );
-
-                    if (offsetX != 0) {
-                        offsetX = (int) MathUtils.rthree(getReferenceSize().getWidth() + getReferenceSize().getHeight(), offsetX, getWindow().getAvailableSize().getWidth() + getWindow().getAvailableSize().getHeight());
-                    }
-                    if (offsetY != 0) {
-                        offsetY = (int) MathUtils.rthree(getReferenceSize().getHeight() + getReferenceSize().getHeight(), offsetY, getWindow().getAvailableSize().getHeight() + getWindow().getAvailableSize().getHeight());
-                    }
-                } else {
-                    dimension = new Dimension(
-                            (int) MathUtils.rthree(getReferenceSize().getWidth(), defaultCompDimension.getWidth(), getWindow().getAvailableSize().getWidth()),
-                            (int) MathUtils.rthree(getReferenceSize().getHeight(), defaultCompDimension.getHeight(), getWindow().getAvailableSize().getHeight())
-                    );
-
-                    if (offsetX != 0) {
-                        offsetX = (int) MathUtils.rthree(getReferenceSize().getWidth(), offsetX, getWindow().getAvailableSize().getWidth());
-                    } if (offsetY != 0) {
-                        offsetY = (int) MathUtils.rthree(getReferenceSize().getHeight(), offsetY, getWindow().getAvailableSize().getHeight());
-                    }
-                }
-            }
-
-            if (isAutoMove()) {
-                location = new Location(
-                        (int) MathUtils.rthree(getReferenceSize().getWidth(), component.getLocation().getX(), getWindow().getAvailableSize().getWidth()),
-                        (int) MathUtils.rthree(getReferenceSize().getHeight(), component.getLocation().getY(), getWindow().getAvailableSize().getHeight())
-                );
-                location = new Location(offsetX + location.getX(), offsetY + location.getY());
-            }
-            //
-
-            // Hitbox defining
-            component.getScreensLocation().put(getWindow(), location);
-            component.getScreensDimension().put(getWindow(), dimension);
-            //
-
-            // Background
-            Graphics2D graphicsCopy = (Graphics2D) graphics.create();
-
-            disposition.renderBackground(graphicsCopy, location, dimension);
-            graphicsCopy.dispose();
-            //
-
-            // Component rendering
-            graphicsCopy = (Graphics2D) graphics.create();
-
-            graphicsCopy.setColor(component.getColor());
-            disposition.render(graphicsCopy, location, dimension);
-            graphicsCopy.dispose();
-            //
+            disposition.render(graphics);
         }
     }
 

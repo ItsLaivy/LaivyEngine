@@ -1,6 +1,7 @@
 package codes.laivy.engine.coordinates.dimension;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Range;
 
 import java.util.Objects;
 
@@ -21,10 +22,7 @@ public class Dimension implements Cloneable, IDimension {
         return width;
     }
     @Override
-    public void setWidth(int width) {
-        if (height < 0) {
-            throw new IllegalArgumentException("A dimensão não pode ser menor que zero");
-        }
+    public void setWidth(@Range(from = 0, to = Integer.MAX_VALUE) int width) {
         this.width = width;
     }
     @Override
@@ -32,10 +30,7 @@ public class Dimension implements Cloneable, IDimension {
         return height;
     }
     @Override
-    public void setHeight(int height) {
-        if (height < 0) {
-            throw new IllegalArgumentException("A dimensão não pode ser menor que zero");
-        }
+    public void setHeight(@Range(from = 0, to = Integer.MAX_VALUE) int height) {
         this.height = height;
     }
 

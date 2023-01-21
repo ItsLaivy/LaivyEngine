@@ -25,10 +25,8 @@ public interface IDimension {
     default boolean contains(@NotNull Location thisComponent, @NotNull Location otherComponent, @NotNull IDimension dimension) {
         if (this.getTopRight(thisComponent).getY() < dimension.getBottomLeft(otherComponent).getY() || this.getBottomLeft(thisComponent).getY() > dimension.getTopRight(otherComponent).getY()) {
             return false;
-        } if (this.getTopRight(thisComponent).getX() < dimension.getBottomLeft(otherComponent).getX() || this.getBottomLeft(thisComponent).getX() > dimension.getTopRight(otherComponent).getX()) {
-            return false;
         }
-        return true;
+        return this.getTopRight(thisComponent).getX() >= dimension.getBottomLeft(otherComponent).getX() && this.getBottomLeft(thisComponent).getX() <= dimension.getTopRight(otherComponent).getX();
     }
 
     @NotNull

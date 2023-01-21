@@ -19,16 +19,16 @@ public class GameExecutionThread extends GameThread {
             Player player = TestGame.instance().player;
 
             if (getGame().getWindow().getKeyManager().isKeyTyping(KeyEvent.VK_UP)) {
-                player.getLocation().add(0, -player.getSpeed());
+                player.setLocation(player.getLocation().add(0, -player.getSpeed()));
             }
             if (getGame().getWindow().getKeyManager().isKeyTyping(KeyEvent.VK_DOWN)) {
-                player.getLocation().add(0, player.getSpeed());
+                player.setLocation(player.getLocation().add(0, player.getSpeed()));
             }
             if (getGame().getWindow().getKeyManager().isKeyTyping(KeyEvent.VK_LEFT)) {
-                player.getLocation().add(-player.getSpeed(), 0);
+                player.setLocation(player.getLocation().add(-player.getSpeed(), 0));
             }
             if (getGame().getWindow().getKeyManager().isKeyTyping(KeyEvent.VK_RIGHT)) {
-                player.getLocation().add(player.getSpeed(), 0);
+                player.setLocation(player.getLocation().add(player.getSpeed(), 0));
             }
 
             getGame().getGraphics().runWindowThreadLater(() -> {

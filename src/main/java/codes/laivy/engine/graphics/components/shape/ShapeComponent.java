@@ -31,7 +31,6 @@ public abstract class ShapeComponent extends GameComponent {
     }
 
     @Override
-    @WindowThread
     public void setLocation(@NotNull Location location) {
         super.setLocation(location);
         setShape(getShape(location, new Dimension(getShape().getBounds().getSize())));

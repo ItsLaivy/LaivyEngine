@@ -37,7 +37,7 @@ public abstract class Entity {
     }
 
     public @NotNull Location getLocation() {
-        return getComponent().getLocation();
+        return getComponent().getLocation().clone();
     }
     public void setLocation(@NotNull Location location) {
         getComponent().setLocation(location);

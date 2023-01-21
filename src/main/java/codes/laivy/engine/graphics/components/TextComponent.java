@@ -28,6 +28,12 @@ public class TextComponent extends GameComponent {
         this.text = text;
         this.font = font;
         setColor(color);
+
+        // Default dimension value
+        Rectangle2D rectangle = font.getStringBounds(text, new FontRenderContext(getAlign().getTransform(), false, false));
+        Dimension dimension = new Dimension(rectangle.getBounds().width, rectangle.getBounds().height);
+        dimensions.put(null, dimension);
+        //
     }
 
     public @NotNull Dimension getDimension(@NotNull AffineTransform transform) {
@@ -36,6 +42,15 @@ public class TextComponent extends GameComponent {
         int textHeight = (int) textSize.getHeight();
 
         return new Dimension(textWidth, textHeight);
+    }
+
+    @Override
+    public void setAlign(@NotNull Alignment align) {
+        if (align.getTransform() == null) {
+            throw new NullPointerException("This alignment doesn't have a AffineTransform. TextComponents alignments needs to have a AffineTransform");
+        }
+
+        super.setAlign(align);
     }
 
     public void setSize(float size) {
@@ -57,6 +72,12 @@ public class TextComponent extends GameComponent {
     }
     public void setFont(@NotNull Font font) {
         this.font = font;
+
+        // Default dimension value
+        Rectangle2D rectangle = font.getStringBounds(text, new FontRenderContext(getAlign().getTransform(), false, false));
+        Dimension dimension = new Dimension(rectangle.getBounds().width, rectangle.getBounds().height);
+        dimensions.put(null, dimension);
+        //
     }
 
     @Override
