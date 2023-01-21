@@ -8,7 +8,6 @@ import codes.laivy.engine.graphics.layout.responsive.disposition.ResponsiveDispo
 import codes.laivy.engine.graphics.window.GameWindow;
 import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
@@ -62,12 +61,10 @@ public class ResponsiveLayout extends GameLayout {
             }
             ResponsiveDisposition disposition = (ResponsiveDisposition) component.getDisposition();
 
-            Graphics2D gCopy = (Graphics2D) graphics.create();
-
             // Coordinates
             Dimension defaultCompDimension = component.getDimension(null);
 
-            Dimension dimension = component.getDimension(getWindow()).clone();
+            Dimension dimension = defaultCompDimension.clone();
             Location location = component.getLocation().clone();
             int offsetX = component.getOffsetX();
             int offsetY = component.getOffsetY();
@@ -114,28 +111,19 @@ public class ResponsiveLayout extends GameLayout {
             //
 
             // Background
-            Color color = getComponentBackgroundColor(component);
-            if (color != null) {
-                gCopy.setColor(color);
-                gCopy.fill(new Rectangle(location.toPoint(), dimension.toSwing()));
-            }
+            Graphics2D graphicsCopy = (Graphics2D) graphics.create();
+
+            disposition.renderBackground(graphicsCopy, location, dimension);
+            graphicsCopy.dispose();
             //
 
-            gCopy.setColor(component.getColor());
+            // Component rendering
+            graphicsCopy = (Graphics2D) graphics.create();
 
-            disposition.render(gCopy, location, dimension);
-
-            gCopy.dispose();
-        }
-    }
-
-    protected static @Nullable Color getComponentBackgroundColor(@NotNull GameComponent component) {
-        GameComponent.Background background = component.getBackground();
-
-        if (background.getColor() != null) {
-            return new Color(background.getColor().getRed() / 255F, background.getColor().getGreen() / 255F, background.getColor().getBlue() / 255F, background.getOpacity() / 100F);
-        } else {
-            return null;
+            graphicsCopy.setColor(component.getColor());
+            disposition.render(graphicsCopy, location, dimension);
+            graphicsCopy.dispose();
+            //
         }
     }
 

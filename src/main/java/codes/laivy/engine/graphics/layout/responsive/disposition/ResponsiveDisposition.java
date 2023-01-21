@@ -3,10 +3,12 @@ package codes.laivy.engine.graphics.layout.responsive.disposition;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
+import codes.laivy.engine.graphics.components.TextComponent;
 import codes.laivy.engine.graphics.components.shape.RectangleComponent;
 import codes.laivy.engine.graphics.components.shape.ShapeComponent;
 import codes.laivy.engine.graphics.layout.ComponentDisposition;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
+import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -31,6 +33,14 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
      * @param dimension the screen dimension of the component
      */
     public abstract void render(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension);
+
+    public void renderBackground(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
+        Color color = component.getBackground().getFinalColor();
+        if (color != null) {
+            graphics.setColor(color);
+            graphics.fill(new java.awt.Rectangle(location.toPoint(), dimension.toSwing()));
+        }
+    }
 
     // ---/-/--- //
     //   Shape   //
@@ -65,4 +75,23 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
     // ---/-/--- //
     //   Shape   //
     // ---/-/--- //
+
+    public static class Text extends ResponsiveDisposition {
+        public Text(@NotNull TextComponent component, @NotNull ResponsiveLayout layout) {
+            super(component, layout);
+        }
+
+        @Override
+        public @NotNull TextComponent getComponent() {
+            return (TextComponent) super.getComponent();
+        }
+
+        @Override
+        public void render(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
+            Font font = getComponent().getFont().deriveFont(MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), getComponent().getFont().getSize(), getLayout().getWindow().getAvailableSize().getWidth() + getLayout().getWindow().getAvailableSize().getHeight()));
+
+            graphics.setFont(font);
+            graphics.drawString(getComponent().getText(), location.getX(), location.getY());
+        }
+    }
 }

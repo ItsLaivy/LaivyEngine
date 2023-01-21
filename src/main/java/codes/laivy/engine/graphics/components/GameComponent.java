@@ -42,7 +42,7 @@ public abstract class GameComponent implements Cloneable {
     private @Nullable Color color;
     private @Range(from = 0, to = 100) int opacity;
 
-    private final @NotNull Background background;
+    protected @NotNull Background background;
 
     private @Nullable ComponentDisposition disposition;
 
@@ -344,6 +344,18 @@ public abstract class GameComponent implements Cloneable {
         public void setOpacity(@Range(from = 0, to = 100) int opacity) {
             this.opacity = opacity;
         }
+
+        /**
+         * @return the final background color with the opacity applied
+         */
+        public @Nullable Color getFinalColor() {
+            if (getColor() != null) {
+                return new Color(getColor().getRed() / 255F, getColor().getGreen() / 255F, getColor().getBlue() / 255F, getOpacity() / 100F);
+            } else {
+                return null;
+            }
+        }
+
     }
 
 }

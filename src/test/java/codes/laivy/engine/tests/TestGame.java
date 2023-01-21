@@ -24,10 +24,9 @@ public class TestGame extends Game {
 
         getGraphics().setFramesPerSecond(60);
 
-        ResponsiveLayout layout = new ResponsiveLayout(getGraphics().getWindow(), getWindow().getSize());
-        getGraphics().getWindow().setLayout(layout);
+        getGraphics().getWindow().setLayout(new ResponsiveLayout(getGraphics().getWindow(), getWindow().getSize()));
 
-        player = new Player(new Location(getWindow().getSize().getWidth() / 2, getWindow().getSize().getHeight() / 2));
+        player = new Player("ItsLaivy", new Location(getWindow().getSize().getWidth() / 2, getWindow().getSize().getHeight() / 2));
     }
 
     @Override

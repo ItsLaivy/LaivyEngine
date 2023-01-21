@@ -11,6 +11,9 @@ public class ImageComponent extends GameComponent {
 
     private @NotNull ImageAsset asset;
 
+    public ImageComponent(@NotNull Game game, @NotNull Location location, @NotNull ImageAsset asset) {
+        this(game, location, null, 0, 0, asset);
+    }
     public ImageComponent(@NotNull Game game, @NotNull Location location, @Nullable Dimension defaultDimension, int offsetX, int offsetY, @NotNull ImageAsset asset) {
         super(game, location, offsetX, offsetY, 100);
 

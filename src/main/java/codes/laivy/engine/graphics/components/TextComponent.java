@@ -19,6 +19,9 @@ public class TextComponent extends GameComponent {
     private @NotNull String text;
     private @NotNull Font font;
 
+    public TextComponent(@NotNull Game game, @NotNull Location location, @NotNull String text, @NotNull Font font, @Nullable Color color) {
+        this(game, location, 0, 0, 100, text, font, color);
+    }
     public TextComponent(@NotNull Game game, @NotNull Location location, int offsetX, int offsetY, int opacity, @NotNull String text, @NotNull Font font, @Nullable Color color) {
         super(game, location, offsetX, offsetY, opacity);
 
@@ -27,7 +30,7 @@ public class TextComponent extends GameComponent {
         setColor(color);
     }
 
-    public @NotNull Dimension getDimension(AffineTransform transform) {
+    public @NotNull Dimension getDimension(@NotNull AffineTransform transform) {
         Rectangle2D textSize = font.getStringBounds(text, new FontRenderContext(transform, false, false));
         int textWidth = (int) textSize.getWidth();
         int textHeight = (int) textSize.getHeight();
