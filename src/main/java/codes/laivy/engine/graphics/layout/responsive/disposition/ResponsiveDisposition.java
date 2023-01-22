@@ -6,10 +6,7 @@ import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.GameComponent.Alignment;
 import codes.laivy.engine.graphics.components.ImageComponent;
 import codes.laivy.engine.graphics.components.TextComponent;
-import codes.laivy.engine.graphics.components.shape.CircleComponent;
-import codes.laivy.engine.graphics.components.shape.EllipseComponent;
-import codes.laivy.engine.graphics.components.shape.RectangleComponent;
-import codes.laivy.engine.graphics.components.shape.ShapeComponent;
+import codes.laivy.engine.graphics.components.shape.*;
 import codes.laivy.engine.graphics.layout.ComponentDisposition;
 import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
@@ -18,7 +15,7 @@ import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
+import java.awt.geom.RoundRectangle2D;
 
 public abstract class ResponsiveDisposition extends ComponentDisposition {
 
@@ -221,8 +218,8 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         }
 
         @Override
-        public void draw(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
-            graphics.draw(getComponent().getShape(location, dimension));
+        public void draw(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
+            renderingGraphics.draw(getComponent().getShape(location, dimension));
         }
 
         @Override
@@ -262,6 +259,59 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         @Override
         public @NotNull CircleComponent getComponent() {
             return (CircleComponent) super.getComponent();
+        }
+    }
+    public static class RoundRectangle extends Shape {
+        public RoundRectangle(@NotNull RoundRectangleComponent component, @NotNull ResponsiveLayout layout) {
+            super(component, layout);
+        }
+        @Override
+        public @NotNull RoundRectangleComponent getComponent() {
+            return (RoundRectangleComponent) super.getComponent();
+        }
+
+        @Override
+        public void draw(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
+            RoundRectangle2D.Float shape = getComponent().getShape(location, dimension);
+            shape.archeight = calculateHeightOffset(getComponent().getArc().getHeight());
+            shape.arcwidth = calculateHeightOffset(getComponent().getArc().getWidth());
+
+            renderingGraphics.draw(shape);
+        }
+
+        @Override
+        public void renderBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
+            Dimension temp = coordinates.getClientDimension().clone();
+            Location location = coordinates.getClientLocation().clone();
+
+            coordinates.setScreenLocation(location);
+            coordinates.setScreenDimension(temp);
+
+            Color color = component.getBackground().getFinalColor();
+            if (color != null) {
+                backgroundGraphics.setColor(color);
+
+                RoundRectangle2D.Float shape = getComponent().getShape(location, temp);
+                shape.archeight = calculateHeightOffset(getComponent().getArc().getHeight());
+                shape.arcwidth = calculateHeightOffset(getComponent().getArc().getWidth());
+
+                backgroundGraphics.fill(shape);
+            }
+        }
+
+        @Override
+        public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords) {
+            Dimension dimension = coords.getScreenDimension();
+
+            renderingGraphics.transform(alignment.getTransform());
+            if (alignment == Alignment.FLIPPED_HORIZONTALLY) {
+                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - dimension.getWidth());
+            } else if (alignment == Alignment.FLIPPED_VERTICALLY) {
+                coords.getClientLocation().setY(-coords.getScreenLocation().getY() - dimension.getHeight());
+            } else if (alignment == Alignment.FLIPPED_VERTICALLY_HORIZONTALLY) {
+                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - dimension.getWidth());
+                coords.getClientLocation().setY(-coords.getScreenLocation().getY() - dimension.getHeight());
+            }
         }
     }
 

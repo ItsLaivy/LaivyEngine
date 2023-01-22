@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Range;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.RoundRectangle2D;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;

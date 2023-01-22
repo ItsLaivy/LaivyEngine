@@ -14,12 +14,12 @@ public class EllipseComponent extends ShapeComponent {
     }
 
     @Override
-    public @NotNull Ellipse2D getShape(@NotNull Location location, @NotNull Dimension dimension) {
+    public @NotNull Ellipse2D.Float getShape(@NotNull Location location, @NotNull Dimension dimension) {
         return new Ellipse2D.Float(location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight());
     }
     @Override
-    public @NotNull Ellipse2D getShape() {
-        return (Ellipse2D) super.getShape();
+    public @NotNull Ellipse2D.Float getShape() {
+        return (Ellipse2D.Float) super.getShape();
     }
 
     @Override

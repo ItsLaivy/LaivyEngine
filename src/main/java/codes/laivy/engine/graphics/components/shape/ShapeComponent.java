@@ -60,12 +60,7 @@ public abstract class ShapeComponent extends GameComponent {
 
     @Override
     public @NotNull ShapeComponent clone() {
-        ShapeComponent component = (ShapeComponent) super.clone();
-
-        component.setFilled(component.isFilled());
-        component.setShape(component.getShape());
-
-        return component;
+        return (ShapeComponent) super.clone();
     }
 
 }
