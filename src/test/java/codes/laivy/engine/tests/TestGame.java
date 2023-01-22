@@ -4,8 +4,6 @@ import codes.laivy.engine.Game;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import codes.laivy.engine.tests.entity.Entity;
-import codes.laivy.engine.tests.entity.ImagePlayer;
-import codes.laivy.engine.tests.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;

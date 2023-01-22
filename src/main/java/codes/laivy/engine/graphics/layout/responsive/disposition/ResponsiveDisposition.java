@@ -16,6 +16,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class ResponsiveDisposition extends ComponentDisposition {
 
@@ -56,6 +58,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         }
 
         draw(renderingGraphics, coordinates.getClientLocation(), coordinates.getClientDimension());
+
         renderingGraphics.dispose();
         //
 

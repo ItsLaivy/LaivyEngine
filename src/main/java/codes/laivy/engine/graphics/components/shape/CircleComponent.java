@@ -6,6 +6,7 @@ import codes.laivy.engine.coordinates.dimension.Dimension;
 import javafx.scene.shape.Circle;
 import org.jetbrains.annotations.NotNull;
 
+import java.awt.*;
 import java.awt.geom.Ellipse2D;
 
 public class CircleComponent extends EllipseComponent {

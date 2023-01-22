@@ -82,9 +82,6 @@ class GameComponents implements GameWindow.Components {
     @Override
     @WindowThread
     public void add(@NotNull GameComponent component) {
-        if (!getWindow().getGame().getGraphics().isWindowThread()) {
-            throw new UnsupportedThreadException("GameWindow");
-        }
         if (!component.getGame().equals(getWindow().getGame())) {
             throw new IllegalArgumentException("This component's game isn't the same as the Components game");
         }

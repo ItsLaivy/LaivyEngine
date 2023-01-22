@@ -23,6 +23,11 @@ public class EllipseComponent extends ShapeComponent {
     }
 
     @Override
+    public @NotNull Background getBackground() {
+        throw new UnsupportedOperationException("Polygons couldn't have a background!");
+    }
+
+    @Override
     public boolean collides(@NotNull Location location) {
         Location sLoc = getScreenLocation(getGame().getWindow());
         Dimension sDim = getScreenDimension(getGame().getWindow());
