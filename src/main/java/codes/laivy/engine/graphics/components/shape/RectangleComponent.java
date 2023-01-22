@@ -1,16 +1,16 @@
 package codes.laivy.engine.graphics.components.shape;
 
-import codes.laivy.engine.Game;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
+import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
 public class RectangleComponent extends ShapeComponent {
 
-    public RectangleComponent(@NotNull Game game, boolean filled, @NotNull Location location, @NotNull Dimension dimension) {
-        super(game, new Rectangle(location.toPoint(), dimension.toSwing()), filled, location);
+    public RectangleComponent(@NotNull GamePanel panel, boolean filled, @NotNull Location location, @NotNull Dimension dimension) {
+        super(panel, new Rectangle(location.toPoint(), dimension.toSwing()), filled, location);
     }
     @Override
     public @NotNull Rectangle getShape(@NotNull Location location, @NotNull Dimension dimension) {

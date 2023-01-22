@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -22,8 +23,8 @@ public class Asset {
     protected @Nullable ResourceFile file;
     protected @Nullable BufferedImage bufferedImage;
 
-    public Asset(@NotNull URI uri) throws IOException {
-        this(new ResourceFile(uri));
+    public Asset(@NotNull InputStream file) throws IOException {
+        bufferedImage = ImageIO.read(file);
     }
     public Asset(@NotNull ResourceFile file) throws IOException {
         this.file = file;

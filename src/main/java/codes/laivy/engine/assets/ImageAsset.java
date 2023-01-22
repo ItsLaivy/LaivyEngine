@@ -7,13 +7,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.Objects;
 
 public class ImageAsset extends Asset {
 
-    public ImageAsset(@NotNull URI uri) throws IOException {
-        super(uri);
+    public ImageAsset(@NotNull InputStream stream) throws IOException {
+        super(stream);
         if (super.toBuffered() == null) {
             throw new LaivyEngineException(new ResourceNotFoundException("This path file isn't an image"), "ImageAsset's constructor");
         }

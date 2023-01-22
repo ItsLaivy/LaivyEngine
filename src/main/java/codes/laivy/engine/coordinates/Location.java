@@ -6,7 +6,6 @@ import codes.laivy.engine.graphics.window.GameWindow;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -70,7 +69,7 @@ public class Location implements Cloneable {
 
     @WindowThread
     public @NotNull Set<@NotNull GameComponent> getComponents(@NotNull GameWindow window) {
-        return window.getComponents(this);
+        return window.getPanel().getComponents(this);
     }
 
     @NotNull

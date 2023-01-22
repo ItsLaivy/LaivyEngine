@@ -2,8 +2,6 @@ package codes.laivy.engine.exceptions;
 
 import codes.laivy.engine.log.AnsiColor;
 import codes.laivy.engine.log.LoggingUtils;
-import codes.laivy.engine.threads.GameThread;
-import com.sun.corba.se.impl.presentation.rmi.ExceptionHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,8 +37,11 @@ public class LaivyEngineException extends Error {
             LoggingUtils.error("");
             LoggingUtils.error(AnsiColor.RED + "An error ocurred in: \"" + at + AnsiColor.RED + "\"");
             LoggingUtils.error("");
-            LoggingUtils.error(AnsiColor.RED + "Error: \"" + throwable.getClass().getSimpleName() + AnsiColor.RED + "\"");
-            LoggingUtils.error(AnsiColor.RED + "Error: \"" + throwable.getMessage() + AnsiColor.RED + "\"");
+            LoggingUtils.error(AnsiColor.RED + "Error ¹: \"" + throwable.getClass().getSimpleName() + AnsiColor.RED + "\"");
+            LoggingUtils.error(AnsiColor.RED + "Error ²: \"" + throwable.getMessage() + AnsiColor.RED + "\"");
+            if (throwable.getCause() != null) {
+                LoggingUtils.error(AnsiColor.RED + "Error ³: \"" + throwable.getCause().getMessage() + AnsiColor.RED + "\"");
+            }
             LoggingUtils.error("");
         }
 

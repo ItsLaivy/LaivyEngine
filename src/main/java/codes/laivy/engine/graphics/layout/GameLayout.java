@@ -36,7 +36,7 @@ public abstract class GameLayout {
     protected abstract void render(@NotNull Graphics2D graphics);
 
     /**
-     * On a layout rendering, the screen location will be the {@link GameComponent#getScreensLocation()} and the screen dimensions will be the {@link GameComponent#getScreensDimension()}
+     * On a layout rendering, the screen location will be the {@link GameComponent#getScreenLocation()} and the screen dimensions will be the {@link GameComponent#getScreenDimension()}
      * The client location and dimension will be the location/dimension where will be rendered on the screen of the client
      */
     public static class LayoutCoordinates {

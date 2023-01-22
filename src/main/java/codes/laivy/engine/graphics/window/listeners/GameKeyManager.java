@@ -1,6 +1,7 @@
 package codes.laivy.engine.graphics.window.listeners;
 
 import codes.laivy.engine.graphics.window.GameWindow;
+import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.*;
@@ -15,33 +16,33 @@ public class GameKeyManager implements Manager<KeyListener> {
     protected @NotNull KeyListener listener = new KeyAdapter() {
     };
 
-    private final @NotNull GameWindow window;
+    private final @NotNull GamePanel panel;
 
-    public GameKeyManager(@NotNull GameWindow window) {
-        this.window = window;
+    public GameKeyManager(@NotNull GamePanel panel) {
+        this.panel = panel;
 
-        getWindow().getFrame().addKeyListener(new KeyListener() {
+        getPanel().getWindow().getFrame().addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-                getWindow().getKeyManager().getListener().keyTyped(e);
+                getPanel().getKeyManager().getListener().keyTyped(e);
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
-                getWindow().getKeyManager().getKeys().put(e.getKeyCode(), e);
-                getWindow().getKeyManager().getListener().keyPressed(e);
+                getPanel().getKeyManager().getKeys().put(e.getKeyCode(), e);
+                getPanel().getKeyManager().getListener().keyPressed(e);
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                getWindow().getKeyManager().getKeys().remove(e.getKeyCode());
-                getWindow().getKeyManager().getListener().keyReleased(e);
+                getPanel().getKeyManager().getKeys().remove(e.getKeyCode());
+                getPanel().getKeyManager().getListener().keyReleased(e);
             }
         });
     }
 
-    public @NotNull GameWindow getWindow() {
-        return window;
+    public @NotNull GamePanel getPanel() {
+        return panel;
     }
 
     public @NotNull Map<@NotNull Integer, @NotNull KeyEvent> getKeys() {

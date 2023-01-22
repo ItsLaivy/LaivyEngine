@@ -4,23 +4,27 @@ import codes.laivy.engine.annotations.WindowThread;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.exceptions.UnsupportedThreadException;
 import codes.laivy.engine.graphics.components.GameComponent;
+import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.BiFunction;
 
-class GameComponents implements GameWindow.Components {
+public class DefaultGameComponents implements GameWindow.Components {
 
     private final @NotNull Map<@NotNull Location, @NotNull Set<@NotNull GameComponent>> components = new LinkedHashMap<>();
 
-    private final @NotNull GameWindow window;
+    private final @NotNull GamePanel panel;
 
-    public GameComponents(@NotNull GameWindow window) {
-        this.window = window;
+    public DefaultGameComponents(@NotNull GamePanel panel) {
+        this.panel = panel;
     }
 
+    public @NotNull GamePanel getPanel() {
+        return panel;
+    }
     public @NotNull GameWindow getWindow() {
-        return window;
+        return getPanel().getWindow();
     }
 
     @Override
@@ -82,8 +86,8 @@ class GameComponents implements GameWindow.Components {
     @Override
     @WindowThread
     public void add(@NotNull GameComponent component) {
-        if (!component.getGame().equals(getWindow().getGame())) {
-            throw new IllegalArgumentException("This component's game isn't the same as the Components game");
+        if (!component.getPanel().equals(getPanel())) {
+            throw new IllegalArgumentException("This component's panel isn't the same as the Components panel");
         }
 
         Location location = component.getLocation();
@@ -108,8 +112,8 @@ class GameComponents implements GameWindow.Components {
             if (components.get(location).size() == 0) components.remove(location);
         }
 
-        component.getScreensDimension().remove(getWindow());
-        component.getScreensDimension().remove(getWindow());
+        component.setScreenDimension(null);
+        component.setScreenLocation(null);
     }
 
     @Override
@@ -139,6 +143,9 @@ class GameComponents implements GameWindow.Components {
             throw new UnsupportedThreadException("GameWindow");
         }
 
+        for (GameComponent component : this) {
+            component.remove();
+        }
         components.clear();
     }
 

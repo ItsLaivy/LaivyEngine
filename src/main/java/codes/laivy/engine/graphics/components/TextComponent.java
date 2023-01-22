@@ -1,8 +1,8 @@
 package codes.laivy.engine.graphics.components;
 
-import codes.laivy.engine.Game;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
+import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,18 +12,18 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 
 /**
- * Um {@link TextComponent TextComponent} é usado para escrever algo na tela do jogo
+ * A {@link TextComponent TextComponent} is used to write something on the screen.
  */
 public class TextComponent extends GameComponent {
 
     private @NotNull String text;
     private @NotNull Font font;
 
-    public TextComponent(@NotNull Game game, @NotNull Location location, @NotNull String text, @NotNull Font font, @Nullable Color color) {
-        this(game, location, 0, 0, 100, text, font, color);
+    public TextComponent(@NotNull GamePanel panel, @NotNull Location location, @NotNull String text, @NotNull Font font, @Nullable Color color) {
+        this(panel, location, 0, 0, 100, text, font, color);
     }
-    public TextComponent(@NotNull Game game, @NotNull Location location, int offsetX, int offsetY, int opacity, @NotNull String text, @NotNull Font font, @Nullable Color color) {
-        super(game, location, offsetX, offsetY, opacity);
+    public TextComponent(@NotNull GamePanel panel, @NotNull Location location, int offsetX, int offsetY, int opacity, @NotNull String text, @NotNull Font font, @Nullable Color color) {
+        super(panel, location, offsetX, offsetY, opacity);
 
         this.text = text;
         this.font = font;
@@ -31,8 +31,7 @@ public class TextComponent extends GameComponent {
 
         // Default dimension value
         Rectangle2D rectangle = font.getStringBounds(text, new FontRenderContext(getAlign().getTransform(), false, false));
-        Dimension dimension = new Dimension(rectangle.getBounds().width, rectangle.getBounds().height);
-        dimensions.put(null, dimension);
+        this.dimension = new Dimension(rectangle.getBounds().width, rectangle.getBounds().height);
         //
     }
 
@@ -71,8 +70,7 @@ public class TextComponent extends GameComponent {
 
         // Default dimension value
         Rectangle2D rectangle = font.getStringBounds(text, new FontRenderContext(getAlign().getTransform(), false, false));
-        Dimension dimension = new Dimension(rectangle.getBounds().width, rectangle.getBounds().height);
-        dimensions.put(null, dimension);
+        this.dimension = new Dimension(rectangle.getBounds().width, rectangle.getBounds().height);
         //
     }
 

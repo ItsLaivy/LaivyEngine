@@ -1,6 +1,5 @@
 package codes.laivy.engine.graphics.components;
 
-import codes.laivy.engine.Game;
 import codes.laivy.engine.annotations.WindowThread;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
@@ -8,30 +7,24 @@ import codes.laivy.engine.coordinates.dimension.Rectangle;
 import codes.laivy.engine.exceptions.LaivyEngineException;
 import codes.laivy.engine.exceptions.UnsupportedThreadException;
 import codes.laivy.engine.graphics.layout.ComponentDisposition;
-import codes.laivy.engine.graphics.window.GameWindow;
-import org.jetbrains.annotations.ApiStatus;
+import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.RoundRectangle2D;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Objects;
 
-@ApiStatus.Experimental
 public abstract class GameComponent implements Cloneable {
 
-    private final @NotNull Game game;
+    private final @NotNull GamePanel panel;
 
     private @NotNull Location location;
 
-    protected final @NotNull Map<@NotNull GameWindow, @NotNull Location> screenLocation = new LinkedHashMap<>();
-    protected final @NotNull Map<@NotNull GameWindow, @NotNull Dimension> screenDimension = new LinkedHashMap<>();
-
-    protected @NotNull Map<@Nullable GameWindow, @NotNull Dimension> dimensions = new LinkedHashMap<>();
+    protected @Nullable Location screenLocation;
+    protected @Nullable Dimension screenDimension;
+    protected @NotNull Dimension dimension;
 
     private int offsetX;
     private int offsetY;
@@ -47,10 +40,10 @@ public abstract class GameComponent implements Cloneable {
 
     private @Nullable ComponentDisposition disposition;
 
-    public GameComponent(@NotNull Game game, @NotNull Location location) {
-        this(game, location, 0,0, 100);
+    public GameComponent(@NotNull GamePanel panel, @NotNull Location location) {
+        this(panel, location, 0,0, 100);
     }
-    public GameComponent(@NotNull Game game, @NotNull Location location, int offsetX, int offsetY, @Range(from = 0, to = 100) int opacity) {
+    public GameComponent(@NotNull GamePanel panel, @NotNull Location location, int offsetX, int offsetY, @Range(from = 0, to = 100) int opacity) {
         this.location = location;
         this.opacity = opacity;
 
@@ -59,35 +52,47 @@ public abstract class GameComponent implements Cloneable {
 
         background = new Background(null, 100);
 
-        this.game = game;
+        this.panel = panel;
         this.align = Alignment.NORMAL;
 
-        dimensions.put(null, new Dimension(0, 0));
+        dimension = new Dimension(0, 0);
     }
 
     /**
      * @param location the location
      * @return returns true if the location collides with the component
      */
+    @WindowThread
     public boolean collides(@NotNull Location location) {
-        return getHitBox(getGame().getWindow()).contains(location);
+        if (isAtScreen()) {
+            return getHitBox().contains(location);
+        }
+        return false;
     }
 
     @WindowThread
     public boolean isAdded() {
-        if (!getGame().getGraphics().isWindowThread()) {
+        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        return getGame().getGraphics().getWindow().getComponents().contains(this);
+        return getPanel().getEngineComponents().contains(this);
     }
     @WindowThread
     public void add() {
-        if (!getGame().getGraphics().isWindowThread()) {
+        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        getGame().getGraphics().getWindow().getComponents().add(this);
+        getPanel().getEngineComponents().add(this);
+    }
+    @WindowThread
+    public void remove() {
+        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
+            throw new UnsupportedThreadException("GameWindow");
+        }
+
+        getPanel().getEngineComponents().remove(this);
     }
 
     /**
@@ -140,8 +145,8 @@ public abstract class GameComponent implements Cloneable {
         this.offsetY = offsetY;
     }
 
-    public @NotNull Game getGame() {
-        return game;
+    public @NotNull GamePanel getPanel() {
+        return panel;
     }
 
     public @Range(from = 0, to = 100) int getOpacity() {
@@ -158,10 +163,9 @@ public abstract class GameComponent implements Cloneable {
         this.location = location;
     }
 
-    @ApiStatus.Internal
     @WindowThread
-    public @NotNull Map<GameWindow, Location> getScreensLocation() {
-        if (!getGame().getGraphics().isWindowThread()) {
+    public @Nullable Location getScreenLocation() {
+        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
@@ -169,19 +173,17 @@ public abstract class GameComponent implements Cloneable {
     }
 
     @WindowThread
-    public @NotNull Location getScreenLocation(@NotNull GameWindow window) {
-        if (!getGame().getGraphics().isWindowThread()) {
+    public void setScreenLocation(@Nullable Location screenLocation) {
+        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        if (!getScreensLocation().containsKey(window)) throw new LaivyEngineException(new IllegalStateException("Não foi possível encontrar o local deste componente na tela"), "Pega o local de um componente na tela");
-        return getScreensLocation().get(window);
+        this.screenLocation = screenLocation;
     }
 
-    @ApiStatus.Internal
     @WindowThread
-    public @NotNull Map<GameWindow, Dimension> getScreensDimension() {
-        if (!getGame().getGraphics().isWindowThread()) {
+    public @Nullable Dimension getScreenDimension() {
+        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
@@ -189,96 +191,51 @@ public abstract class GameComponent implements Cloneable {
     }
 
     @WindowThread
-    public @NotNull Dimension getScreenDimension(@NotNull GameWindow window) {
-        if (!getGame().getGraphics().isWindowThread()) {
+    public void setScreenDimension(@Nullable Dimension screenDimension) {
+        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
-
-        if (!getScreensDimension().containsKey(window)) throw new LaivyEngineException(new IllegalStateException("Não foi possível encontrar a dimensão deste componente na tela"), "Pega a dimensão de um componente na tela");
-        return getScreensDimension().get(window);
+        
+        this.screenDimension = screenDimension;
     }
 
     @WindowThread
-    public boolean isAtScreen(@NotNull GameWindow window) {
-        if (!getGame().getGraphics().isWindowThread()) {
+    public boolean isAtScreen() {
+        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        return getScreensLocation().containsKey(window) && getScreensDimension().containsKey(window);
+        return getScreenLocation() != null && getScreenDimension() != null;
     }
 
     @WindowThread
-    public @NotNull Rectangle getHitBox(@NotNull GameWindow window) {
-        if (!getGame().getGraphics().isWindowThread()) {
+    public @NotNull Rectangle getHitBox() {
+        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        if (isAtScreen(window)) {
-            Location location = getScreenLocation(window);
-            Dimension dimension = getScreenDimension(window);
-            return new Rectangle(location, dimension);
+        if (isAtScreen()) {
+            return new Rectangle(Objects.requireNonNull(getScreenLocation()), Objects.requireNonNull(getScreenDimension()));
         }
         throw new LaivyEngineException(new IllegalStateException("The component's hitbox doesn't exists at that screen"), "Gets the hitbox of a component on the screen");
     }
 
     @WindowThread
-    public @NotNull Map<@Nullable GameWindow, @NotNull Dimension> getDimensions() {
-        if (!getGame().getGraphics().isWindowThread()) {
+    public @NotNull Dimension getDimension() {
+        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        return dimensions;
+        return dimension;
     }
-
-    /**
-     * Pega as dimensões do componente em uma GameWindow, caso indefinido, será o padrão.
-     *
-     * @param window janela do jogo, nulo caso queira pegar o valor padrão do asset
-     * @return as dimensões do asset naquela tela, ou o padrão caso a tela seja nula ou não esteja definida
-     */
-    @NotNull
+    
     @WindowThread
-    public Dimension getDimension(@Nullable GameWindow window) {
-        if (!getGame().getGraphics().isWindowThread()) {
+    public void setDimension(@NotNull Dimension dimension) {
+        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
-
-        if (!getDimensions().containsKey(window)) {
-            throw new NullPointerException("Couldn't find a dimension for this screen");
-        }
-
-        return getDimensions().get(window);
-    }
-
-    /**
-     * @param window use null para modificar o valor padrão
-     */
-    @WindowThread
-    public void setDimension(@Nullable GameWindow window, @NotNull Dimension dimension) {
-        if (!getGame().getGraphics().isWindowThread()) {
-            throw new UnsupportedThreadException("GameWindow");
-        }
-
-        if (window != null && !window.getGame().equals(game)) {
-            throw new LaivyEngineException(new IllegalArgumentException("Essa janela inserida não pertence ao jogo desse componente"), "Redimensionar componentes");
-        }
-
-        getDimensions().put(window, dimension);
-    }
-
-    /**
-     * Basicamente a mesma coisa de usar {@link #setDimension(GameWindow, Dimension) setDimension(null, Dimension)}
-     *
-     * @see #setDimension(GameWindow, Dimension)
-     * @param dimension a nova dimensão padrão
-     */
-    @WindowThread
-    public void setDefaultDimension(@NotNull Dimension dimension) {
-        if (!getGame().getGraphics().isWindowThread()) {
-            throw new UnsupportedThreadException("GameWindow");
-        }
-
-        setDimension(null, dimension);
+        
+        this.dimension = dimension;
     }
 
     @Override
@@ -286,10 +243,10 @@ public abstract class GameComponent implements Cloneable {
         try {
             GameComponent clone = (GameComponent) super.clone();
             clone.setLocation(clone.getLocation().clone());
-            clone.dimensions = new HashMap<>(clone.dimensions);
+            clone.dimension = clone.dimension.clone();
 
-            clone.screenLocation.clear();
-            clone.screenDimension.clear();
+            clone.screenLocation = null;
+            clone.screenDimension = null;
 
             return clone;
         } catch (CloneNotSupportedException e) {

@@ -1,9 +1,10 @@
-package codes.laivy.engine.tests;
+package codes.laivy.engine.tests.first;
 
 import codes.laivy.engine.Game;
+import codes.laivy.engine.GameState;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
-import codes.laivy.engine.tests.entity.Entity;
+import codes.laivy.engine.tests.first.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -40,6 +41,11 @@ public class TestGame extends Game {
     @Override
     public boolean exception(@NotNull Thread thread, @NotNull Throwable e) {
         return true;
+    }
+
+    @Override
+    public void state(@NotNull GameState state) {
+
     }
 
     @Override

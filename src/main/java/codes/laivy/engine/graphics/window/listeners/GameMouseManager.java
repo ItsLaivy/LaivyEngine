@@ -1,7 +1,7 @@
 package codes.laivy.engine.graphics.window.listeners;
 
 import codes.laivy.engine.coordinates.Location;
-import codes.laivy.engine.graphics.window.GameWindow;
+import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,45 +18,45 @@ public class GameMouseManager implements Manager<MouseListener> {
     protected @NotNull MouseListener listener = new MouseAdapter() {
     };
 
-    private final @NotNull GameWindow window;
+    private final @NotNull GamePanel panel;
 
-    public GameMouseManager(@NotNull GameWindow window) {
-        this.window = window;
+    public GameMouseManager(@NotNull GamePanel panel) {
+        this.panel = panel;
 
-        getWindow().getFrame().addMouseListener(new MouseListener() {
+        getPanel().getWindow().getFrame().addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                getWindow().getMouseManager().getListener().mouseClicked(e);
+                getPanel().getMouseManager().getListener().mouseClicked(e);
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-                getWindow().getMouseManager().setClickLocation(new Location(e.getX(), e.getY()));
-                getWindow().getMouseManager().setPressing(true);
-                getWindow().getMouseManager().getListener().mousePressed(e);
+                getPanel().getMouseManager().setClickLocation(new Location(e.getX(), e.getY()));
+                getPanel().getMouseManager().setPressing(true);
+                getPanel().getMouseManager().getListener().mousePressed(e);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                getWindow().getMouseManager().setClickLocation(null);
-                getWindow().getMouseManager().setPressing(false);
-                getWindow().getMouseManager().getListener().mouseReleased(e);
+                getPanel().getMouseManager().setClickLocation(null);
+                getPanel().getMouseManager().setPressing(false);
+                getPanel().getMouseManager().getListener().mouseReleased(e);
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                getWindow().getMouseManager().getListener().mouseEntered(e);
+                getPanel().getMouseManager().getListener().mouseEntered(e);
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                getWindow().getMouseManager().getListener().mouseExited(e);
+                getPanel().getMouseManager().getListener().mouseExited(e);
             }
         });
     }
 
-    public @NotNull GameWindow getWindow() {
-        return window;
+    public @NotNull GamePanel getPanel() {
+        return panel;
     }
 
     public @Nullable Location getClickLocation() {

@@ -1,10 +1,9 @@
-package codes.laivy.engine.tests;
+package codes.laivy.engine.tests.first;
 
 import codes.laivy.engine.Game;
 import codes.laivy.engine.coordinates.MouseLocation;
 import codes.laivy.engine.graphics.components.GameComponent;
-import codes.laivy.engine.tests.entity.Entity;
-import codes.laivy.engine.tests.entity.Player;
+import codes.laivy.engine.tests.first.entity.Entity;
 import codes.laivy.engine.threads.GameThread;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,16 +20,16 @@ public class GameExecutionThread extends GameThread {
         while (true) {
             Entity player = TestGame.instance().player;
 
-            if (getGame().getWindow().getKeyManager().isKeyTyping(KeyEvent.VK_UP)) {
+            if (getGame().getWindow().getPanel().getKeyManager().isKeyTyping(KeyEvent.VK_UP)) {
                 player.setLocation(player.getLocation().add(0, -player.getSpeed()));
             }
-            if (getGame().getWindow().getKeyManager().isKeyTyping(KeyEvent.VK_DOWN)) {
+            if (getGame().getWindow().getPanel().getKeyManager().isKeyTyping(KeyEvent.VK_DOWN)) {
                 player.setLocation(player.getLocation().add(0, player.getSpeed()));
             }
-            if (getGame().getWindow().getKeyManager().isKeyTyping(KeyEvent.VK_LEFT)) {
+            if (getGame().getWindow().getPanel().getKeyManager().isKeyTyping(KeyEvent.VK_LEFT)) {
                 player.setLocation(player.getLocation().add(-player.getSpeed(), 0));
             }
-            if (getGame().getWindow().getKeyManager().isKeyTyping(KeyEvent.VK_RIGHT)) {
+            if (getGame().getWindow().getPanel().getKeyManager().isKeyTyping(KeyEvent.VK_RIGHT)) {
                 player.setLocation(player.getLocation().add(player.getSpeed(), 0));
             }
 

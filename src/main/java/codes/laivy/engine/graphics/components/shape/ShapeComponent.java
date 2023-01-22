@@ -1,13 +1,11 @@
 package codes.laivy.engine.graphics.components.shape;
 
-import codes.laivy.engine.Game;
 import codes.laivy.engine.annotations.WindowThread;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
-import codes.laivy.engine.graphics.window.GameWindow;
+import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 
@@ -16,18 +14,17 @@ public abstract class ShapeComponent extends GameComponent {
     private Shape shape;
     private boolean filled;
 
-    public ShapeComponent(@NotNull Game game, @NotNull Shape shape, boolean filled, @NotNull Location location) {
-        super(game, location);
+    public ShapeComponent(@NotNull GamePanel panel, @NotNull Shape shape, boolean filled, @NotNull Location location) {
+        super(panel, location);
 
         this.shape = shape;
         this.filled = filled;
 
         this.shape.getBounds().setLocation(location.toPoint());
 
-        // Define o valor da dimensão padrão
-        Dimension dimension = new Dimension(shape.getBounds().width, shape.getBounds().height);
-        dimensions.put(null, dimension);
-        // Define o valor da dimensão padrão
+        // Default dimension
+        this.dimension = new Dimension(shape.getBounds().width, shape.getBounds().height);
+        //
     }
 
     @Override
@@ -37,8 +34,8 @@ public abstract class ShapeComponent extends GameComponent {
     }
     @Override
     @WindowThread
-    public void setDimension(@Nullable GameWindow window, @NotNull Dimension dimension) {
-        super.setDimension(window, dimension);
+    public void setDimension(@NotNull Dimension dimension) {
+        super.setDimension(dimension);
         setShape(getShape(getLocation(), dimension));
     }
 

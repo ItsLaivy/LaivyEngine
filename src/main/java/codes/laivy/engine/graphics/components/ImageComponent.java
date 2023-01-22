@@ -1,9 +1,9 @@
 package codes.laivy.engine.graphics.components;
 
-import codes.laivy.engine.Game;
 import codes.laivy.engine.assets.ImageAsset;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
+import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,11 +11,11 @@ public class ImageComponent extends GameComponent {
 
     private @NotNull ImageAsset asset;
 
-    public ImageComponent(@NotNull Game game, @NotNull Location location, @NotNull ImageAsset asset) {
-        this(game, location, null, 0, 0, asset);
+    public ImageComponent(@NotNull GamePanel panel, @NotNull Location location, @NotNull ImageAsset asset) {
+        this(panel, location, null, 0, 0, asset);
     }
-    public ImageComponent(@NotNull Game game, @NotNull Location location, @Nullable Dimension defaultDimension, int offsetX, int offsetY, @NotNull ImageAsset asset) {
-        super(game, location, offsetX, offsetY, 100);
+    public ImageComponent(@NotNull GamePanel panel, @NotNull Location location, @Nullable Dimension defaultDimension, int offsetX, int offsetY, @NotNull ImageAsset asset) {
+        super(panel, location, offsetX, offsetY, 100);
 
         this.asset = asset;
 
@@ -24,7 +24,7 @@ public class ImageComponent extends GameComponent {
         if (dimension == null) {
             dimension = new Dimension(asset.toBuffered().getWidth(null), asset.toBuffered().getHeight(null));
         }
-        dimensions.put(null, dimension);
+        this.dimension = dimension;
         // Define o valor da dimensão padrão
     }
 

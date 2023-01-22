@@ -2,7 +2,6 @@ package codes.laivy.engine.graphics.window;
 
 import codes.laivy.engine.Game;
 import codes.laivy.engine.annotations.WindowThread;
-import codes.laivy.engine.assets.Asset;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.MouseLocation;
 import codes.laivy.engine.coordinates.dimension.Dimension;
@@ -10,8 +9,6 @@ import codes.laivy.engine.exceptions.LaivyEngineException;
 import codes.laivy.engine.exceptions.UnsupportedThreadException;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
-import codes.laivy.engine.graphics.window.listeners.GameKeyManager;
-import codes.laivy.engine.graphics.window.listeners.GameMouseManager;
 import codes.laivy.engine.graphics.window.swing.GameFrame;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.NotNull;
@@ -25,15 +22,10 @@ public class GameWindow {
 
     private final @NotNull Game game;
 
-    protected final @NotNull GameFrame frame;
-    protected final @NotNull GamePanel panel;
+    protected @NotNull GameFrame frame;
+    protected @NotNull GamePanel panel;
 
     private @Nullable GameLayout layout;
-
-    protected @NotNull Components components;
-
-    private @NotNull GameMouseManager mouseManager;
-    private @NotNull GameKeyManager keyManager;
 
     public GameWindow(@NotNull Game game) {
         this(game, null);
@@ -44,10 +36,6 @@ public class GameWindow {
 
         this.frame = new GameFrame(this);
         this.panel = new GamePanel(this);
-        this.components = new GameComponents(this);
-
-        mouseManager = new GameMouseManager(this);
-        keyManager = new GameKeyManager(this);
 
         getFrame().add(getPanel());
         getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -68,33 +56,24 @@ public class GameWindow {
         return frame;
     }
 
+    public void setFrame(@NotNull GameFrame frame) {
+        this.frame = frame;
+    }
+
     public @NotNull GamePanel getPanel() {
         return panel;
     }
 
-    public @NotNull GameMouseManager getMouseManager() {
-        return mouseManager;
-    }
-
-    public void setMouseManager(@NotNull GameMouseManager mouseManager) {
-        this.mouseManager = mouseManager;
-    }
-
-    public @NotNull GameKeyManager getKeyManager() {
-        return keyManager;
-    }
-
-    public void setKeyManager(@NotNull GameKeyManager keyManager) {
-        this.keyManager = keyManager;
-    }
-
     @WindowThread
-    public @NotNull Components getComponents() {
-        if (!getGame().getGraphics().isWindowThread()) {
+    public void setPanel(@NotNull GamePanel panel) {
+        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        return components;
+        getFrame().remove(getPanel());
+        getPanel().clear();
+        this.panel = panel;
+        getFrame().add(getPanel());
     }
 
     public @NotNull MouseLocation getMouseLocation() {
@@ -184,26 +163,6 @@ public class GameWindow {
         }
 
         return new Dimension(getFrame().getContentPane().getWidth(), getFrame().getContentPane().getHeight());
-    }
-
-    @WindowThread
-    public @NotNull Set<@NotNull GameComponent> getComponents(@NotNull Location location) {
-        if (!getGame().getGraphics().isWindowThread()) {
-            throw new UnsupportedThreadException("GameWindow");
-        }
-
-        Set<GameComponent> set = new LinkedHashSet<>();
-
-        Map<Location, Set<GameComponent>> components = getComponents().map();
-        for (Map.Entry<Location, Set<GameComponent>> map : components.entrySet()) {
-            for (GameComponent component : map.getValue()) {
-                if (component.isAtScreen(this) && component.collides(location)) {
-                    set.add(component);
-                }
-            }
-        }
-
-        return set;
     }
 
     public interface Components extends Iterable<GameComponent> {

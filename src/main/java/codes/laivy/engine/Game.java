@@ -7,6 +7,7 @@ import codes.laivy.engine.graphics.window.GameWindow;
 import codes.laivy.engine.threads.GameThread;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -28,9 +29,9 @@ public abstract class Game {
         });
 
         try {
-            URL resource = Game.class.getClassLoader().getResource("LaivyEngine.png");
-            if (resource != null) {
-                LAIVY_ENGINE_LOGO = new ImageAsset(resource.toURI());
+            InputStream stream = LaivyEngine.class.getClassLoader().getResourceAsStream("LaivyEngine.png");
+            if (stream != null) {
+                LAIVY_ENGINE_LOGO = new ImageAsset(stream);
             } else {
                 throw new NullPointerException("Couldn't find LaivyEngine's logo resource");
             }
@@ -85,6 +86,15 @@ public abstract class Game {
      */
     public abstract boolean exception(@NotNull Thread thread, @NotNull Throwable e);
 
+    /**
+     * This method is called when the game state is changed
+     *
+     * @since 1.0 build 0 (02/07/2022)
+     * @author ItsLaivy
+     *
+     */
+    public abstract void state(@NotNull GameState state);
+
     public abstract @NotNull String getName();
 
     /*
@@ -107,14 +117,14 @@ public abstract class Game {
         } GAMES.put(getName(), this);
         //
 
-        state = GameState.GRAPHICS_INITIALIZING;
+        setState(GameState.GRAPHICS_INITIALIZING);
         graphics = new GameGraphics(this, new GameWindow(this));
         graphics.getWindow().getFrame().setIcon(LAIVY_ENGINE_LOGO);
 
-        state = GameState.GAME_INITIALIZING;
+        setState(GameState.GAME_INITIALIZING);
         init();
 
-        state = GameState.GAME_LOADED;
+        setState(GameState.GAME_LOADED);
 
         getGraphics().getWindow().setVisible(true);
     }
@@ -125,6 +135,10 @@ public abstract class Game {
 
     public @NotNull GameState getState() {
         return state;
+    }
+    public void setState(@NotNull GameState state) {
+        this.state = state;
+        state(state);
     }
 
     public @NotNull GameGraphics getGraphics() {

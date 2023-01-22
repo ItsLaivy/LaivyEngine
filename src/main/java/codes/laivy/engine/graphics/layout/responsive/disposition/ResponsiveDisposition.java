@@ -16,8 +16,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
-import java.util.LinkedList;
-import java.util.List;
 
 public abstract class ResponsiveDisposition extends ComponentDisposition {
 
@@ -63,8 +61,8 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         //
 
         // Hitbox defining
-        getComponent().getScreensLocation().put(getLayout().getWindow(), coordinates.getScreenLocation());
-        getComponent().getScreensDimension().put(getLayout().getWindow(), coordinates.getScreenDimension());
+        getComponent().setScreenLocation(coordinates.getScreenLocation());
+        getComponent().setScreenDimension(coordinates.getScreenDimension());
         //
     }
 
@@ -74,11 +72,11 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
      */
     public @NotNull GameLayout.LayoutCoordinates resolutionFix() {
         GameWindow window = getLayout().getWindow();
-        Dimension defaultCompDimension = component.getDimension(null);
+        Dimension defaultDim = component.getDimension().clone();
 
         GameLayout.LayoutCoordinates coordinates = new GameLayout.LayoutCoordinates(
                 getComponent().getLocation().clone(),
-                defaultCompDimension.clone()
+                defaultDim.clone()
         );
 
         int offsetX = calculateWidthOffset(component.getOffsetX());
@@ -87,13 +85,13 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         if ((window.getAvailableSize().getWidth() != getLayout().getReferenceSize().getWidth() || window.getAvailableSize().getHeight() != getLayout().getReferenceSize().getHeight())) {
             if (getLayout().isCubicResizing()) {
                 coordinates.setDimension(new Dimension(
-                        (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), defaultCompDimension.getWidth(), window.getAvailableSize().getWidth() + window.getAvailableSize().getHeight()),
-                        (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), defaultCompDimension.getHeight(), window.getAvailableSize().getWidth() + window.getAvailableSize().getHeight())
+                        (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), defaultDim.getWidth(), window.getAvailableSize().getWidth() + window.getAvailableSize().getHeight()),
+                        (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), defaultDim.getHeight(), window.getAvailableSize().getWidth() + window.getAvailableSize().getHeight())
                 ));
             } else {
                 coordinates.setDimension(new Dimension(
-                        (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), defaultCompDimension.getWidth(), window.getAvailableSize().getWidth()),
-                        (int) MathUtils.rthree(getLayout().getReferenceSize().getHeight(), defaultCompDimension.getHeight(), window.getAvailableSize().getHeight())
+                        (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), defaultDim.getWidth(), window.getAvailableSize().getWidth()),
+                        (int) MathUtils.rthree(getLayout().getReferenceSize().getHeight(), defaultDim.getHeight(), window.getAvailableSize().getHeight())
                 ));
             }
         }
@@ -190,6 +188,17 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
             super(component, layout);
         }
 
+        public abstract void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension);
+        public abstract void shape(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension);
+
+        @Override
+        public final void draw(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
+            shape(renderingGraphics, location, dimension);
+            if (getComponent().isFilled()) {
+                fill(renderingGraphics, location, dimension);
+            }
+        }
+
         @Override
         public @NotNull ShapeComponent getComponent() {
             return (ShapeComponent) super.getComponent();
@@ -201,12 +210,17 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         }
 
         @Override
+        public void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
+
+        }
+
+        @Override
         public @NotNull RectangleComponent getComponent() {
             return (RectangleComponent) super.getComponent();
         }
 
         @Override
-        public void draw(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
+        public void shape(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
             graphics.draw(getComponent().getShape(location, dimension));
         }
     }
@@ -221,7 +235,12 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         }
 
         @Override
-        public void draw(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
+        public void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
+            renderingGraphics.fill(getComponent().getShape(location, dimension));
+        }
+
+        @Override
+        public void shape(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
             renderingGraphics.draw(getComponent().getShape(location, dimension));
         }
 
@@ -274,12 +293,21 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         }
 
         @Override
-        public void draw(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
+        public void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
+            renderingGraphics.fill(shape(location, dimension));
+        }
+
+        @Override
+        public void shape(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
+            renderingGraphics.draw(shape(location, dimension));
+        }
+
+        private @NotNull RoundRectangle2D.Float shape(@NotNull Location location, @NotNull Dimension dimension) {
             RoundRectangle2D.Float shape = getComponent().getShape(location, dimension);
             shape.archeight = calculateHeightOffset(getComponent().getArc().getHeight());
             shape.arcwidth = calculateHeightOffset(getComponent().getArc().getWidth());
 
-            renderingGraphics.draw(shape);
+            return shape;
         }
 
         @Override
@@ -334,7 +362,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
 
         @Override
         public void draw(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
-            Font font = getComponent().getFont().deriveFont((float) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), getComponent().getFont().getSize(), getLayout().getWindow().getAvailableSize().getWidth() + getLayout().getWindow().getAvailableSize().getHeight()));
+            Font font = getComponent().getFont().deriveFont((float) calculateWidthOffset(getComponent().getFont().getSize()));
 
             graphics.setFont(font);
             graphics.drawString(getComponent().getText(), location.getX(), location.getY());
@@ -389,7 +417,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
 
         @Override
         public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords) {
-            Dimension dimension = getComponent().getDimension(null);
+            Dimension dimension = getComponent().getDimension();
 
             renderingGraphics.transform(alignment.getTransform());
             if (alignment == Alignment.FLIPPED_HORIZONTALLY) {
