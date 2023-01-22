@@ -21,12 +21,12 @@ public abstract class Entity {
     private @Range(from = 0, to = 20) int speed = 10;
 
     public Entity(@NotNull Location location, @NotNull Color color) {
-        this.component = new EllipseComponent(TestGame.instance(), true, location, new Dimension(35, 35));
+        this.component = new EllipseComponent(TestGame.instance(), true, location, new Dimension(35, 100));
         this.component.setColor(color);
         this.component.getBackground().setColor(Color.WHITE);
         this.component.getBackground().setOpacity(20);
         this.component.setDisposition(new ResponsiveDisposition.Ellipse((EllipseComponent) this.component, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getLayout())));
-        //this.component.setAlign(GameComponent.Alignment.FLIPPED_VERTICALLY_HORIZONTALLY);
+        this.component.setAlign(GameComponent.Alignment.FLIPPED_VERTICALLY_HORIZONTALLY);
         getSquare().getGame().getGraphics().runWindowThreadLater(component::add);
     }
 

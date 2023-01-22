@@ -226,10 +226,31 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
 
         @Override
         public void renderBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
-            Color color = getComponent().getBackground().getFinalColor();
+            Dimension temp = coordinates.getClientDimension().clone();
+            Location location = coordinates.getClientLocation().clone();
+
+            coordinates.setScreenLocation(location);
+            coordinates.setScreenDimension(temp);
+
+            Color color = component.getBackground().getFinalColor();
             if (color != null) {
                 backgroundGraphics.setColor(color);
-                backgroundGraphics.fill(getComponent().getShape(coordinates.getClientLocation(), coordinates.getClientDimension()));
+                backgroundGraphics.fill(getComponent().getShape(location, temp));
+            }
+        }
+
+        @Override
+        public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords) {
+            Dimension dimension = coords.getScreenDimension();
+
+            renderingGraphics.transform(alignment.getTransform());
+            if (alignment == Alignment.FLIPPED_HORIZONTALLY) {
+                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - dimension.getWidth());
+            } else if (alignment == Alignment.FLIPPED_VERTICALLY) {
+                coords.getClientLocation().setY(-coords.getScreenLocation().getY() - dimension.getHeight());
+            } else if (alignment == Alignment.FLIPPED_VERTICALLY_HORIZONTALLY) {
+                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - dimension.getWidth());
+                coords.getClientLocation().setY(-coords.getScreenLocation().getY() - dimension.getHeight());
             }
         }
     }
