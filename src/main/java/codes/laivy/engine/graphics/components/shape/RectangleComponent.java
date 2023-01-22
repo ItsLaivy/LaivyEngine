@@ -13,8 +13,16 @@ public class RectangleComponent extends ShapeComponent {
         super(game, new Rectangle(location.toPoint(), dimension.toSwing()), filled, location);
     }
     @Override
-    public @NotNull Shape getShape(@NotNull Location location, @NotNull Dimension dimension) {
+    public @NotNull Rectangle getShape(@NotNull Location location, @NotNull Dimension dimension) {
         return new Rectangle(location.toPoint(), dimension.toSwing());
     }
+    @Override
+    public @NotNull Rectangle getShape() {
+        return (Rectangle) super.getShape();
+    }
 
+    @Override
+    public @NotNull RectangleComponent clone() {
+        return (RectangleComponent) super.clone();
+    }
 }

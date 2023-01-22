@@ -3,9 +3,12 @@ package codes.laivy.engine.tests;
 import codes.laivy.engine.Game;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
+import codes.laivy.engine.tests.entity.Entity;
 import codes.laivy.engine.tests.entity.ImagePlayer;
 import codes.laivy.engine.tests.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.awt.*;
 
 public class TestGame extends Game {
 
@@ -17,7 +20,7 @@ public class TestGame extends Game {
         return (TestGame) getGame("Nome Teste");
     }
 
-    Player player;
+    Entity player;
 
     @Override
     public void init() {
@@ -27,7 +30,9 @@ public class TestGame extends Game {
 
         getGraphics().getWindow().setLayout(new ResponsiveLayout(getGraphics().getWindow(), getWindow().getSize()));
 
-        player = new ImagePlayer("ItsLaivy", Game.LAIVY_ENGINE_LOGO, new Location(getWindow().getSize().getWidth() / 2, getWindow().getSize().getHeight() / 2));
+        //player = new ImagePlayer("ItsLaivy", Game.LAIVY_ENGINE_LOGO, new Location(getWindow().getSize().getWidth() / 2, getWindow().getSize().getHeight() / 2));
+        player = new Entity(new Location(getWindow().getSize().getWidth() / 2, getWindow().getSize().getHeight() / 2), Color.RED) {
+        };
     }
 
     @Override

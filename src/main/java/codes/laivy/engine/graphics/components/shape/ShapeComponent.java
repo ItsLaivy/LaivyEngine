@@ -51,7 +51,6 @@ public abstract class ShapeComponent extends GameComponent {
         this.filled = filled;
     }
 
-
     public @NotNull Shape getShape() {
         return shape;
     }

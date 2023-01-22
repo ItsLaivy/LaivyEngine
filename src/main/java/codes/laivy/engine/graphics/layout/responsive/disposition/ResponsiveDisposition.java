@@ -6,6 +6,7 @@ import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.GameComponent.Alignment;
 import codes.laivy.engine.graphics.components.ImageComponent;
 import codes.laivy.engine.graphics.components.TextComponent;
+import codes.laivy.engine.graphics.components.shape.EllipseComponent;
 import codes.laivy.engine.graphics.components.shape.RectangleComponent;
 import codes.laivy.engine.graphics.components.shape.ShapeComponent;
 import codes.laivy.engine.graphics.layout.ComponentDisposition;
@@ -16,6 +17,7 @@ import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 
 public abstract class ResponsiveDisposition extends ComponentDisposition {
 
@@ -205,6 +207,30 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         @Override
         public void draw(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
             graphics.draw(getComponent().getShape(location, dimension));
+        }
+    }
+    public static class Ellipse extends Shape {
+        public Ellipse(@NotNull EllipseComponent component, @NotNull ResponsiveLayout layout) {
+            super(component, layout);
+        }
+
+        @Override
+        public @NotNull EllipseComponent getComponent() {
+            return (EllipseComponent) super.getComponent();
+        }
+
+        @Override
+        public void draw(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
+            graphics.draw(getComponent().getShape(location, dimension));
+        }
+
+        @Override
+        public void renderBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
+            Color color = getComponent().getBackground().getFinalColor();
+            if (color != null) {
+                backgroundGraphics.setColor(color);
+                backgroundGraphics.fill(getComponent().getShape(coordinates.getClientLocation(), coordinates.getClientDimension()));
+            }
         }
     }
 

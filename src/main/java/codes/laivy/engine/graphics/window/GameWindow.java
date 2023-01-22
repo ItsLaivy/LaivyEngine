@@ -2,6 +2,7 @@ package codes.laivy.engine.graphics.window;
 
 import codes.laivy.engine.Game;
 import codes.laivy.engine.annotations.WindowThread;
+import codes.laivy.engine.assets.Asset;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.MouseLocation;
 import codes.laivy.engine.coordinates.dimension.Dimension;
@@ -196,7 +197,7 @@ public class GameWindow {
         Map<Location, Set<GameComponent>> components = getComponents().map();
         for (Map.Entry<Location, Set<GameComponent>> map : components.entrySet()) {
             for (GameComponent component : map.getValue()) {
-                if (component.isAtScreen(this) && component.getHitBox(this).contains(location)) {
+                if (component.isAtScreen(this) && component.collides(location)) {
                     set.add(component);
                 }
             }

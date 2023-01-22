@@ -64,6 +64,14 @@ public abstract class GameComponent implements Cloneable {
         dimensions.put(null, new Dimension(0, 0));
     }
 
+    /**
+     * @param location the location
+     * @return returns true if the location collides with the component
+     */
+    public boolean collides(@NotNull Location location) {
+        return getHitBox(getGame().getWindow()).contains(location);
+    }
+
     @WindowThread
     public boolean isAdded() {
         if (!getGame().getGraphics().isWindowThread()) {

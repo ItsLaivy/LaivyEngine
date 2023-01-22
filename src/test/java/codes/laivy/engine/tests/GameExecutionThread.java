@@ -3,6 +3,7 @@ package codes.laivy.engine.tests;
 import codes.laivy.engine.Game;
 import codes.laivy.engine.coordinates.MouseLocation;
 import codes.laivy.engine.graphics.components.GameComponent;
+import codes.laivy.engine.tests.entity.Entity;
 import codes.laivy.engine.tests.entity.Player;
 import codes.laivy.engine.threads.GameThread;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,7 @@ public class GameExecutionThread extends GameThread {
     @Override
     public void run() {
         while (true) {
-            Player player = TestGame.instance().player;
+            Entity player = TestGame.instance().player;
 
             if (getGame().getWindow().getKeyManager().isKeyTyping(KeyEvent.VK_UP)) {
                 player.setLocation(player.getLocation().add(0, -player.getSpeed()));

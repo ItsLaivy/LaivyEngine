@@ -109,6 +109,7 @@ public abstract class Game {
 
         state = GameState.GRAPHICS_INITIALIZING;
         graphics = new GameGraphics(this, new GameWindow(this));
+        graphics.getWindow().getFrame().setIcon(LAIVY_ENGINE_LOGO);
 
         state = GameState.GAME_INITIALIZING;
         init();
