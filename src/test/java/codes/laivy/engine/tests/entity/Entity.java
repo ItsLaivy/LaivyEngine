@@ -3,6 +3,7 @@ package codes.laivy.engine.tests.entity;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
+import codes.laivy.engine.graphics.components.shape.CircleComponent;
 import codes.laivy.engine.graphics.components.shape.EllipseComponent;
 import codes.laivy.engine.graphics.components.shape.RectangleComponent;
 import codes.laivy.engine.graphics.components.shape.ShapeComponent;
@@ -21,12 +22,12 @@ public abstract class Entity {
     private @Range(from = 0, to = 20) int speed = 10;
 
     public Entity(@NotNull Location location, @NotNull Color color) {
-        this.component = new EllipseComponent(TestGame.instance(), true, location, new Dimension(35, 100));
+        this.component = new CircleComponent(TestGame.instance(), true, location, 35);
         this.component.setColor(color);
         this.component.getBackground().setColor(Color.WHITE);
         this.component.getBackground().setOpacity(20);
-        this.component.setDisposition(new ResponsiveDisposition.Ellipse((EllipseComponent) this.component, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getLayout())));
-        this.component.setAlign(GameComponent.Alignment.FLIPPED_VERTICALLY_HORIZONTALLY);
+        this.component.setDisposition(new ResponsiveDisposition.Circle((CircleComponent) this.component, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getLayout())));
+        this.component.setAlign(GameComponent.Alignment.FLIPPED_VERTICALLY);
         getSquare().getGame().getGraphics().runWindowThreadLater(component::add);
     }
 

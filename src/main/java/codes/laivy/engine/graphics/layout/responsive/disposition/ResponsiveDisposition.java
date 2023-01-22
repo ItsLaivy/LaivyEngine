@@ -6,6 +6,7 @@ import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.GameComponent.Alignment;
 import codes.laivy.engine.graphics.components.ImageComponent;
 import codes.laivy.engine.graphics.components.TextComponent;
+import codes.laivy.engine.graphics.components.shape.CircleComponent;
 import codes.laivy.engine.graphics.components.shape.EllipseComponent;
 import codes.laivy.engine.graphics.components.shape.RectangleComponent;
 import codes.laivy.engine.graphics.components.shape.ShapeComponent;
@@ -252,6 +253,15 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
                 coords.getClientLocation().setX(-coords.getScreenLocation().getX() - dimension.getWidth());
                 coords.getClientLocation().setY(-coords.getScreenLocation().getY() - dimension.getHeight());
             }
+        }
+    }
+    public static class Circle extends Ellipse {
+        public Circle(@NotNull CircleComponent component, @NotNull ResponsiveLayout layout) {
+            super(component, layout);
+        }
+        @Override
+        public @NotNull CircleComponent getComponent() {
+            return (CircleComponent) super.getComponent();
         }
     }
 
