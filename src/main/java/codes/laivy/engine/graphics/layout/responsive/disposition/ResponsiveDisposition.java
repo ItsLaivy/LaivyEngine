@@ -12,11 +12,13 @@ import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import codes.laivy.engine.graphics.window.GameWindow;
 import codes.laivy.engine.utils.MathUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
+@ApiStatus.Experimental
 public abstract class ResponsiveDisposition extends ComponentDisposition {
 
     private final @NotNull ResponsiveLayout layout;
@@ -50,6 +52,10 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
 
         // Component rendering
         renderingGraphics.setColor(getComponent().getColor());
+
+        if (getComponent().getStroke() != null) {
+            renderingGraphics.setStroke(getComponent().getStroke());
+        }
 
         if (getComponent().getOpacity() != 100) {
             renderingGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getComponent().getOpacity() / 100F));

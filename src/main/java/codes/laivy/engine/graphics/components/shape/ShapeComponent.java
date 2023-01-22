@@ -11,7 +11,7 @@ import java.awt.*;
 
 public abstract class ShapeComponent extends GameComponent {
 
-    private Shape shape;
+    private @NotNull Shape shape;
     private boolean filled;
 
     public ShapeComponent(@NotNull GamePanel panel, @NotNull Shape shape, boolean filled, @NotNull Location location) {

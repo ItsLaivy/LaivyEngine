@@ -36,6 +36,8 @@ public abstract class GameComponent implements Cloneable {
     private @Nullable Color color;
     private @Range(from = 0, to = 100) int opacity;
 
+    protected @Nullable Stroke stroke = new BasicStroke(1);
+
     protected @NotNull Background background;
 
     private @Nullable ComponentDisposition disposition;
@@ -56,6 +58,17 @@ public abstract class GameComponent implements Cloneable {
         this.align = Alignment.NORMAL;
 
         dimension = new Dimension(0, 0);
+    }
+
+    public @Nullable Stroke getStroke() {
+        return stroke;
+    }
+
+    public void setStroke(@Range(from = 1, to = Integer.MAX_VALUE) int width) {
+        setStroke(new BasicStroke(width));
+    }
+    public void setStroke(@Nullable Stroke stroke) {
+        this.stroke = stroke;
     }
 
     /**

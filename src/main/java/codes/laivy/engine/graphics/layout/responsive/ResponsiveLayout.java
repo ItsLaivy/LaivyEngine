@@ -5,10 +5,12 @@ import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.responsive.disposition.ResponsiveDisposition;
 import codes.laivy.engine.graphics.window.GameWindow;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
+@ApiStatus.Experimental
 public class ResponsiveLayout extends GameLayout {
 
     private final @NotNull Dimension referenceSize;
@@ -31,6 +33,9 @@ public class ResponsiveLayout extends GameLayout {
 
     /**
      * The cubic resizing means that the components will maintain their cubic dimensions on every dimension
+     * <br><br>
+     * <storng>Note:</storng> The cubic resizing mode isn't recommended for screens that contains components with a high location/dimension precision needed
+     *
      * @return true if the cubic resizing is active
      */
     public boolean isCubicResizing() {

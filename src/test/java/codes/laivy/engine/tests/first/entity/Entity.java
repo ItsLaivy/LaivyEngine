@@ -19,12 +19,13 @@ public abstract class Entity {
     private @Range(from = 0, to = 20) int speed = 10;
 
     public Entity(@NotNull Location location, @NotNull Color color) {
-        this.component = new RoundRectangleComponent(TestGame.instance().getWindow().getPanel(), true, location, new Dimension(150, 150), new Dimension(50, 50));
+        this.component = new RoundRectangleComponent(TestGame.instance().getWindow().getPanel(), false, location, new Dimension(150, 150), new Dimension(50, 50));
         this.component.setColor(color);
         this.component.getBackground().setColor(Color.WHITE);
         this.component.getBackground().setOpacity(20);
+        //this.component.setStroke(10);
         this.component.setDisposition(new ResponsiveDisposition.RoundRectangle((RoundRectangleComponent) this.component, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getLayout())));
-        this.component.setAlign(GameComponent.Alignment.FLIPPED_VERTICALLY_HORIZONTALLY);
+        //this.component.setAlign(GameComponent.Alignment.FLIPPED_VERTICALLY_HORIZONTALLY);
         getSquare().getPanel().getWindow().getGame().getGraphics().runWindowThreadLater(component::add);
     }
 

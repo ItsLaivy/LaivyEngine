@@ -1,6 +1,5 @@
 package codes.laivy.engine.graphics.components.shape;
 
-import codes.laivy.engine.Game;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
