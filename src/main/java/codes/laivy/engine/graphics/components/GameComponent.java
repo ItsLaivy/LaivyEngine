@@ -295,13 +295,13 @@ public abstract class GameComponent implements Cloneable {
         FLIPPED_VERTICALLY_HORIZONTALLY(AffineTransform.getScaleInstance(-1, -1)),
         ;
 
-        private final @Nullable AffineTransform transform;
+        private final @NotNull AffineTransform transform;
 
-        Alignment(@Nullable AffineTransform transform) {
+        Alignment(@NotNull AffineTransform transform) {
             this.transform = transform;
         }
 
-        public @Nullable AffineTransform getTransform() {
+        public @NotNull AffineTransform getTransform() {
             return transform;
         }
     }

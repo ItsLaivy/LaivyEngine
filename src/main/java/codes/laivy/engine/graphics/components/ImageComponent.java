@@ -24,7 +24,7 @@ public class ImageComponent extends GameComponent {
         if (dimension == null) {
             dimension = new Dimension(asset.toBuffered().getWidth(null), asset.toBuffered().getHeight(null));
         }
-        getDimensions().put(null, dimension);
+        dimensions.put(null, dimension);
         // Define o valor da dimensão padrão
     }
 

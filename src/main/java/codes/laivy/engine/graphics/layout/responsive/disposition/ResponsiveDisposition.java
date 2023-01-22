@@ -4,6 +4,7 @@ import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.GameComponent.Alignment;
+import codes.laivy.engine.graphics.components.ImageComponent;
 import codes.laivy.engine.graphics.components.TextComponent;
 import codes.laivy.engine.graphics.components.shape.RectangleComponent;
 import codes.laivy.engine.graphics.components.shape.ShapeComponent;
@@ -15,7 +16,6 @@ import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 
 public abstract class ResponsiveDisposition extends ComponentDisposition {
 
@@ -33,19 +33,19 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
     @Override
     public void render(@NotNull Graphics2D graphics) {
         Graphics2D renderingGraphics = (Graphics2D) graphics.create();
+        Graphics2D backgroundGraphics = (Graphics2D) graphics.create();
 
         // Coordinates
         GameLayout.LayoutCoordinates coordinates = resolutionFix();
         //
 
-        // Component alignment
-        alignment(renderingGraphics, getComponent().getAlign(), coordinates);
-        //
-
         // Background
-        Graphics2D backgroundGraphics = (Graphics2D) graphics.create();
         renderBackground(backgroundGraphics, coordinates);
         backgroundGraphics.dispose();
+        //
+
+        // Component alignment
+        alignment(renderingGraphics, getComponent().getAlign(), coordinates);
         //
 
         // Component rendering
@@ -78,8 +78,8 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
                 defaultCompDimension.clone()
         );
 
-        int offsetX = component.getOffsetX();
-        int offsetY = component.getOffsetY();
+        int offsetX = calculateWidthOffset(component.getOffsetX());
+        int offsetY = calculateHeightOffset(component.getOffsetY());
 
         if ((window.getAvailableSize().getWidth() != getLayout().getReferenceSize().getWidth() || window.getAvailableSize().getHeight() != getLayout().getReferenceSize().getHeight())) {
             if (getLayout().isCubicResizing()) {
@@ -87,24 +87,11 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
                         (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), defaultCompDimension.getWidth(), window.getAvailableSize().getWidth() + window.getAvailableSize().getHeight()),
                         (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), defaultCompDimension.getHeight(), window.getAvailableSize().getWidth() + window.getAvailableSize().getHeight())
                 ));
-
-                if (offsetX != 0) {
-                    offsetX = (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), offsetX, window.getAvailableSize().getWidth() + window.getAvailableSize().getHeight());
-                }
-                if (offsetY != 0) {
-                    offsetY = (int) MathUtils.rthree(getLayout().getReferenceSize().getHeight() + getLayout().getReferenceSize().getHeight(), offsetY, window.getAvailableSize().getHeight() + window.getAvailableSize().getHeight());
-                }
             } else {
                 coordinates.setDimension(new Dimension(
                         (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), defaultCompDimension.getWidth(), window.getAvailableSize().getWidth()),
                         (int) MathUtils.rthree(getLayout().getReferenceSize().getHeight(), defaultCompDimension.getHeight(), window.getAvailableSize().getHeight())
                 ));
-
-                if (offsetX != 0) {
-                    offsetX = (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), offsetX, window.getAvailableSize().getWidth());
-                } if (offsetY != 0) {
-                    offsetY = (int) MathUtils.rthree(getLayout().getReferenceSize().getHeight(), offsetY, window.getAvailableSize().getHeight());
-                }
             }
         }
 
@@ -137,27 +124,14 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
      * @param coords The coordinates of the component
      */
     public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords) {
-        Dimension dimension = coords.getScreenDimension();
-        Location location = coords.getScreenLocation();
-
+        renderingGraphics.transform(alignment.getTransform());
         if (alignment == Alignment.FLIPPED_HORIZONTALLY) {
-            dimension.setWidth(-dimension.getWidth());
-            location.setX(location.getX() - dimension.getWidth());
+            coords.getClientLocation().setX(coords.getScreenLocation().getX());
         } else if (alignment == Alignment.FLIPPED_VERTICALLY) {
-            dimension.setHeight(-dimension.getHeight());
-            location.setY(location.getY() - dimension.getHeight());
+            coords.getClientLocation().setY(coords.getScreenLocation().getY());
         } else if (alignment == Alignment.FLIPPED_VERTICALLY_HORIZONTALLY) {
-            dimension.setWidth(-dimension.getWidth());
-            dimension.setHeight(-dimension.getHeight());
-
-            location.setX(location.getX() - dimension.getWidth());
-            location.setY(location.getY() - dimension.getHeight());
-        }
-
-        if (alignment == Alignment.FLIPPED_HORIZONTALLY) {
-            renderingGraphics.setTransform(alignment.getTransform());
-            coords.getClientLocation().setX(-(coords.getClientLocation().getX() + getLayout().getWindow().getAvailableSize().getWidth() / getLayout().getWindow().getSize().getWidth()));
-            coords.getClientLocation().setX(coords.getClientLocation().getX() - dimension.getWidth());
+            coords.getClientLocation().setX(coords.getScreenLocation().getX());
+            coords.getClientLocation().setY(coords.getScreenLocation().getY());
         }
     }
 
@@ -166,12 +140,43 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
      * @param coordinates the coordinates
      */
     public void renderBackground(@NotNull Graphics2D backgroundGraphics, @NotNull GameLayout.LayoutCoordinates coordinates) {
-        Color color = component.getBackground().getFinalColor();
+        Color color = getComponent().getBackground().getFinalColor();
         if (color != null) {
             backgroundGraphics.setColor(color);
             backgroundGraphics.fill(new java.awt.Rectangle(coordinates.getClientLocation().toPoint(), coordinates.getClientDimension().toSwing()));
         }
     }
+
+    // ---/-/--- //
+    // Utilities //
+    // ---/-/--- //
+    protected final int calculateWidthOffset(int offsetX) {
+        if (getLayout().isCubicResizing()) {
+            if (offsetX != 0) {
+                offsetX = (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), offsetX, getLayout().getWindow().getAvailableSize().getWidth() + getLayout().getWindow().getAvailableSize().getHeight());
+            }
+        } else {
+            if (offsetX != 0) {
+                offsetX = (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), offsetX, getLayout().getWindow().getAvailableSize().getWidth());
+            }
+        }
+        return offsetX;
+    }
+    protected final int calculateHeightOffset(int offsetY) {
+        if (getLayout().isCubicResizing()) {
+            if (offsetY != 0) {
+                offsetY = (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), offsetY, getLayout().getWindow().getAvailableSize().getWidth() + getLayout().getWindow().getAvailableSize().getHeight());
+            }
+        } else {
+            if (offsetY != 0) {
+                offsetY = (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), offsetY, getLayout().getWindow().getAvailableSize().getWidth());
+            }
+        }
+        return offsetY;
+    }
+    // ---/-/--- //
+    // Utilities //
+    // ---/-/--- //
 
     // ---/-/--- //
     //   Shape   //
@@ -219,7 +224,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
 
         @Override
         public void draw(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
-            Font font = getComponent().getFont().deriveFont(MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), getComponent().getFont().getSize(), getLayout().getWindow().getAvailableSize().getWidth() + getLayout().getWindow().getAvailableSize().getHeight()));
+            Font font = getComponent().getFont().deriveFont((float) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), getComponent().getFont().getSize(), getLayout().getWindow().getAvailableSize().getWidth() + getLayout().getWindow().getAvailableSize().getHeight()));
 
             graphics.setFont(font);
             graphics.drawString(getComponent().getText(), location.getX(), location.getY());
@@ -227,49 +232,72 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
 
         @Override
         public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords) {
-            if (alignment.getTransform() != null) {
-                Dimension textRectangularSize = getComponent().getDimension(alignment.getTransform());
+            Dimension dimension = getComponent().getDimension(alignment.getTransform());
 
-                if (alignment == Alignment.FLIPPED_HORIZONTALLY) {
-                    coords.getScreenLocation().setX(coords.getScreenLocation().getX() + textRectangularSize.getWidth());
-                } else if (alignment == Alignment.FLIPPED_VERTICALLY) {
-                    coords.getScreenLocation().setY(coords.getScreenLocation().getY() - textRectangularSize.getHeight() / 2);
-                } else if (alignment == Alignment.FLIPPED_VERTICALLY_HORIZONTALLY) {
-                    coords.getScreenLocation().setX(coords.getScreenLocation().getX() + textRectangularSize.getWidth());
-                    coords.getScreenLocation().setY(coords.getScreenLocation().getY() - textRectangularSize.getHeight() / 2);
-                }
-
-                if (alignment == Alignment.FLIPPED_HORIZONTALLY) {
-                    coords.getClientLocation().setX(-(coords.getClientLocation().getX() + getLayout().getWindow().getAvailableSize().getWidth() / getLayout().getWindow().getSize().getWidth()));
-                    coords.getClientLocation().setX(coords.getClientLocation().getX() - coords.getScreenDimension().getWidth());
-                }
-            } else {
-                throw new NullPointerException("This alignment doesn't have a AffineTransform. TextComponents alignments needs to have a AffineTransform");
+            renderingGraphics.transform(alignment.getTransform());
+            if (alignment == Alignment.FLIPPED_HORIZONTALLY) {
+                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - calculateWidthOffset(dimension.getWidth()));
+            } else if (alignment == Alignment.FLIPPED_VERTICALLY) {
+                coords.getClientLocation().setY(-coords.getScreenLocation().getY());
+            } else if (alignment == Alignment.FLIPPED_VERTICALLY_HORIZONTALLY) {
+                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - calculateWidthOffset(dimension.getWidth()));
+                coords.getClientLocation().setY(-coords.getScreenLocation().getY());
             }
         }
 
         @Override
         public void renderBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
-            AffineTransform transform;
-            if (getComponent().getAlign().getTransform() != null) transform = getComponent().getAlign().getTransform();
-            else transform = new AffineTransform();
-
-            Dimension temp = coordinates.getScreenDimension().clone();
-            temp.setHeight(temp.getHeight());
+            Dimension temp = coordinates.getClientDimension().clone();
 
             Location location = coordinates.getClientLocation().clone();
-            location.setY((int) (location.getY() - temp.getHeight() / 1.25f));
+            location.setY(location.getY() - temp.getHeight());
 
-            Dimension textRectangularSize = getComponent().getDimension(transform);
+            coordinates.setScreenLocation(location);
+            coordinates.setScreenDimension(temp);
 
-            if (getComponent().getAlign() == Alignment.FLIPPED_HORIZONTALLY) {
-                location.setX(location.getX() - textRectangularSize.getWidth());
-            } else if (getComponent().getAlign() == Alignment.FLIPPED_VERTICALLY) {
-                location.setY(location.getY() + textRectangularSize.getHeight() / 2);
-            } else if (getComponent().getAlign() == Alignment.FLIPPED_VERTICALLY_HORIZONTALLY) {
-                location.setX(location.getX() - textRectangularSize.getWidth());
-                location.setY(location.getY() + textRectangularSize.getHeight() / 2);
+            Color color = component.getBackground().getFinalColor();
+            if (color != null) {
+                backgroundGraphics.setColor(color);
+                backgroundGraphics.fill(new java.awt.Rectangle(location.toPoint(), temp.toSwing()));
             }
+        }
+    }
+    public static class Image extends ResponsiveDisposition {
+        public Image(@NotNull ImageComponent component, @NotNull ResponsiveLayout layout) {
+            super(component, layout);
+        }
+
+        @Override
+        public @NotNull ImageComponent getComponent() {
+            return (ImageComponent) super.getComponent();
+        }
+
+        @Override
+        public void draw(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
+            graphics.drawImage(getComponent().getAsset().toBuffered(), location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight(), getLayout().getWindow().getPanel());
+        }
+
+        @Override
+        public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords) {
+            Dimension dimension = getComponent().getDimension(null);
+
+            renderingGraphics.transform(alignment.getTransform());
+            if (alignment == Alignment.FLIPPED_HORIZONTALLY) {
+                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - calculateWidthOffset(dimension.getWidth()));
+            } else if (alignment == Alignment.FLIPPED_VERTICALLY) {
+                coords.getClientLocation().setY(-coords.getScreenLocation().getY() - calculateWidthOffset(dimension.getWidth()));
+            } else if (alignment == Alignment.FLIPPED_VERTICALLY_HORIZONTALLY) {
+                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - calculateWidthOffset(dimension.getWidth()));
+                coords.getClientLocation().setY(-coords.getScreenLocation().getY() - calculateWidthOffset(dimension.getWidth()));
+            }
+        }
+
+        @Override
+        public void renderBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
+            Dimension temp = coordinates.getClientDimension().clone();
+
+            Location location = coordinates.getClientLocation().clone();
+            location.setY((location.getY() - temp.getHeight()) + temp.getHeight());
 
             coordinates.setScreenLocation(location);
             coordinates.setScreenDimension(temp);

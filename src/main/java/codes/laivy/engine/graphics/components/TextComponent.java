@@ -46,10 +46,6 @@ public class TextComponent extends GameComponent {
 
     @Override
     public void setAlign(@NotNull Alignment align) {
-        if (align.getTransform() == null) {
-            throw new NullPointerException("This alignment doesn't have a AffineTransform. TextComponents alignments needs to have a AffineTransform");
-        }
-
         super.setAlign(align);
     }
 

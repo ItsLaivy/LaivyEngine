@@ -2,11 +2,13 @@ package codes.laivy.engine.tests;
 
 import codes.laivy.engine.Game;
 import codes.laivy.engine.coordinates.MouseLocation;
+import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.tests.entity.Player;
 import codes.laivy.engine.threads.GameThread;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.KeyEvent;
+import java.util.Set;
 
 public class GameExecutionThread extends GameThread {
     public GameExecutionThread(@NotNull Game game) {
@@ -34,7 +36,10 @@ public class GameExecutionThread extends GameThread {
             getGame().getGraphics().runWindowThreadLater(() -> {
                 @NotNull MouseLocation mouse = getGame().getWindow().getMouseLocation();
                 if (mouse.getLocation() != null) {
-                    System.out.println(mouse.getLocation() + " - '" + mouse.getLocation().getComponents(getGame().getWindow()) + "'");
+                    Set<GameComponent> components = mouse.getLocation().getComponents(getGame().getWindow());
+                    if (!components.isEmpty()) {
+                        System.out.println("Hovering: '" + components + "'");
+                    }
                 }
             });
 

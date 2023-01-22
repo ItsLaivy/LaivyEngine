@@ -2,6 +2,7 @@ package codes.laivy.engine.tests.entity;
 
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
+import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.shape.RectangleComponent;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import codes.laivy.engine.graphics.layout.responsive.disposition.ResponsiveDisposition;
@@ -22,7 +23,8 @@ public abstract class Entity {
         this.component.setColor(color);
         this.component.getBackground().setColor(color);
         this.component.setDisposition(new ResponsiveDisposition.Rectangle(this.component, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getLayout())));
-        getComponent().getGame().getGraphics().runWindowThreadLater(component::add);
+        this.component.setAlign(GameComponent.Alignment.FLIPPED_VERTICALLY_HORIZONTALLY);
+        getSquare().getGame().getGraphics().runWindowThreadLater(component::add);
     }
 
     public int getSpeed() {
@@ -32,15 +34,15 @@ public abstract class Entity {
         this.speed = speed;
     }
 
-    protected @NotNull RectangleComponent getComponent() {
+    protected @NotNull RectangleComponent getSquare() {
         return component;
     }
 
     public @NotNull Location getLocation() {
-        return getComponent().getLocation().clone();
+        return getSquare().getLocation().clone();
     }
     public void setLocation(@NotNull Location location) {
-        getComponent().setLocation(location);
+        getSquare().setLocation(location);
     }
 
 }

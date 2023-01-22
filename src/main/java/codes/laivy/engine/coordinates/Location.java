@@ -61,6 +61,13 @@ public class Location implements Cloneable {
         return this;
     }
 
+    @NotNull
+    public Location multiply(int value) {
+        setX(getX() * value);
+        setY(getY() * value);
+        return this;
+    }
+
     @WindowThread
     public @NotNull Set<@NotNull GameComponent> getComponents(@NotNull GameWindow window) {
         return window.getComponents(this);

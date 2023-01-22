@@ -1,7 +1,6 @@
 package codes.laivy.engine.tests.entity;
 
 import codes.laivy.engine.coordinates.Location;
-import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.TextComponent;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import codes.laivy.engine.graphics.layout.responsive.disposition.ResponsiveDisposition;
@@ -19,13 +18,9 @@ public class Player extends Entity {
     public Player(@NotNull String name, @NotNull Location location) {
         super(location, new Color(new Random().nextInt(255), new Random().nextInt(255), new Random().nextInt(255)));
 
-        this.name = new TextComponent(TestGame.instance(), getLocation().clone(), -17, -15, 100, name, new Font("ARIAL", Font.PLAIN, 20), getComponent().getColor());
+        this.name = new TextComponent(TestGame.instance(), getLocation().clone(), -17, -15, 100, name, new Font("ARIAL", Font.PLAIN, 20), Color.WHITE);
         this.name.setDisposition(new ResponsiveDisposition.Text(this.name, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getLayout())));
-        this.name.getBackground().setColor(Color.WHITE);
-        this.name.getBackground().setOpacity(20);
-        this.name.setOpacity(20);
-        //this.name.setAlign(GameComponent.Alignment.FLIPPED_HORIZONTALLY);
-        getComponent().getGame().getGraphics().runWindowThreadLater(this.name::add);
+        getSquare().getGame().getGraphics().runWindowThreadLater(this.name::add);
     }
 
     @Override
