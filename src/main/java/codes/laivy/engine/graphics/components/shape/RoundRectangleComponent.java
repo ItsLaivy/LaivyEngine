@@ -4,6 +4,7 @@ import codes.laivy.engine.annotations.WindowThread;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.geom.RoundRectangle2D;
@@ -18,6 +19,7 @@ public class RoundRectangleComponent extends ShapeComponent {
         this.arc = arc;
     }
     @Override
+    @Contract("_, _ -> new")
     public @NotNull RoundRectangle2D.Float getShape(@NotNull Location location, @NotNull Dimension dimension) {
         return new RoundRectangle2D.Float(location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight(), getArc().getWidth(), arc.getHeight());
     }
@@ -71,6 +73,7 @@ public class RoundRectangleComponent extends ShapeComponent {
     }
 
     @Override
+    @Contract("-> new")
     public @NotNull RoundRectangleComponent clone() {
         return (RoundRectangleComponent) super.clone();
     }

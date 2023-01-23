@@ -1,6 +1,7 @@
 package codes.laivy.engine.assets;
 
 import codes.laivy.engine.exceptions.LaivyEngineException;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
@@ -29,10 +30,12 @@ public class SpriteSheet {
         }
     }
 
+    @Contract(pure = true)
     public @NotNull ImageAsset getSprite(@Range(from = 0, to = Integer.MAX_VALUE) int row, @Range(from = 0, to = Integer.MAX_VALUE) int column) {
         return sprites[row][column];
     }
 
+    @Contract(pure = true)
     public @NotNull ImageAsset getAsset() {
         return asset;
     }

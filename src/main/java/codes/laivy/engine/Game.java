@@ -5,6 +5,7 @@ import codes.laivy.engine.exceptions.LaivyEngineException;
 import codes.laivy.engine.graphics.GameGraphics;
 import codes.laivy.engine.graphics.window.GameWindow;
 import codes.laivy.engine.threads.GameThread;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStream;
@@ -126,9 +127,10 @@ public abstract class Game {
 
         setState(GameState.GAME_LOADED);
 
-        getGraphics().getWindow().setVisible(true);
+        getGraphics().getWindow().getFrame().setVisible(true);
     }
 
+    @Contract(pure = true)
     public @NotNull List<GameThread> getThreads() {
         return threads;
     }

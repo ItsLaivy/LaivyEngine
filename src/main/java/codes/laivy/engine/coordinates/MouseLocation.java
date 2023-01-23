@@ -1,5 +1,6 @@
 package codes.laivy.engine.coordinates;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
 public final class MouseLocation {
@@ -14,6 +15,7 @@ public final class MouseLocation {
      * Returns the mouse location
      * @return The mouse location or null if the mouse isn't on the screen
      */
+    @Contract(pure = true)
     public @Nullable Location getLocation() {
         return location;
     }

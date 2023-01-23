@@ -4,6 +4,7 @@ import codes.laivy.engine.assets.ImageAsset;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,6 +37,7 @@ public class ImageComponent extends GameComponent {
     }
 
     @Override
+    @Contract("-> new")
     public @NotNull ImageComponent clone() {
         ImageComponent component = (ImageComponent) super.clone();
 

@@ -5,6 +5,7 @@ import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.exceptions.UnsupportedThreadException;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -20,9 +21,11 @@ public class DefaultGameComponents implements GameWindow.Components {
         this.panel = panel;
     }
 
+    @Contract(pure = true)
     public @NotNull GamePanel getPanel() {
         return panel;
     }
+    @Contract(pure = true)
     public @NotNull GameWindow getWindow() {
         return getPanel().getWindow();
     }

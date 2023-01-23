@@ -8,6 +8,7 @@ import codes.laivy.engine.graphics.window.DefaultGameComponents;
 import codes.laivy.engine.graphics.window.GameWindow;
 import codes.laivy.engine.graphics.window.listeners.GameKeyManager;
 import codes.laivy.engine.graphics.window.listeners.GameMouseManager;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -45,6 +46,7 @@ public class GamePanel extends JPanel {
         getEngineComponents().clear();
     }
 
+    @Contract(pure = true)
     public @NotNull GameWindow getWindow() {
         return window;
     }

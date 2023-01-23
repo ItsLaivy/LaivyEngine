@@ -1,6 +1,7 @@
 package codes.laivy.engine.coordinates.dimension;
 
 import codes.laivy.engine.coordinates.Location;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public interface IDimension {
@@ -12,6 +13,7 @@ public interface IDimension {
     void setHeight(int height);
 
     @NotNull
+    @Contract("-> new")
     default java.awt.Dimension toSwing() {
         return new java.awt.Dimension(getWidth(), getHeight());
     }
@@ -30,22 +32,26 @@ public interface IDimension {
     }
 
     @NotNull
+    @Contract(pure = true)
     default Location getTopLeft(@NotNull Location location) {
         return location;
     }
     @NotNull
+    @Contract(value = "_ -> new")
     default Location getTopRight(@NotNull Location location) {
         location = location.clone();
         location.setX(location.getX() + getWidth());
         return location;
     }
     @NotNull
+    @Contract(value = "_ -> new")
     default Location getBottomLeft(@NotNull Location location) {
         location = location.clone();
         location.setY(location.getY() + getHeight());
         return location;
     }
     @NotNull
+    @Contract(value = "_ -> new")
     default Location getBottomRight(@NotNull Location location) {
         location = location.clone();
         location.setX(location.getX() + getWidth());
@@ -54,12 +60,14 @@ public interface IDimension {
     }
 
     @NotNull
+    @Contract(value = "_ -> this")
     default IDimension subtract(@NotNull IDimension dimension) {
         setHeight(getHeight() - dimension.getHeight());
         setWidth(getWidth() - dimension.getWidth());
         return this;
     }
     @NotNull
+    @Contract(value = "_ -> this")
     default IDimension add(@NotNull IDimension dimension) {
         setHeight(getHeight() + dimension.getHeight());
         setWidth(getWidth() + dimension.getWidth());

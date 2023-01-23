@@ -4,6 +4,7 @@ import codes.laivy.engine.Game;
 import codes.laivy.engine.graphics.window.GameWindow;
 import codes.laivy.engine.threads.GameRunnable;
 import codes.laivy.engine.threads.GraphicsThread;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
@@ -34,10 +35,12 @@ public class GameGraphics {
     }
 
     @NotNull
+    @Contract(pure = true)
     public Game getGame() {
         return game;
     }
     @NotNull
+    @Contract(pure = true)
     public GameWindow getWindow() {
         return window;
     }

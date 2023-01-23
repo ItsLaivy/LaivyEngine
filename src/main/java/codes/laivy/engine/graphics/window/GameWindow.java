@@ -11,6 +11,7 @@ import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.window.swing.GameFrame;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,13 +42,14 @@ public class GameWindow {
         getFrame().setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         setSize(new Dimension(800, 600));
-        setTitle(null);
+        getFrame().setTitle(null);
 
         getFrame().setLocationRelativeTo(null);
         getPanel().setBackground(Color.BLACK);
         getFrame().setUndecorated(false);
     }
 
+    @Contract(pure = true)
     public @NotNull Game getGame() {
         return game;
     }
@@ -76,6 +78,7 @@ public class GameWindow {
         getFrame().add(getPanel());
     }
 
+    @Contract("-> new")
     public @NotNull MouseLocation getMouseLocation() {
         Point p = getPanel().getMousePosition();
         Location loc = null;
@@ -93,36 +96,6 @@ public class GameWindow {
         this.layout = layout;
     }
 
-    public void setTitle(@Nullable String title) {
-        if (title == null) title = "LaivyEngine - " + game.getName();
-        getFrame().setTitle(title);
-    }
-    public @NotNull String getTitle() {
-        return getFrame().getTitle();
-    }
-
-    public void setSize(@NotNull Dimension dimension) {
-        getFrame().setSize(new Dimension(dimension.getWidth(), dimension.getHeight()).toSwing());
-    }
-    public @NotNull Dimension getSize() {
-        java.awt.Dimension size = getFrame().getSize();
-        return new Dimension(size);
-    }
-
-    public boolean isResizable() {
-        return getFrame().isResizable();
-    }
-    public void setResizable(boolean resizable) {
-        getFrame().setResizable(resizable);
-    }
-
-    public void setVisible(boolean visible) {
-        getFrame().setVisible(visible);
-    }
-    public boolean isVisible() {
-        return getFrame().isVisible();
-    }
-
     public void setBackground(@NotNull Color color) {
         panel.setBackground(color);
     }
@@ -135,6 +108,7 @@ public class GameWindow {
         getFrame().setMinimumSize(new Dimension(dimension.getWidth(), dimension.getHeight()).toSwing());
     }
     @NotNull
+    @Contract("-> new")
     public Dimension getMinimumSize() {
         java.awt.Dimension d = getFrame().getMinimumSize();
         return new Dimension(d.width, d.height);
@@ -148,15 +122,27 @@ public class GameWindow {
         }
     }
     @NotNull
+    @Contract("-> new")
     public Dimension getMaximumSize() {
         java.awt.Dimension d = getFrame().getMaximumSize();
         return new Dimension(d.width, d.height);
+    }
+
+    public void setSize(@NotNull Dimension dimension) {
+        getFrame().setSize(new Dimension(dimension.getWidth(), dimension.getHeight()).toSwing());
+    }
+
+    @Contract("-> new")
+    public @NotNull Dimension getSize() {
+        java.awt.Dimension size = getFrame().getSize();
+        return new Dimension(size);
     }
 
     /**
      * This method returns the available panel dimension (without border, close button, ect...)
      * @return The available size, without borders.
      */
+    @Contract("-> new")
     public @NotNull Dimension getAvailableSize() {
         if (!getFrame().isVisible()) {
             throw new LaivyEngineException(new IllegalStateException("The window needs to be visible to perform that method"), "GameWindow#getAvailableSize() method");

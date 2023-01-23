@@ -1,6 +1,7 @@
 package codes.laivy.engine.threads;
 
 import codes.laivy.engine.Game;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,12 +36,14 @@ public abstract class GameThread extends Thread {
 
     @SuppressWarnings("deprecation")
     @Override
+    @Contract("-> fail")
     public void destroy() {
         throw new UnsupportedOperationException();
     }
 
     @SuppressWarnings("deprecation")
     @Override
+    @Contract("-> fail")
     public int countStackFrames() {
         throw new UnsupportedOperationException();
     }
@@ -75,6 +78,7 @@ public abstract class GameThread extends Thread {
         return interruptTime;
     }
 
+    @Contract(pure = true)
     public @NotNull Game getGame() {
         return game;
     }

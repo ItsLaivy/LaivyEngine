@@ -1,5 +1,6 @@
 package codes.laivy.engine.log;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -8,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
  *
  * @since 1.0 build 0 (30/06/2022)
  * @author ItsLaivy
- *
  */
 public enum AnsiColor {
     RESET("\033[0m"),
@@ -72,16 +72,18 @@ public enum AnsiColor {
 
     private final String ansiCode;
 
-    AnsiColor(String ansiCode) {
+    AnsiColor(@NotNull String ansiCode) {
         this.ansiCode = ansiCode;
     }
 
     @NotNull
+    @Contract(pure = true)
     public String getAnsiCode() {
         return ansiCode;
     }
 
     @Override
+    @Contract(pure = true)
     public String toString() {
         return ansiCode;
     }

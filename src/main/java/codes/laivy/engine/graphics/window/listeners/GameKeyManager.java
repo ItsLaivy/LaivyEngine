@@ -1,17 +1,17 @@
 package codes.laivy.engine.graphics.window.listeners;
 
-import codes.laivy.engine.graphics.window.GameWindow;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.event.*;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class GameKeyManager implements Manager<KeyListener> {
 
     // KeyCode, Key
-    private final @NotNull Map<@NotNull Integer, @NotNull KeyEvent> keys = new HashMap<>();
+    private final @NotNull Map<@NotNull Integer, @NotNull KeyEvent> keys = new LinkedHashMap<>();
 
     protected @NotNull KeyListener listener = new KeyAdapter() {
     };
@@ -41,10 +41,12 @@ public class GameKeyManager implements Manager<KeyListener> {
         });
     }
 
+    @Contract(pure = true)
     public @NotNull GamePanel getPanel() {
         return panel;
     }
 
+    @Contract(pure = true)
     public @NotNull Map<@NotNull Integer, @NotNull KeyEvent> getKeys() {
         return keys;
     }

@@ -2,7 +2,6 @@ package codes.laivy.engine.tests.first.entity;
 
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
-import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.shape.*;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import codes.laivy.engine.graphics.layout.responsive.disposition.ResponsiveDisposition;

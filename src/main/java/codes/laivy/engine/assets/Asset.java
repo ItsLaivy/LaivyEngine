@@ -1,8 +1,7 @@
 package codes.laivy.engine.assets;
 
-import codes.laivy.engine.Game;
 import codes.laivy.engine.exceptions.LaivyEngineException;
-import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,8 +9,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -78,6 +75,7 @@ public class Asset {
      * @param name Name of the loaded asset
      * @return Returns the asset with that name
      */
+    @Contract(pure = true)
     public static @NotNull Asset get(@NotNull String name) {
         if (!ASSETS.containsKey(name)) {
             throw new LaivyEngineException(new NullPointerException("Couldn't find a asset with that name"), "Asset#get(String) method");

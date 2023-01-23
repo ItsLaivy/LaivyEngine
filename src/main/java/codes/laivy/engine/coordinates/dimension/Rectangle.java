@@ -1,7 +1,10 @@
 package codes.laivy.engine.coordinates.dimension;
 
 import codes.laivy.engine.coordinates.Location;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Random;
 
 public class Rectangle implements IDimension {
 
@@ -23,10 +26,12 @@ public class Rectangle implements IDimension {
     }
 
     @NotNull
+    @Contract(value = "-> new")
     public Location getAsLocation() {
         return new Location(x, y);
     }
     @NotNull
+    @Contract(value = "-> new")
     public Dimension getAsDimension() {
         return new Dimension(width, height);
     }

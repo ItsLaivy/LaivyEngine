@@ -5,6 +5,7 @@ import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -39,6 +40,7 @@ public abstract class ShapeComponent extends GameComponent {
         setShape(getShape(getLocation(), dimension));
     }
 
+    @Contract("_, _ -> new")
     public abstract @NotNull Shape getShape(@NotNull Location location, @NotNull Dimension dimension);
 
     public boolean isFilled() {
@@ -56,6 +58,7 @@ public abstract class ShapeComponent extends GameComponent {
     }
 
     @Override
+    @Contract("-> new")
     public @NotNull ShapeComponent clone() {
         return (ShapeComponent) super.clone();
     }

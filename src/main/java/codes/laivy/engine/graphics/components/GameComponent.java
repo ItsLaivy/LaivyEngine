@@ -8,6 +8,7 @@ import codes.laivy.engine.exceptions.LaivyEngineException;
 import codes.laivy.engine.exceptions.UnsupportedThreadException;
 import codes.laivy.engine.graphics.layout.ComponentDisposition;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
@@ -158,6 +159,7 @@ public abstract class GameComponent implements Cloneable {
         this.offsetY = offsetY;
     }
 
+    @Contract(pure = true)
     public @NotNull GamePanel getPanel() {
         return panel;
     }
@@ -222,6 +224,7 @@ public abstract class GameComponent implements Cloneable {
     }
 
     @WindowThread
+    @Contract("-> new")
     public @NotNull Rectangle getHitBox() {
         if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
@@ -252,6 +255,7 @@ public abstract class GameComponent implements Cloneable {
     }
 
     @Override
+    @Contract("-> new")
     public @NotNull GameComponent clone() {
         try {
             GameComponent clone = (GameComponent) super.clone();
@@ -280,6 +284,7 @@ public abstract class GameComponent implements Cloneable {
             this.transform = transform;
         }
 
+        @Contract(pure = true)
         public @NotNull AffineTransform getTransform() {
             return transform;
         }

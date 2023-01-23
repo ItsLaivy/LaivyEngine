@@ -1,6 +1,7 @@
 package codes.laivy.engine.assets;
 
 import codes.laivy.engine.exceptions.LaivyEngineException;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -28,6 +29,7 @@ public class ResourceFile extends File {
     }
 
     @Override
+    @Contract("_ -> fail")
     public final boolean renameTo(@NotNull File dest) {
         throw new LaivyEngineException(new IllegalStateException("You cannot change the file name of a ResourceFile!"), "ResourceFile#renameTo(File) method");
     }

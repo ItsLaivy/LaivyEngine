@@ -2,6 +2,7 @@ package codes.laivy.engine.graphics.window.swing;
 
 import codes.laivy.engine.assets.ImageAsset;
 import codes.laivy.engine.graphics.window.GameWindow;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,6 +18,7 @@ public class GameFrame extends JFrame {
         this.window = window;
     }
 
+    @Contract(pure = true)
     public @NotNull GameWindow getWindow() {
         return window;
     }
@@ -37,6 +39,14 @@ public class GameFrame extends JFrame {
     }
     public @Nullable ImageAsset getIcon() {
         return icon;
+    }
+
+    public void setTitle(@Nullable String title) {
+        if (title == null) title = "";
+        super.setTitle(title);
+    }
+    public @NotNull String getTitle() {
+        return super.getTitle();
     }
 
 }

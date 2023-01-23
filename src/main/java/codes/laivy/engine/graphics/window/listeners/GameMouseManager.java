@@ -2,6 +2,7 @@ package codes.laivy.engine.graphics.window.listeners;
 
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,6 +56,7 @@ public class GameMouseManager implements Manager<MouseListener> {
         });
     }
 
+    @Contract(pure = true)
     public @NotNull GamePanel getPanel() {
         return panel;
     }

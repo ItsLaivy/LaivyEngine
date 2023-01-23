@@ -3,6 +3,7 @@ package codes.laivy.engine.graphics.components.shape;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.geom.Ellipse2D;
@@ -15,17 +16,13 @@ public class EllipseComponent extends ShapeComponent {
     }
 
     @Override
+    @Contract("_, _ -> new")
     public @NotNull Ellipse2D.Float getShape(@NotNull Location location, @NotNull Dimension dimension) {
         return new Ellipse2D.Float(location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight());
     }
     @Override
     public @NotNull Ellipse2D.Float getShape() {
         return (Ellipse2D.Float) super.getShape();
-    }
-
-    @Override
-    public @NotNull Background getBackground() {
-        throw new UnsupportedOperationException("Polygons couldn't have a background!");
     }
 
     @Override
@@ -46,6 +43,7 @@ public class EllipseComponent extends ShapeComponent {
     }
 
     @Override
+    @Contract("-> new")
     public @NotNull EllipseComponent clone() {
         return (EllipseComponent) super.clone();
     }

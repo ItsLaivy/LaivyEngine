@@ -3,6 +3,7 @@ package codes.laivy.engine.graphics.components.shape;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class CircleComponent extends EllipseComponent {
@@ -12,6 +13,7 @@ public class CircleComponent extends EllipseComponent {
     }
 
     @Override
+    @Contract("-> new")
     public @NotNull CircleComponent clone() {
         return (CircleComponent) super.clone();
     }

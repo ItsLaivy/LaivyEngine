@@ -1,6 +1,7 @@
 package codes.laivy.engine.threads;
 
 import codes.laivy.engine.graphics.GameGraphics;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class GraphicsThread extends GameThread {
@@ -26,6 +27,7 @@ public class GraphicsThread extends GameThread {
         }
     }
 
+    @Contract(pure = true)
     public @NotNull GameGraphics getGraphics() {
         return graphics;
     }

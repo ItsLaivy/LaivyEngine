@@ -4,6 +4,7 @@ import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.exceptions.LaivyEngineException;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.window.GameWindow;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import codes.laivy.engine.coordinates.dimension.Dimension;
@@ -18,6 +19,7 @@ public abstract class GameLayout {
         this.window = window;
     }
 
+    @Contract(pure = true)
     public final @NotNull GameWindow getWindow() {
         return window;
     }

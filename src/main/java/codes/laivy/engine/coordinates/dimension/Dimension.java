@@ -1,5 +1,6 @@
 package codes.laivy.engine.coordinates.dimension;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
 
@@ -40,6 +41,7 @@ public class Dimension implements Cloneable, IDimension {
     }
 
     @Override
+    @Contract("null -> false")
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -53,6 +55,7 @@ public class Dimension implements Cloneable, IDimension {
     }
 
     @Override
+    @Contract("-> new")
     public Dimension clone() {
         try {
             return (Dimension) super.clone();

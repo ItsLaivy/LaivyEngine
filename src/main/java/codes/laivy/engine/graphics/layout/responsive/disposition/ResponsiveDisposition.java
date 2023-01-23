@@ -13,6 +13,7 @@ import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import codes.laivy.engine.graphics.window.GameWindow;
 import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -28,11 +29,11 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         this.layout = layout;
     }
 
+    @Contract(pure = true)
     public @NotNull ResponsiveLayout getLayout() {
         return layout;
     }
 
-    @Override
     public void render(@NotNull Graphics2D graphics) {
         Graphics2D renderingGraphics = (Graphics2D) graphics.create();
         Graphics2D backgroundGraphics = (Graphics2D) graphics.create();
@@ -206,6 +207,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         }
 
         @Override
+        @Contract(pure = true)
         public @NotNull ShapeComponent getComponent() {
             return (ShapeComponent) super.getComponent();
         }
@@ -221,6 +223,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         }
 
         @Override
+        @Contract(pure = true)
         public @NotNull RectangleComponent getComponent() {
             return (RectangleComponent) super.getComponent();
         }
@@ -236,6 +239,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         }
 
         @Override
+        @Contract(pure = true)
         public @NotNull EllipseComponent getComponent() {
             return (EllipseComponent) super.getComponent();
         }
@@ -285,6 +289,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
             super(component, layout);
         }
         @Override
+        @Contract(pure = true)
         public @NotNull CircleComponent getComponent() {
             return (CircleComponent) super.getComponent();
         }
@@ -294,6 +299,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
             super(component, layout);
         }
         @Override
+        @Contract(pure = true)
         public @NotNull RoundRectangleComponent getComponent() {
             return (RoundRectangleComponent) super.getComponent();
         }
@@ -362,6 +368,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         }
 
         @Override
+        @Contract(pure = true)
         public @NotNull TextComponent getComponent() {
             return (TextComponent) super.getComponent();
         }
@@ -412,6 +419,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
         }
 
         @Override
+        @Contract(pure = true)
         public @NotNull ImageComponent getComponent() {
             return (ImageComponent) super.getComponent();
         }

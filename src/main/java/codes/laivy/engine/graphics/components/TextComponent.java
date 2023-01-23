@@ -3,6 +3,7 @@ package codes.laivy.engine.graphics.components;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -75,6 +76,7 @@ public class TextComponent extends GameComponent {
     }
 
     @Override
+    @Contract("-> new")
     public @NotNull TextComponent clone() {
         TextComponent component = (TextComponent) super.clone();
 

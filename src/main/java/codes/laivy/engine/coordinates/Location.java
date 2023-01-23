@@ -3,6 +3,7 @@ package codes.laivy.engine.coordinates;
 import codes.laivy.engine.annotations.WindowThread;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.window.GameWindow;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -39,10 +40,12 @@ public class Location implements Cloneable {
     }
 
     @NotNull
+    @Contract("_ -> this")
     public Location subtract(@NotNull Location location) {
         return this.subtract(location.getX(), location.getY());
     }
     @NotNull
+    @Contract("_, _ -> this")
     public Location subtract(int x, int y) {
         setX(getX() - x);
         setY(getY() - y);
@@ -50,10 +53,12 @@ public class Location implements Cloneable {
     }
 
     @NotNull
+    @Contract("_ -> this")
     public Location add(@NotNull Location location) {
         return this.add(location.getX(), location.getY());
     }
     @NotNull
+    @Contract("_, _ -> this")
     public Location add(int x, int y) {
         setX(getX() + x);
         setY(getY() + y);
@@ -61,6 +66,7 @@ public class Location implements Cloneable {
     }
 
     @NotNull
+    @Contract("_ -> this")
     public Location multiply(int value) {
         setX(getX() * value);
         setY(getY() * value);
@@ -73,6 +79,7 @@ public class Location implements Cloneable {
     }
 
     @NotNull
+    @Contract(value = "-> new")
     public Point toPoint() {
         return new Point(x, y);
     }
@@ -83,6 +90,7 @@ public class Location implements Cloneable {
     }
 
     @Override
+    @Contract(value = "null -> false")
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -96,6 +104,7 @@ public class Location implements Cloneable {
     }
 
     @Override
+    @Contract("-> new")
     public Location clone() {
         try {
             return (Location) super.clone();

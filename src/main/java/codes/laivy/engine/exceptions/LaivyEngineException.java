@@ -2,6 +2,7 @@ package codes.laivy.engine.exceptions;
 
 import codes.laivy.engine.log.AnsiColor;
 import codes.laivy.engine.log.LoggingUtils;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,9 +49,11 @@ public class LaivyEngineException extends Error {
         System.exit(0);
     }
 
+    @Contract(pure = true)
     public @NotNull Throwable getThrowable() {
         return throwable;
     }
+    @Contract(pure = true)
     public @Nullable String getAt() {
         return at;
     }

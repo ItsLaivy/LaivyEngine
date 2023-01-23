@@ -6,6 +6,7 @@ import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.responsive.disposition.ResponsiveDisposition;
 import codes.laivy.engine.graphics.window.GameWindow;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -24,9 +25,10 @@ public class ResponsiveLayout extends GameLayout {
     }
 
     /**
-     * The reference size is the reference value to change the component's size with the difference between Current Frame Size vs Reference Size
+     * The reference size is the reference value to change the component's size with the difference between Current Frame GridSize vs Reference GridSize
      * @return the refence size
      */
+    @Contract(pure = true)
     public @NotNull Dimension getReferenceSize() {
         return referenceSize;
     }
