@@ -4,7 +4,7 @@ import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.shape.*;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
-import codes.laivy.engine.graphics.layout.responsive.disposition.ResponsiveDisposition;
+import codes.laivy.engine.graphics.layout.responsive.disposition.ResponsiveRoundRectangleDisposition;
 import codes.laivy.engine.tests.first.TestGame;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Range;
@@ -23,7 +23,7 @@ public abstract class Entity {
         this.component.getBackground().setColor(Color.WHITE);
         this.component.getBackground().setOpacity(20);
         //this.component.setStroke(10);
-        this.component.setDisposition(new ResponsiveDisposition.RoundRectangle((RoundRectangleComponent) this.component, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getLayout())));
+        this.component.setDisposition(new ResponsiveRoundRectangleDisposition((RoundRectangleComponent) this.component, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getLayout())));
         //this.component.setAlign(GameComponent.Alignment.FLIPPED_VERTICALLY_HORIZONTALLY);
         getSquare().getPanel().getWindow().getGame().getGraphics().runWindowThreadLater(component::add);
     }

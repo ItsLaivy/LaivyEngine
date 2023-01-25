@@ -19,6 +19,9 @@ public class ResponsiveLayout extends GameLayout {
     private boolean cubicResizing = true;
     private boolean autoMove = true;
 
+    public ResponsiveLayout(@NotNull GameWindow window) {
+        this(window, new Dimension(800, 600));
+    }
     public ResponsiveLayout(@NotNull GameWindow window, @NotNull Dimension referenceSize) {
         super(window);
         this.referenceSize = referenceSize;

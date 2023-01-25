@@ -4,34 +4,21 @@ import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.GameComponent.Alignment;
-import codes.laivy.engine.graphics.components.ImageComponent;
-import codes.laivy.engine.graphics.components.TextComponent;
-import codes.laivy.engine.graphics.components.shape.*;
 import codes.laivy.engine.graphics.layout.ComponentDisposition;
 import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import codes.laivy.engine.graphics.window.GameWindow;
 import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 
 @ApiStatus.Experimental
-public abstract class ResponsiveDisposition extends ComponentDisposition {
-
-    private final @NotNull ResponsiveLayout layout;
+public abstract class ResponsiveDisposition extends ComponentDisposition<ResponsiveLayout> {
 
     public ResponsiveDisposition(@NotNull GameComponent component, @NotNull ResponsiveLayout layout) {
-        super(component);
-        this.layout = layout;
-    }
-
-    @Contract(pure = true)
-    public @NotNull ResponsiveLayout getLayout() {
-        return layout;
+        super(component, layout);
     }
 
     public void render(@NotNull Graphics2D graphics) {
@@ -91,9 +78,14 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
 
         if ((window.getAvailableSize().getWidth() != getLayout().getReferenceSize().getWidth() || window.getAvailableSize().getHeight() != getLayout().getReferenceSize().getHeight())) {
             if (getLayout().isCubicResizing()) {
+                int ratio = defaultDim.getWidth() / defaultDim.getHeight();
+
+                int width = (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), defaultDim.getWidth(), window.getAvailableSize().getWidth());
+                int height = (width / ratio);
+
                 coordinates.setDimension(new Dimension(
-                        (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), defaultDim.getWidth(), window.getAvailableSize().getWidth() + window.getAvailableSize().getHeight()),
-                        (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), defaultDim.getHeight(), window.getAvailableSize().getWidth() + window.getAvailableSize().getHeight())
+                        width,
+                        height
                 ));
             } else {
                 coordinates.setDimension(new Dimension(
@@ -177,7 +169,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
             }
         } else {
             if (offsetY != 0) {
-                offsetY = (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), offsetY, getLayout().getWindow().getAvailableSize().getWidth());
+                offsetY = (int) MathUtils.rthree(getLayout().getReferenceSize().getHeight(), offsetY, getLayout().getWindow().getAvailableSize().getHeight());
             }
         }
         return offsetY;
@@ -186,279 +178,4 @@ public abstract class ResponsiveDisposition extends ComponentDisposition {
     // Utilities //
     // ---/-/--- //
 
-    // ---/-/--- //
-    //   Shape   //
-    // ---/-/--- //
-
-    public abstract static class Shape extends ResponsiveDisposition {
-        public Shape(@NotNull ShapeComponent component, @NotNull ResponsiveLayout layout) {
-            super(component, layout);
-        }
-
-        public abstract void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension);
-        public abstract void shape(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension);
-
-        @Override
-        public final void draw(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
-            shape(renderingGraphics, location, dimension);
-            if (getComponent().isFilled()) {
-                fill(renderingGraphics, location, dimension);
-            }
-        }
-
-        @Override
-        @Contract(pure = true)
-        public @NotNull ShapeComponent getComponent() {
-            return (ShapeComponent) super.getComponent();
-        }
-    }
-    public static class Rectangle extends Shape {
-        public Rectangle(@NotNull RectangleComponent component, @NotNull ResponsiveLayout layout) {
-            super(component, layout);
-        }
-
-        @Override
-        public void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
-
-        }
-
-        @Override
-        @Contract(pure = true)
-        public @NotNull RectangleComponent getComponent() {
-            return (RectangleComponent) super.getComponent();
-        }
-
-        @Override
-        public void shape(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
-            graphics.draw(getComponent().getShape(location, dimension));
-        }
-    }
-    public static class Ellipse extends Shape {
-        public Ellipse(@NotNull EllipseComponent component, @NotNull ResponsiveLayout layout) {
-            super(component, layout);
-        }
-
-        @Override
-        @Contract(pure = true)
-        public @NotNull EllipseComponent getComponent() {
-            return (EllipseComponent) super.getComponent();
-        }
-
-        @Override
-        public void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
-            renderingGraphics.fill(getComponent().getShape(location, dimension));
-        }
-
-        @Override
-        public void shape(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
-            renderingGraphics.draw(getComponent().getShape(location, dimension));
-        }
-
-        @Override
-        public void renderBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
-            Dimension temp = coordinates.getClientDimension().clone();
-            Location location = coordinates.getClientLocation().clone();
-
-            coordinates.setScreenLocation(location);
-            coordinates.setScreenDimension(temp);
-
-            Color color = component.getBackground().getFinalColor();
-            if (color != null) {
-                backgroundGraphics.setColor(color);
-                backgroundGraphics.fill(getComponent().getShape(location, temp));
-            }
-        }
-
-        @Override
-        public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords) {
-            Dimension dimension = coords.getScreenDimension();
-
-            renderingGraphics.transform(alignment.getTransform());
-            if (alignment == Alignment.FLIPPED_HORIZONTALLY) {
-                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - dimension.getWidth());
-            } else if (alignment == Alignment.FLIPPED_VERTICALLY) {
-                coords.getClientLocation().setY(-coords.getScreenLocation().getY() - dimension.getHeight());
-            } else if (alignment == Alignment.FLIPPED_VERTICALLY_HORIZONTALLY) {
-                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - dimension.getWidth());
-                coords.getClientLocation().setY(-coords.getScreenLocation().getY() - dimension.getHeight());
-            }
-        }
-    }
-    public static class Circle extends Ellipse {
-        public Circle(@NotNull CircleComponent component, @NotNull ResponsiveLayout layout) {
-            super(component, layout);
-        }
-        @Override
-        @Contract(pure = true)
-        public @NotNull CircleComponent getComponent() {
-            return (CircleComponent) super.getComponent();
-        }
-    }
-    public static class RoundRectangle extends Shape {
-        public RoundRectangle(@NotNull RoundRectangleComponent component, @NotNull ResponsiveLayout layout) {
-            super(component, layout);
-        }
-        @Override
-        @Contract(pure = true)
-        public @NotNull RoundRectangleComponent getComponent() {
-            return (RoundRectangleComponent) super.getComponent();
-        }
-
-        @Override
-        public void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
-            renderingGraphics.fill(shape(location, dimension));
-        }
-
-        @Override
-        public void shape(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
-            renderingGraphics.draw(shape(location, dimension));
-        }
-
-        private @NotNull RoundRectangle2D.Float shape(@NotNull Location location, @NotNull Dimension dimension) {
-            RoundRectangle2D.Float shape = getComponent().getShape(location, dimension);
-            shape.archeight = calculateHeightOffset(getComponent().getArc().getHeight());
-            shape.arcwidth = calculateHeightOffset(getComponent().getArc().getWidth());
-
-            return shape;
-        }
-
-        @Override
-        public void renderBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
-            Dimension temp = coordinates.getClientDimension().clone();
-            Location location = coordinates.getClientLocation().clone();
-
-            coordinates.setScreenLocation(location);
-            coordinates.setScreenDimension(temp);
-
-            Color color = component.getBackground().getFinalColor();
-            if (color != null) {
-                backgroundGraphics.setColor(color);
-
-                RoundRectangle2D.Float shape = getComponent().getShape(location, temp);
-                shape.archeight = calculateHeightOffset(getComponent().getArc().getHeight());
-                shape.arcwidth = calculateHeightOffset(getComponent().getArc().getWidth());
-
-                backgroundGraphics.fill(shape);
-            }
-        }
-
-        @Override
-        public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords) {
-            Dimension dimension = coords.getScreenDimension();
-
-            renderingGraphics.transform(alignment.getTransform());
-            if (alignment == Alignment.FLIPPED_HORIZONTALLY) {
-                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - dimension.getWidth());
-            } else if (alignment == Alignment.FLIPPED_VERTICALLY) {
-                coords.getClientLocation().setY(-coords.getScreenLocation().getY() - dimension.getHeight());
-            } else if (alignment == Alignment.FLIPPED_VERTICALLY_HORIZONTALLY) {
-                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - dimension.getWidth());
-                coords.getClientLocation().setY(-coords.getScreenLocation().getY() - dimension.getHeight());
-            }
-        }
-    }
-
-    // ---/-/--- //
-    //   Shape   //
-    // ---/-/--- //
-
-    public static class Text extends ResponsiveDisposition {
-        public Text(@NotNull TextComponent component, @NotNull ResponsiveLayout layout) {
-            super(component, layout);
-        }
-
-        @Override
-        @Contract(pure = true)
-        public @NotNull TextComponent getComponent() {
-            return (TextComponent) super.getComponent();
-        }
-
-        @Override
-        public void draw(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
-            Font font = getComponent().getFont().deriveFont((float) calculateWidthOffset(getComponent().getFont().getSize()));
-
-            graphics.setFont(font);
-            graphics.drawString(getComponent().getText(), location.getX(), location.getY());
-        }
-
-        @Override
-        public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords) {
-            Dimension dimension = getComponent().getDimension(alignment.getTransform());
-
-            renderingGraphics.transform(alignment.getTransform());
-            if (alignment == Alignment.FLIPPED_HORIZONTALLY) {
-                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - calculateWidthOffset(dimension.getWidth()));
-            } else if (alignment == Alignment.FLIPPED_VERTICALLY) {
-                coords.getClientLocation().setY(-coords.getScreenLocation().getY());
-            } else if (alignment == Alignment.FLIPPED_VERTICALLY_HORIZONTALLY) {
-                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - calculateWidthOffset(dimension.getWidth()));
-                coords.getClientLocation().setY(-coords.getScreenLocation().getY());
-            }
-        }
-
-        @Override
-        public void renderBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
-            Dimension temp = coordinates.getClientDimension().clone();
-
-            Location location = coordinates.getClientLocation().clone();
-            location.setY(location.getY() - temp.getHeight());
-
-            coordinates.setScreenLocation(location);
-            coordinates.setScreenDimension(temp);
-
-            Color color = component.getBackground().getFinalColor();
-            if (color != null) {
-                backgroundGraphics.setColor(color);
-                backgroundGraphics.fill(new java.awt.Rectangle(location.toPoint(), temp.toSwing()));
-            }
-        }
-    }
-    public static class Image extends ResponsiveDisposition {
-        public Image(@NotNull ImageComponent component, @NotNull ResponsiveLayout layout) {
-            super(component, layout);
-        }
-
-        @Override
-        @Contract(pure = true)
-        public @NotNull ImageComponent getComponent() {
-            return (ImageComponent) super.getComponent();
-        }
-
-        @Override
-        public void draw(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
-            graphics.drawImage(getComponent().getAsset().toBuffered(), location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight(), getLayout().getWindow().getPanel());
-        }
-
-        @Override
-        public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords) {
-            Dimension dimension = getComponent().getDimension();
-
-            renderingGraphics.transform(alignment.getTransform());
-            if (alignment == Alignment.FLIPPED_HORIZONTALLY) {
-                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - calculateWidthOffset(dimension.getWidth()));
-            } else if (alignment == Alignment.FLIPPED_VERTICALLY) {
-                coords.getClientLocation().setY(-coords.getScreenLocation().getY() - calculateWidthOffset(dimension.getWidth()));
-            } else if (alignment == Alignment.FLIPPED_VERTICALLY_HORIZONTALLY) {
-                coords.getClientLocation().setX(-coords.getScreenLocation().getX() - calculateWidthOffset(dimension.getWidth()));
-                coords.getClientLocation().setY(-coords.getScreenLocation().getY() - calculateWidthOffset(dimension.getWidth()));
-            }
-        }
-
-        @Override
-        public void renderBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
-            Dimension temp = coordinates.getClientDimension().clone();
-
-            Location location = coordinates.getClientLocation().clone();
-            location.setY((location.getY() - temp.getHeight()) + temp.getHeight());
-
-            coordinates.setScreenLocation(location);
-            coordinates.setScreenDimension(temp);
-
-            Color color = component.getBackground().getFinalColor();
-            if (color != null) {
-                backgroundGraphics.setColor(color);
-                backgroundGraphics.fill(new java.awt.Rectangle(location.toPoint(), temp.toSwing()));
-            }
-        }
-    }
 }

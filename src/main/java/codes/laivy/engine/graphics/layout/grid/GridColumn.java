@@ -1,28 +1,33 @@
 package codes.laivy.engine.graphics.layout.grid;
 
 import codes.laivy.engine.graphics.layout.grid.disposition.GridDisposition;
-import com.sun.glass.ui.Size;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class GridColumn {
 
     private final @NotNull GridRow row;
-    private final @NotNull Set<@NotNull GridDisposition> dispositions = new LinkedHashSet<>();
-    private @Range(from = 1, to = 12) int maxDispositions = 3; // 3 is the default amount of max dispositions.
+    private @Nullable GridDisposition disposition;
 
     private @NotNull GridColumn.Breakpoints breakpoints;
 
     public GridColumn(@NotNull GridRow row, @NotNull Breakpoints breakpoints) {
         this.row = row;
         this.breakpoints = breakpoints;
+        getRow().getColumns().add(this);
+    }
+
+    public @Nullable GridDisposition getDisposition() {
+        return disposition;
+    }
+
+    public void setDisposition(@Nullable GridDisposition disposition) {
+        this.disposition = disposition;
     }
 
     public @NotNull Breakpoints getBreakpoints() {
@@ -32,46 +37,9 @@ public class GridColumn {
         this.breakpoints = breakpoints;
     }
 
-    /**
-     * The maximum dispositions number is the amount of dispositions (starting from the first to last) that will
-     * be displayed into the screen, if i have 10 dispositions at the {@link #getDispositions()} method but 3 {@link #getMaxDispositions()}
-     * only the first 3 dispositions will be displayed
-     *
-     * @since 1.0 22/01/2023
-     * @author ItsLaivy
-     * @return a number between 1 and 12 of the maximum dispositions at this row
-     */
-    public @Range(from = 1, to = 12) int getMaxDispositions() {
-        return maxDispositions;
-    }
-    /**
-     * @since 1.0 22/01/2023
-     * @author ItsLaivy
-     * @param maxDispositions a number between 1 and 12 of the maximum dispositions at this row
-     */
-    public void setMaxDispositions(@Range(from = 1, to = 12) int maxDispositions) {
-        this.maxDispositions = maxDispositions;
-    }
-
     @Contract(pure = true)
     public @NotNull GridRow getRow() {
         return row;
-    }
-
-    /**
-     * The dispositions that will be displayed.
-     * <br><br>
-     * <strong>Note:</strong> Only will be displayed the amount of {@link #getMaxDispositions()} starting from the first to last.
-     * if the {@link #getMaxDispositions()} is 3, only the first 3 dispositions will be displayed.
-
-     * @since 1.0 22/01/2023
-     * @author ItsLaivy
-     * @return The dispositions
-     */
-    @ApiStatus.Internal
-    @Contract(pure = true)
-    public @NotNull Set<@NotNull GridDisposition> getDispositions() {
-        return dispositions;
     }
 
     /**
@@ -107,10 +75,10 @@ public class GridColumn {
      */
     public static class Breakpoints {
 
-        protected final @NotNull Map<@NotNull Size, @NotNull Integer> breakpoints;
+        protected final @NotNull Map<@NotNull GridSize, @NotNull Integer> breakpoints;
 
         /**
-         * @deprecated Use {@link Breakpoints#Breakpoints(Map)} instead, if you want to use that way, be sure that you are defining the breakpoints using the {@link Breakpoints#addBreakpoint(Size, int)} method.
+         * @deprecated Use {@link Breakpoints#Breakpoints(Map)} instead, if you want to use that way, be sure that you are defining the breakpoints using the {@link Breakpoints#addBreakpoint(GridSize, int)} method.
          * @since 1.0 22/01/2023
          * @author ItsLaivy
          */
@@ -124,11 +92,11 @@ public class GridColumn {
          * @author ItsLaivy
          * @param breakpoints the breakpoints map
          */
-        public Breakpoints(@NotNull Map<@NotNull Size, @NotNull Integer> breakpoints) {
+        public Breakpoints(@NotNull Map<@NotNull GridSize, @NotNull Integer> breakpoints) {
             this.breakpoints = breakpoints;
         }
 
-        public void addBreakpoint(@NotNull Size size, @Range(from = 1, to = 12) int spacing) {
+        public void addBreakpoint(@NotNull GridSize size, @Range(from = 1, to = 12) int spacing) {
             this.breakpoints.put(size, spacing);
         }
 
@@ -137,8 +105,24 @@ public class GridColumn {
          * @param size the screen size
          * @return The size between 1 and 12
          */
-        public @Range(from = 1, to = 12) int getSpacing(@NotNull Size size) {
-            // TODO: 22/01/2023 Doing this!
+        public @Range(from = 1, to = 12) int getSpacing(@NotNull GridSize size) {
+            Integer value = breakpoints.get(size);
+            if (value != null) {
+                return value;
+            }
+            GridSize next = size.getNext();
+            GridSize prev = size.getPrevious();
+            while (next != null || prev != null) {
+                if (breakpoints.containsKey(next)) {
+                    return breakpoints.get(next);
+                }
+                if (breakpoints.containsKey(prev)) {
+                    return breakpoints.get(prev);
+                }
+                if (next != null) next = next.getNext();
+                if (prev != null) prev = prev.getPrevious();
+            }
+            throw new IllegalStateException("This Breakpoint doesn't have breakpoints yet!");
         }
 
     }
