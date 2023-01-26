@@ -29,6 +29,10 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
         GameLayout.LayoutCoordinates coordinates = resolutionFix();
         //
 
+        if (getComponent().isAntiAliasing()) {
+            renderingGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        }
+
         // Background
         renderBackground(backgroundGraphics, coordinates);
         backgroundGraphics.dispose();
@@ -67,9 +71,10 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
     public @NotNull GameLayout.LayoutCoordinates resolutionFix() {
         GameWindow window = getLayout().getWindow();
         Dimension defaultDim = component.getDimension().clone();
+        Location defaultLoc = component.getLocation().clone();
 
         GameLayout.LayoutCoordinates coordinates = new GameLayout.LayoutCoordinates(
-                getComponent().getLocation().clone(),
+                defaultLoc,
                 defaultDim.clone()
         );
 
@@ -96,10 +101,21 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
         }
 
         if (getLayout().isAutoMove()) {
-            Location location = new Location(
-                    (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), getComponent().getLocation().getX(), window.getAvailableSize().getWidth()),
-                    (int) MathUtils.rthree(getLayout().getReferenceSize().getHeight(), getComponent().getLocation().getY(), window.getAvailableSize().getHeight())
-            );
+            Location location;
+            if (getLayout().isCubicResizing()) {
+                int x = (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), defaultLoc.getX(), window.getAvailableSize().getWidth());
+                int y = (int) MathUtils.rthree(getLayout().getReferenceSize().getHeight(), defaultLoc.getY(), window.getAvailableSize().getHeight());
+
+                location = new Location(
+                        x,
+                        (int) (y - coordinates.getClientDimension().getHeight() / 2.1D)
+                );
+            } else {
+                location = new Location(
+                        (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), defaultLoc.getX(), window.getAvailableSize().getWidth()),
+                        (int) MathUtils.rthree(getLayout().getReferenceSize().getHeight(), defaultLoc.getY(), window.getAvailableSize().getHeight())
+                );
+            }
             coordinates.setLocation(new Location(offsetX + location.getX(), offsetY + location.getY()));
         }
 

@@ -27,6 +27,8 @@ public abstract class GameComponent implements Cloneable {
     protected @Nullable Dimension screenDimension;
     protected @NotNull Dimension dimension;
 
+    public boolean antiAliasing = true;
+
     private int offsetX;
     private int offsetY;
 
@@ -59,6 +61,14 @@ public abstract class GameComponent implements Cloneable {
         this.align = Alignment.NORMAL;
 
         dimension = new Dimension(0, 0);
+    }
+
+    public boolean isAntiAliasing() {
+        return antiAliasing;
+    }
+
+    public void setAntiAliasing(boolean antiAliasing) {
+        this.antiAliasing = antiAliasing;
     }
 
     public @Nullable Stroke getStroke() {
