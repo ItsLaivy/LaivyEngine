@@ -135,7 +135,7 @@ public class GameWindow {
     @Contract("-> new")
     public @NotNull Dimension getSize() {
         java.awt.Dimension size = getFrame().getSize();
-        return new Dimension(size);
+        return new Dimension(size.width, size.height);
     }
 
     /**

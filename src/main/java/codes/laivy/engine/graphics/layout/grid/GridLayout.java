@@ -2,8 +2,8 @@ package codes.laivy.engine.graphics.layout.grid;
 
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
-import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
+import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import codes.laivy.engine.graphics.layout.grid.disposition.GridDisposition;
 import codes.laivy.engine.graphics.window.GameWindow;
 import codes.laivy.engine.utils.MathUtils;
@@ -43,34 +43,68 @@ public class GridLayout extends GameLayout {
 
     @Override
     protected void render(@NotNull Graphics2D graphics) {
-        int width = getWindow().getAvailableSize().getWidth();
-        int height = getWindow().getAvailableSize().getHeight();
+        int screenWidth = getWindow().getSize().getWidth();
+        int screenHeight = getWindow().getAvailableSize().getHeight();
 
+
+        int totalRows = getRows().size();
         for (GridRow row : getRows()) {
-            int rowTotalSpace = row.getMaxColumns();
-            for (GridColumn column : row.getColumns()) {
-                if (column.getDisposition() != null) {
-                    GameComponent component = column.getDisposition().getComponent();
+            int rowIndex = getRows().indexOf(row);
+
+            Dimension rowDim = new Dimension(screenWidth, (screenHeight / totalRows));
+            Location rowLoc = new Location(0, (screenHeight / totalRows) * rowIndex);
+
+            GridColumn[][] matriz = row.getColumnsWithBreakpoint(getSize());
+
+            int breakpoint = 0;
+            for (GridColumn[] columns : matriz) {
+                int walkedSpaces = 0;
+                for (GridColumn column : columns) {
+                    // Component
+                    GridDisposition disposition = column.getDisposition();
+                    //
+
+                    // Coordinates
+                    int columnSpace = column.getBreakpoints().getSpacing(getSize());
                     int columnWidth, columnHeight, columnX, columnY;
 
-                    int referenceX = 800;
-                    int referenceY = 600;
+                    columnWidth = (rowDim.getWidth() / row.getMaxColumns()) * columnSpace;
+                    columnHeight = (rowDim.getHeight() / matriz.length);
+                    columnX = rowLoc.getX() + ((screenWidth - rowLoc.getX()) / row.getMaxColumns()) * walkedSpaces;
+                    columnY = rowLoc.getY() + (rowDim.getHeight() / matriz.length) * breakpoint;
 
-                    float aspectRatio = component.getDimension().getWidth() / component.getDimension().getHeight();
+                    walkedSpaces += columnSpace;
+                    //
 
-                    columnWidth = (int) MathUtils.rthree(referenceX, component.getDimension().getWidth(), width);
-                    columnHeight = (int) (columnWidth / aspectRatio);
-                    columnX = (int) MathUtils.rthree(referenceX, component.getLocation().getX(), width);
-                    columnY = (int) MathUtils.rthree(referenceY, component.getLocation().getY(), height);
-
-                    Graphics2D renderingGraphics = (Graphics2D) graphics.create();
-                    renderingGraphics.setColor(component.getColor());
-                    column.getDisposition().render(renderingGraphics, new LayoutCoordinates(new Location(columnX, columnY), new Dimension(columnWidth, columnHeight)));
-                    renderingGraphics.dispose();
-                } else {
-                    throw new NullPointerException("Couldn't find a disposition for that column.");
+                    if (disposition != null) {
+                        // Rendering Graphics
+                        Graphics2D graphics2D = (Graphics2D) graphics.create();
+                        disposition.render(graphics2D, new LayoutCoordinates(new Location(columnX + calculateWidthOffset(disposition.getComponent().getOffsetX()), columnY + calculateHeightOffset(disposition.getComponent().getOffsetY())), new Location(columnX, columnY), new Dimension(columnWidth, columnHeight), new Dimension(columnWidth, columnHeight)));
+                        graphics2D.dispose();
+                        //
+                    }
                 }
+                breakpoint++;
             }
         }
     }
+
+    // ---/-/--- //
+    // Utilities //
+    // ---/-/--- //
+    public final int calculateWidthOffset(int offsetX) {
+        if (offsetX != 0) {
+            offsetX = (int) MathUtils.rthree(new codes.laivy.engine.coordinates.dimension.Dimension(800, 600).getWidth() + new codes.laivy.engine.coordinates.dimension.Dimension(800, 600).getHeight(), offsetX, getWindow().getAvailableSize().getWidth() + getWindow().getAvailableSize().getHeight());
+        }
+        return offsetX;
+    }
+    public final int calculateHeightOffset(int offsetY) {
+        if (offsetY != 0) {
+            offsetY = (int) MathUtils.rthree(new codes.laivy.engine.coordinates.dimension.Dimension(800, 600).getWidth() + new codes.laivy.engine.coordinates.dimension.Dimension(800, 600).getHeight(), offsetY, getWindow().getAvailableSize().getWidth() + getWindow().getAvailableSize().getHeight());
+        }
+        return offsetY;
+    }
+    // ---/-/--- //
+    // Utilities //
+    // ---/-/--- //
 }

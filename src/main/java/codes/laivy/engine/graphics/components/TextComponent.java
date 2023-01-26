@@ -31,13 +31,13 @@ public class TextComponent extends GameComponent {
         setColor(color);
 
         // Default dimension value
-        Rectangle2D rectangle = font.getStringBounds(text, new FontRenderContext(getAlign().getTransform(), false, false));
+        Rectangle2D rectangle = font.getStringBounds(text, new FontRenderContext(getAlign().getTransform(), isAntiAliasing(), true));
         this.dimension = new Dimension(rectangle.getBounds().width, rectangle.getBounds().height);
         //
     }
 
     public @NotNull Dimension getDimension(@NotNull AffineTransform transform) {
-        Rectangle2D textSize = font.getStringBounds(text, new FontRenderContext(transform, false, false));
+        Rectangle2D textSize = font.getStringBounds(text, new FontRenderContext(transform, isAntiAliasing(), true));
         int textWidth = (int) textSize.getWidth();
         int textHeight = (int) textSize.getHeight();
 
@@ -70,7 +70,7 @@ public class TextComponent extends GameComponent {
         this.font = font;
 
         // Default dimension value
-        Rectangle2D rectangle = font.getStringBounds(text, new FontRenderContext(getAlign().getTransform(), false, false));
+        Rectangle2D rectangle = font.getStringBounds(text, new FontRenderContext(getAlign().getTransform(), isAntiAliasing(), true));
         this.dimension = new Dimension(rectangle.getBounds().width, rectangle.getBounds().height);
         //
     }

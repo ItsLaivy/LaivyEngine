@@ -36,13 +36,13 @@ public class ResponsiveRoundRectangleDisposition extends ResponsiveShapeDisposit
     private @NotNull RoundRectangle2D.Float shape(@NotNull Location location, @NotNull codes.laivy.engine.coordinates.dimension.Dimension dimension) {
         RoundRectangle2D.Float shape = getComponent().getShape(location, dimension);
         shape.archeight = calculateHeightOffset(getComponent().getArc().getHeight());
-        shape.arcwidth = calculateHeightOffset(getComponent().getArc().getWidth());
+        shape.arcwidth = calculateWidthOffset(getComponent().getArc().getWidth());
 
         return shape;
     }
 
     @Override
-    public void renderBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
+    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
         codes.laivy.engine.coordinates.dimension.Dimension temp = coordinates.getClientDimension().clone();
         Location location = coordinates.getClientLocation().clone();
 
@@ -55,7 +55,7 @@ public class ResponsiveRoundRectangleDisposition extends ResponsiveShapeDisposit
 
             RoundRectangle2D.Float shape = getComponent().getShape(location, temp);
             shape.archeight = calculateHeightOffset(getComponent().getArc().getHeight());
-            shape.arcwidth = calculateHeightOffset(getComponent().getArc().getWidth());
+            shape.arcwidth = calculateWidthOffset(getComponent().getArc().getWidth());
 
             backgroundGraphics.fill(shape);
         }

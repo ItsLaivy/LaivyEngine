@@ -47,7 +47,7 @@ public class Asset {
      * @since 1.0 build 0 (02/07/2022)
      * @author ItsLaivy
      */
-    public void unload() {
+    public void dispose() {
         BufferedImage buff = toBuffered();
         if (buff != null) buff.flush();
 

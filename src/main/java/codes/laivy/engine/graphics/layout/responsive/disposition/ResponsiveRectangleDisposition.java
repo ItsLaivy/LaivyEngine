@@ -20,13 +20,13 @@ public class ResponsiveRectangleDisposition extends ResponsiveShapeDisposition {
     }
 
     @Override
-    @Contract(pure = true)
-    public @NotNull RectangleComponent getComponent() {
-        return (RectangleComponent) super.getComponent();
+    public void shape(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
+        graphics.draw(getComponent().getShape(location, dimension));
     }
 
     @Override
-    public void shape(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
-        graphics.draw(getComponent().getShape(location, dimension));
+    @Contract(pure = true)
+    public @NotNull RectangleComponent getComponent() {
+        return (RectangleComponent) super.getComponent();
     }
 }

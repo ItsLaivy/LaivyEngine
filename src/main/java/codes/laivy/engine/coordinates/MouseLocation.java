@@ -28,4 +28,12 @@ public final class MouseLocation {
         return location != null;
     }
 
+    @Override
+    public String toString() {
+        if (getLocation() != null) {
+            return "MouseLocation[x:" + getLocation().getY() + ",y:" + getLocation().getX() + "]";
+        } else {
+            return super.toString();
+        }
+    }
 }

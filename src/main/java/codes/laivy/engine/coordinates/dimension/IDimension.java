@@ -73,5 +73,16 @@ public interface IDimension {
         setWidth(getWidth() + dimension.getWidth());
         return this;
     }
+
+    @Contract(value = "_, _ -> this")
+    default @NotNull IDimension multiply(int width, int height) {
+        setHeight(getHeight() * height);
+        setWidth(getWidth() * width);
+        return this;
+    }
+    @Contract(value = "_ -> this")
+    default @NotNull IDimension multiply(int value) {
+        return this.multiply(value, value);
+    }
     
 }

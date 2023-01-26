@@ -1,6 +1,7 @@
 package codes.laivy.engine.graphics.layout.responsive.disposition;
 
 import codes.laivy.engine.coordinates.Location;
+import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.ImageComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
@@ -22,13 +23,13 @@ public class ResponsiveImageDisposition extends ResponsiveDisposition {
     }
 
     @Override
-    public void draw(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull codes.laivy.engine.coordinates.dimension.Dimension dimension) {
+    public void drawObject(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
         graphics.drawImage(getComponent().getAsset().toBuffered(), location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight(), getLayout().getWindow().getPanel());
     }
 
     @Override
     public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords) {
-        codes.laivy.engine.coordinates.dimension.Dimension dimension = getComponent().getDimension();
+        Dimension dimension = getComponent().getDimension();
 
         renderingGraphics.transform(alignment.getTransform());
         if (alignment == GameComponent.Alignment.FLIPPED_HORIZONTALLY) {
@@ -42,8 +43,8 @@ public class ResponsiveImageDisposition extends ResponsiveDisposition {
     }
 
     @Override
-    public void renderBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
-        codes.laivy.engine.coordinates.dimension.Dimension temp = coordinates.getClientDimension().clone();
+    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
+        Dimension temp = coordinates.getClientDimension().clone();
 
         Location location = coordinates.getClientLocation().clone();
         location.setY((location.getY() - temp.getHeight()) + temp.getHeight());

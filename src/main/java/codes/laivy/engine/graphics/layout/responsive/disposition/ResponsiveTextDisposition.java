@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.awt.font.GlyphVector;
 
 public class ResponsiveTextDisposition extends ResponsiveDisposition {
     public ResponsiveTextDisposition(@NotNull TextComponent component, @NotNull ResponsiveLayout layout) {
@@ -25,22 +24,10 @@ public class ResponsiveTextDisposition extends ResponsiveDisposition {
     }
 
     @Override
-    public void render(@NotNull Graphics2D graphics) {
-        Graphics2D renderingGraphics = (Graphics2D) graphics.create();
-        Graphics2D backgroundGraphics = (Graphics2D) graphics.create();
-
-        // Coordinates
-        GameLayout.LayoutCoordinates coordinates = resolutionFix();
-        //
-
+    public void postResolutionFix(@NotNull Graphics2D renderingGraphics, @NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
         // Text resolution fix
         float size = (float) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), getComponent().getSize(), getLayout().getWindow().getAvailableSize().getWidth());
         Font font = getComponent().getFont().deriveFont(size);
-
-        renderingGraphics.setRenderingHint(
-                RenderingHints.KEY_FRACTIONALMETRICS,
-                RenderingHints.VALUE_FRACTIONALMETRICS_ON);
-
 
         FontMetrics metrics = renderingGraphics.getFontMetrics(font);
 
@@ -49,40 +36,10 @@ public class ResponsiveTextDisposition extends ResponsiveDisposition {
 
         coordinates.setDimension(new Dimension(width, height));
         //
-
-        // Background
-        renderBackground(backgroundGraphics, coordinates);
-        backgroundGraphics.dispose();
-        //
-
-        // Component alignment
-        alignment(renderingGraphics, getComponent().getAlign(), coordinates);
-        //
-
-        // Component rendering
-        renderingGraphics.setColor(getComponent().getColor());
-
-        if (getComponent().getStroke() != null) {
-            renderingGraphics.setStroke(getComponent().getStroke());
-        }
-
-        if (getComponent().getOpacity() != 100) {
-            renderingGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getComponent().getOpacity() / 100F));
-        }
-
-        draw(renderingGraphics, coordinates.getClientLocation(), coordinates.getClientDimension());
-
-        renderingGraphics.dispose();
-        //
-
-        // Hitbox defining
-        getComponent().setScreenLocation(coordinates.getScreenLocation());
-        getComponent().setScreenDimension(coordinates.getScreenDimension());
-        //
     }
 
     @Override
-    public void draw(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
+    public void drawObject(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
         Font font = getComponent().getFont().deriveFont((float) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), getComponent().getSize(), getLayout().getWindow().getAvailableSize().getWidth()));
 
         graphics.setFont(font);
@@ -105,7 +62,7 @@ public class ResponsiveTextDisposition extends ResponsiveDisposition {
     }
 
     @Override
-    public void renderBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
+    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
         Dimension temp = coordinates.getClientDimension().clone();
 
         Location location = coordinates.getClientLocation().clone();

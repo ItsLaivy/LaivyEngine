@@ -3,22 +3,22 @@ package codes.laivy.engine.graphics.layout.grid.disposition;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
-import codes.laivy.engine.graphics.components.shape.RectangleComponent;
+import codes.laivy.engine.graphics.components.shape.EllipseComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
-import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import codes.laivy.engine.graphics.layout.grid.GridLayout;
+import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
-public class GridRectangleDisposition extends GridShapeDisposition {
-    public GridRectangleDisposition(@NotNull RectangleComponent component, @NotNull GridLayout layout, @NotNull GridColumn column) {
+public class GridEllipseDisposition extends GridShapeDisposition {
+    public GridEllipseDisposition(@NotNull EllipseComponent component, @NotNull GridLayout layout, @NotNull GridColumn column) {
         super(component, layout, column);
     }
 
     @Override
-    public void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull codes.laivy.engine.coordinates.dimension.Dimension dimension) {
+    public void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
         renderingGraphics.fill(getComponent().getShape(location, dimension));
     }
 
@@ -42,7 +42,7 @@ public class GridRectangleDisposition extends GridShapeDisposition {
 
     @Override
     @Contract(pure = true)
-    public @NotNull RectangleComponent getComponent() {
-        return (RectangleComponent) super.getComponent();
+    public @NotNull EllipseComponent getComponent() {
+        return (EllipseComponent) super.getComponent();
     }
 }

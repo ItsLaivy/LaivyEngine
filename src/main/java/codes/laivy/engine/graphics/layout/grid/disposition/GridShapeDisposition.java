@@ -1,17 +1,18 @@
-package codes.laivy.engine.graphics.layout.responsive.disposition;
+package codes.laivy.engine.graphics.layout.grid.disposition;
 
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.shape.ShapeComponent;
-import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
+import codes.laivy.engine.graphics.layout.grid.GridLayout;
+import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
-public abstract class ResponsiveShapeDisposition extends ResponsiveDisposition {
-    public ResponsiveShapeDisposition(@NotNull ShapeComponent component, @NotNull ResponsiveLayout layout) {
-        super(component, layout);
+public abstract class GridShapeDisposition extends GridDisposition {
+    public GridShapeDisposition(@NotNull ShapeComponent component, @NotNull GridLayout layout, @NotNull GridColumn column) {
+        super(component, layout, column);
     }
 
     public abstract void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull codes.laivy.engine.coordinates.dimension.Dimension dimension);

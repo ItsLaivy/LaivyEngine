@@ -33,7 +33,7 @@ public class ResponsiveEllipseDisposition extends ResponsiveShapeDisposition {
     }
 
     @Override
-    public void renderBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
+    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
         codes.laivy.engine.coordinates.dimension.Dimension temp = coordinates.getClientDimension().clone();
         Location location = coordinates.getClientLocation().clone();
 

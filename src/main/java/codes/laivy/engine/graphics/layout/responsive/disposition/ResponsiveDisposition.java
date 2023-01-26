@@ -22,6 +22,11 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
     }
 
     public void render(@NotNull Graphics2D graphics) {
+        if (getComponent().isAntiAliasing()) {
+            graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        }
+        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_ON);
+
         Graphics2D renderingGraphics = (Graphics2D) graphics.create();
         Graphics2D backgroundGraphics = (Graphics2D) graphics.create();
 
@@ -29,13 +34,12 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
         GameLayout.LayoutCoordinates coordinates = resolutionFix();
         //
 
-        if (getComponent().isAntiAliasing()) {
-            renderingGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        }
+        // Post
+        postResolutionFix(renderingGraphics, backgroundGraphics, coordinates);
+        //
 
         // Background
-        renderBackground(backgroundGraphics, coordinates);
-        backgroundGraphics.dispose();
+        drawBackground(backgroundGraphics, coordinates);
         //
 
         // Component alignment
@@ -48,13 +52,15 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
         if (getComponent().getStroke() != null) {
             renderingGraphics.setStroke(getComponent().getStroke());
         }
-
         if (getComponent().getOpacity() != 100) {
             renderingGraphics.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, getComponent().getOpacity() / 100F));
         }
 
-        draw(renderingGraphics, coordinates.getClientLocation(), coordinates.getClientDimension());
+        drawObject(renderingGraphics, coordinates.getClientLocation(), coordinates.getClientDimension());
+        //
 
+        // Graphics disposing
+        backgroundGraphics.dispose();
         renderingGraphics.dispose();
         //
 
@@ -62,6 +68,9 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
         getComponent().setScreenLocation(coordinates.getScreenLocation());
         getComponent().setScreenDimension(coordinates.getScreenDimension());
         //
+    }
+
+    public void postResolutionFix(@NotNull Graphics2D renderingGraphics, @NotNull Graphics2D backgroundGraphics, @NotNull GameLayout.LayoutCoordinates coordinates) {
     }
 
     /**
@@ -129,7 +138,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
      * @param location the sreen location of the component
      * @param dimension the screen dimension of the component
      */
-    public abstract void draw(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension);
+    public abstract void drawObject(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension);
 
     /**
      * That's the alignment method for components
@@ -155,7 +164,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
      * @param backgroundGraphics A copy of the original graphics, separated from the rendering graphics.
      * @param coordinates the coordinates
      */
-    public void renderBackground(@NotNull Graphics2D backgroundGraphics, @NotNull GameLayout.LayoutCoordinates coordinates) {
+    public void drawBackground(@NotNull Graphics2D backgroundGraphics, @NotNull GameLayout.LayoutCoordinates coordinates) {
         Color color = getComponent().getBackground().getFinalColor();
         if (color != null) {
             backgroundGraphics.setColor(color);
