@@ -1,7 +1,9 @@
 package codes.laivy.engine.graphics.layout;
 
+import codes.laivy.engine.annotations.WindowThread;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.exceptions.LaivyEngineException;
+import codes.laivy.engine.exceptions.UnsupportedThreadException;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.Contract;
@@ -24,7 +26,12 @@ public abstract class GameLayout {
         return panel;
     }
 
-    public void callLayout(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds) {
+    @WindowThread
+    public synchronized void callLayout(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds) {
+        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
+            throw new UnsupportedThreadException("GameWindow");
+        }
+
         try {
             render(graphics, bounds);
         } catch (Exception e) {
@@ -35,6 +42,7 @@ public abstract class GameLayout {
     /**
      * It's called when the layout needs to be reconfigured. Commonly called a lot of times per second.
      */
+    @WindowThread
     protected abstract void render(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds);
 
     /**

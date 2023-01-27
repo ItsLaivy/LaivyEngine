@@ -22,7 +22,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
     }
 
     public @NotNull Dimension getReferenceSize(@NotNull GameLayoutBounds bounds) {
-        return getLayout().getReferenceSize();
+        return new Dimension(getLayout().getReferenceSize().getWidth(), getLayout().getReferenceSize().getHeight());
     }
 
     public void render(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds) {
@@ -179,27 +179,25 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
     // Utilities //
     // ---/-/--- //
     protected final int calculateWidthOffset(int offsetX, @NotNull GameLayoutBounds bounds) {
-        if (getLayout().isCubicResizing()) {
-            if (offsetX != 0) {
-                offsetX = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth() + getReferenceSize(bounds).getHeight(), offsetX, bounds.getAvailable().getWidth() + bounds.getAvailable().getHeight());
-            }
-        } else {
-            if (offsetX != 0) {
+        if (offsetX != 0) {
+            if (getLayout().isCubicResizing()) {
+                offsetX = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth() + getReferenceSize(bounds).getHeight(), offsetX, bounds.getTotal().getWidth() + bounds.getTotal().getHeight());
+            } else {
                 offsetX = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth(), offsetX, bounds.getAvailable().getWidth());
             }
         }
+
         return offsetX;
     }
     protected final int calculateHeightOffset(int offsetY, @NotNull GameLayoutBounds bounds) {
-        if (getLayout().isCubicResizing()) {
-            if (offsetY != 0) {
+        if (offsetY != 0) {
+            if (getLayout().isCubicResizing()) {
                 offsetY = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth() + getReferenceSize(bounds).getHeight(), offsetY, bounds.getAvailable().getWidth() + bounds.getAvailable().getHeight());
-            }
-        } else {
-            if (offsetY != 0) {
+            } else {
                 offsetY = (int) MathUtils.rthree(getReferenceSize(bounds).getHeight(), offsetY, bounds.getAvailable().getHeight());
             }
         }
+
         return offsetY;
     }
     // ---/-/--- //

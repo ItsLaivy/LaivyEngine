@@ -153,7 +153,7 @@ public class DefaultGameComponents implements GameWindow.Components {
     }
 
     @WindowThread
-    private @NotNull Set<@NotNull GameComponent> set() {
+    private synchronized @NotNull Set<@NotNull GameComponent> set() {
         if (!getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
