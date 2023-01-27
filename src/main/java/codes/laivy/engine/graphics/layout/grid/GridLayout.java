@@ -2,10 +2,12 @@ package codes.laivy.engine.graphics.layout.grid;
 
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
+import codes.laivy.engine.graphics.components.ScreenComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import codes.laivy.engine.graphics.layout.grid.disposition.GridDisposition;
+import codes.laivy.engine.graphics.layout.grid.disposition.GridScreenDisposition;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
 import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
@@ -42,6 +44,8 @@ public class GridLayout extends GameLayout {
         throw new IllegalArgumentException("Couldn't get grid size for width: '" + screen.getWidth() + "'");
     }
 
+    private int r = 0;
+
     @Override
     protected void render(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds) {
         int screenWidth = bounds.getTotal().getWidth();
@@ -49,10 +53,7 @@ public class GridLayout extends GameLayout {
 
         int totalRows = getRows().size();
 
-        int rows = 0;
         for (GridRow row : getRows()) {
-            rows++;
-
             int rowIndex = getRows().indexOf(row);
 
             Dimension rowDim = new Dimension(screenWidth, (screenHeight / totalRows));
@@ -75,16 +76,11 @@ public class GridLayout extends GameLayout {
                     int columnSpace = column.getBreakpoints().getSpacing(getSize());
                     int columnWidth, columnHeight, columnX, columnY;
 
-                    columnWidth = (int) Math.ceil((double) (rowWidth * columnSpace) / row.getMaxColumns()) - 1;
+                    columnWidth = (int) Math.ceil((double) (rowWidth * columnSpace) / row.getMaxColumns());
                     columnHeight = (rowHeight / matriz.length);
-                    columnX = (int) (rowLoc.getX() + Math.ceil((double) screenWidth * walkedSpaces / row.getMaxColumns())) - 1;
+                    columnX = (int) (rowLoc.getX() + Math.ceil((double) screenWidth * walkedSpaces / row.getMaxColumns()));
                     columnY = rowLoc.getY() + (rowHeight / matriz.length) * breakpoint;
-
-//                    Debugging
-//                    if (rows == 2) {
-//                        System.out.println("Row width: '" + rowWidth + "', Column spaces: '" + columnSpace + "', Column width: '" + columnWidth + " (" + columnWidth * row.getColumns().size() + ")', Screen width: '" + screenWidth + "', Walked spaces: '" + walkedSpaces + "', Column x: '" + columnX + "'");
-//                    }
-
+                    
                     walkedSpaces += columnSpace;
                     //
 
@@ -95,7 +91,7 @@ public class GridLayout extends GameLayout {
                                 graphics2D,
                                 new LayoutCoordinates(
                                         new Location(columnX + calculateWidthOffset(disposition.getComponent().getOffsetX(), bounds), columnY + calculateHeightOffset(disposition.getComponent().getOffsetY(), bounds)),
-                                        new Location(columnX, columnY),
+                                        new Location(columnX + calculateWidthOffset(disposition.getComponent().getOffsetX(), bounds), columnY + calculateHeightOffset(disposition.getComponent().getOffsetY(), bounds)),
                                         new Dimension(columnWidth, columnHeight),
                                         new Dimension(columnWidth, columnHeight)
                                 ),

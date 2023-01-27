@@ -8,14 +8,13 @@ import codes.laivy.engine.exceptions.LaivyEngineException;
 import codes.laivy.engine.exceptions.UnsupportedThreadException;
 import codes.laivy.engine.graphics.layout.ComponentDisposition;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.Range;
+import org.jetbrains.annotations.*;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 
 public abstract class GameComponent implements Cloneable {
 
@@ -80,6 +79,21 @@ public abstract class GameComponent implements Cloneable {
     }
     public void setStroke(@Nullable Stroke stroke) {
         this.stroke = stroke;
+    }
+
+    /**
+     * Originally maded for ScreenComponent
+     *
+     * @param location the location
+     * @return the component on that location
+     */
+    @ApiStatus.Internal
+    @ApiStatus.Experimental
+    @Contract(value = "_ -> new")
+    public @NotNull Set<@NotNull GameComponent> getComponent(@NotNull Location location) {
+        return new LinkedHashSet<GameComponent>() {{
+            add(GameComponent.this);
+        }};
     }
 
     /**

@@ -104,7 +104,7 @@ public class GamePanel extends JPanel {
         for (Map.Entry<Location, Set<GameComponent>> map : components.entrySet()) {
             for (GameComponent component : map.getValue()) {
                 if (component.isAtScreen() && component.collides(location)) {
-                    set.add(component);
+                    set.addAll(component.getComponent(location));
                 }
             }
         }
