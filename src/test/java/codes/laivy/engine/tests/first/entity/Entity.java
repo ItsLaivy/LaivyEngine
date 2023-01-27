@@ -23,9 +23,9 @@ public abstract class Entity {
         this.component.getBackground().setColor(Color.WHITE);
         this.component.getBackground().setOpacity(20);
         //this.component.setStroke(10);
-        this.component.setDisposition(new ResponsiveRoundRectangleDisposition((RoundRectangleComponent) this.component, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getLayout())));
+        this.component.setDisposition(new ResponsiveRoundRectangleDisposition((RoundRectangleComponent) this.component, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getPanel().getLayout())));
         //this.component.setAlign(GameComponent.Alignment.FLIPPED_VERTICALLY_HORIZONTALLY);
-        getSquare().getPanel().getWindow().getGame().getGraphics().runWindowThreadLater(component::add);
+        getSquare().getGamePanel().getWindow().getGame().getGraphics().runWindowThreadLater(component::add);
     }
 
     public int getSpeed() {

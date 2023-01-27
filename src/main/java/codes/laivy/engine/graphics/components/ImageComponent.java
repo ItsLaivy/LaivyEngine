@@ -39,11 +39,7 @@ public class ImageComponent extends GameComponent {
     @Override
     @Contract("-> new")
     public @NotNull ImageComponent clone() {
-        ImageComponent component = (ImageComponent) super.clone();
-
-        component.setAsset(component.getAsset());
-
-        return component;
+        return (ImageComponent) super.clone();
     }
 
 }

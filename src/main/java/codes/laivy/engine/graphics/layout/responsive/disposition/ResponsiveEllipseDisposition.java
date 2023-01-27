@@ -5,6 +5,7 @@ import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.shape.EllipseComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
+import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -23,17 +24,17 @@ public class ResponsiveEllipseDisposition extends ResponsiveShapeDisposition {
     }
 
     @Override
-    public void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull codes.laivy.engine.coordinates.dimension.Dimension dimension) {
+    public void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull codes.laivy.engine.coordinates.dimension.Dimension dimension, @NotNull GameLayoutBounds bounds) {
         renderingGraphics.fill(getComponent().getShape(location, dimension));
     }
 
     @Override
-    public void shape(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull codes.laivy.engine.coordinates.dimension.Dimension dimension) {
+    public void shape(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull codes.laivy.engine.coordinates.dimension.Dimension dimension, @NotNull GameLayoutBounds bounds) {
         renderingGraphics.draw(getComponent().getShape(location, dimension));
     }
 
     @Override
-    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
+    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates, @NotNull GameLayoutBounds bounds) {
         codes.laivy.engine.coordinates.dimension.Dimension temp = coordinates.getClientDimension().clone();
         Location location = coordinates.getClientLocation().clone();
 
@@ -48,7 +49,7 @@ public class ResponsiveEllipseDisposition extends ResponsiveShapeDisposition {
     }
 
     @Override
-    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords) {
+    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords, @NotNull GameLayoutBounds bounds) {
         Dimension dimension = coords.getScreenDimension();
 
         renderingGraphics.transform(alignment.getTransform());

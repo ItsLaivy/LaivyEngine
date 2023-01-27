@@ -5,6 +5,7 @@ import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.shape.EllipseComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
+import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.grid.GridLayout;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import org.jetbrains.annotations.Contract;
@@ -18,17 +19,17 @@ public class GridEllipseDisposition extends GridShapeDisposition {
     }
 
     @Override
-    public void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension) {
+    public void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayoutBounds bounds) {
         renderingGraphics.fill(getComponent().getShape(location, dimension));
     }
 
     @Override
-    public void shape(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
+    public void shape(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayoutBounds bounds) {
         graphics.draw(getComponent().getShape(location, dimension));
     }
 
     @Override
-    public void alignment(@NotNull Graphics2D renderingGraphics, GameComponent.@NotNull Alignment alignment, GameLayout.@NotNull LayoutCoordinates coords) {
+    public void alignment(@NotNull Graphics2D renderingGraphics, GameComponent.@NotNull Alignment alignment, GameLayout.@NotNull LayoutCoordinates coords, @NotNull GameLayoutBounds bounds) {
         renderingGraphics.transform(alignment.getTransform());
         if (alignment == GameComponent.Alignment.FLIPPED_HORIZONTALLY) {
             coords.getClientLocation().setX(-coords.getClientLocation().getX() - coords.getClientDimension().getWidth());

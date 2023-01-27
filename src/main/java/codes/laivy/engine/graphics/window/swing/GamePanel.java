@@ -4,12 +4,15 @@ import codes.laivy.engine.annotations.WindowThread;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.exceptions.UnsupportedThreadException;
 import codes.laivy.engine.graphics.components.GameComponent;
+import codes.laivy.engine.graphics.layout.GameLayout;
+import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.window.DefaultGameComponents;
 import codes.laivy.engine.graphics.window.GameWindow;
 import codes.laivy.engine.graphics.window.listeners.GameKeyManager;
 import codes.laivy.engine.graphics.window.listeners.GameMouseManager;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,12 +29,26 @@ public class GamePanel extends JPanel {
     private @NotNull GameMouseManager mouseManager;
     private @NotNull GameKeyManager keyManager;
 
+    private @Nullable GameLayout layout;
+
     public GamePanel(@NotNull GameWindow window) {
+        this(window, null);
+    }
+    public GamePanel(@NotNull GameWindow window, @Nullable GameLayout layout) {
         this.window = window;
         this.components = new DefaultGameComponents(this);
 
+        this.layout = layout;
+
         mouseManager = new GameMouseManager(this);
         keyManager = new GameKeyManager(this);
+    }
+
+    public @Nullable GameLayout getEngineLayout() {
+        return layout;
+    }
+    public void setEngineLayout(@Nullable GameLayout layout) {
+        this.layout = layout;
     }
 
     /**
@@ -102,8 +119,8 @@ public class GamePanel extends JPanel {
         super.paint(g);
 
         // The layout will do the work :)
-        if (getWindow().getLayout() != null && getWindow().getFrame().isVisible()) {
-            getWindow().getLayout().callLayout((Graphics2D) g);
+        if (getWindow().getPanel().getEngineLayout() != null && getWindow().getFrame().isVisible()) {
+            getWindow().getPanel().getEngineLayout().callLayout((Graphics2D) g, new GameLayoutBounds(new Location(0, 0), window.getSize(), window.getAvailableSize()));
         }
 
         g.dispose();

@@ -26,14 +26,8 @@ public class GameWindow {
     protected @NotNull GameFrame frame;
     protected @NotNull GamePanel panel;
 
-    private @Nullable GameLayout layout;
-
     public GameWindow(@NotNull Game game) {
-        this(game, null);
-    }
-    public GameWindow(@NotNull Game game, @Nullable GameLayout layout) {
         this.game = game;
-        this.layout = layout;
 
         this.frame = new GameFrame(this);
         this.panel = new GamePanel(this);
@@ -86,16 +80,9 @@ public class GameWindow {
             loc = new Location(p);
         }
 
-        return new MouseLocation(loc);
+        return new MouseLocation(getPanel(), loc);
     }
-
-    public @Nullable GameLayout getLayout() {
-        return layout;
-    }
-    public void setLayout(@Nullable GameLayout layout) {
-        this.layout = layout;
-    }
-
+    
     public void setBackground(@NotNull Color color) {
         panel.setBackground(color);
     }

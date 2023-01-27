@@ -20,11 +20,11 @@ public class ImagePlayer extends Player {
         super(name, location);
 
         this.image = new ImageComponent(TestGame.instance().getWindow().getPanel(), getLocation().clone(), new Dimension(35, 35), 0, 0, asset);
-        this.image.setDisposition(new ResponsiveImageDisposition(this.image, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getLayout())));
+        this.image.setDisposition(new ResponsiveImageDisposition(this.image, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getPanel().getLayout())));
         this.image.getBackground().setColor(Color.RED);
         this.image.getBackground().setOpacity(20);
 
-        getSquare().getPanel().getWindow().getGame().getGraphics().runWindowThreadLater(this.image::add);
+        getSquare().getGamePanel().getWindow().getGame().getGraphics().runWindowThreadLater(this.image::add);
     }
 
     @Override

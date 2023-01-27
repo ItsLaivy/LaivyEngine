@@ -3,7 +3,7 @@ package codes.laivy.engine.graphics.layout;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.exceptions.LaivyEngineException;
 import codes.laivy.engine.graphics.components.GameComponent;
-import codes.laivy.engine.graphics.window.GameWindow;
+import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,20 +13,20 @@ import java.awt.*;
 
 public abstract class GameLayout {
 
-    private final @NotNull GameWindow window;
+    private final @NotNull GamePanel panel;
 
-    public GameLayout(@NotNull GameWindow window) {
-        this.window = window;
+    public GameLayout(@NotNull GamePanel panel) {
+        this.panel = panel;
     }
 
     @Contract(pure = true)
-    public final @NotNull GameWindow getWindow() {
-        return window;
+    public final @NotNull GamePanel getPanel() {
+        return panel;
     }
 
-    public void callLayout(@NotNull Graphics2D graphics) {
+    public void callLayout(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds) {
         try {
-            render(graphics);
+            render(graphics, bounds);
         } catch (Exception e) {
             throw new LaivyEngineException(e, "Layout organization");
         }
@@ -35,7 +35,7 @@ public abstract class GameLayout {
     /**
      * It's called when the layout needs to be reconfigured. Commonly called a lot of times per second.
      */
-    protected abstract void render(@NotNull Graphics2D graphics);
+    protected abstract void render(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds);
 
     /**
      * On a layout rendering, the screen location will be the {@link GameComponent#getScreenLocation()} and the screen dimensions will be the {@link GameComponent#getScreenDimension()}

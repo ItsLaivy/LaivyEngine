@@ -20,7 +20,7 @@ public class GraphicsThread extends GameThread {
 
             try {
                 //noinspection BusyWait
-                Thread.sleep(1000 / getGraphics().getFramesPerSecond());
+                Thread.sleep(1000 / getGraphics().getMaxFps());
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

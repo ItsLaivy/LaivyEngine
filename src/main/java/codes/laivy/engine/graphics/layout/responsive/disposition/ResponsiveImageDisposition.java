@@ -5,6 +5,7 @@ import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.ImageComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
+import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -23,27 +24,27 @@ public class ResponsiveImageDisposition extends ResponsiveDisposition {
     }
 
     @Override
-    public void drawObject(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
-        graphics.drawImage(getComponent().getAsset().toBuffered(), location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight(), getLayout().getWindow().getPanel());
+    public void drawObject(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayoutBounds bounds) {
+        graphics.drawImage(getComponent().getAsset().toBuffered(), location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight(), getLayout().getPanel().getWindow().getPanel());
     }
 
     @Override
-    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords) {
+    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords, @NotNull GameLayoutBounds bounds) {
         Dimension dimension = getComponent().getDimension();
 
         renderingGraphics.transform(alignment.getTransform());
         if (alignment == GameComponent.Alignment.FLIPPED_HORIZONTALLY) {
-            coords.getClientLocation().setX(-coords.getScreenLocation().getX() - calculateWidthOffset(dimension.getWidth()));
+            coords.getClientLocation().setX(-coords.getScreenLocation().getX() - calculateWidthOffset(dimension.getWidth(), bounds));
         } else if (alignment == GameComponent.Alignment.FLIPPED_VERTICALLY) {
-            coords.getClientLocation().setY(-coords.getScreenLocation().getY() - calculateWidthOffset(dimension.getWidth()));
+            coords.getClientLocation().setY(-coords.getScreenLocation().getY() - calculateWidthOffset(dimension.getWidth(), bounds));
         } else if (alignment == GameComponent.Alignment.FLIPPED_VERTICALLY_HORIZONTALLY) {
-            coords.getClientLocation().setX(-coords.getScreenLocation().getX() - calculateWidthOffset(dimension.getWidth()));
-            coords.getClientLocation().setY(-coords.getScreenLocation().getY() - calculateWidthOffset(dimension.getWidth()));
+            coords.getClientLocation().setX(-coords.getScreenLocation().getX() - calculateWidthOffset(dimension.getWidth(), bounds));
+            coords.getClientLocation().setY(-coords.getScreenLocation().getY() - calculateWidthOffset(dimension.getWidth(), bounds));
         }
     }
 
     @Override
-    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
+    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates, @NotNull GameLayoutBounds bounds) {
         Dimension temp = coordinates.getClientDimension().clone();
 
         Location location = coordinates.getClientLocation().clone();

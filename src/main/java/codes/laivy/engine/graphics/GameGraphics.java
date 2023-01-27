@@ -15,7 +15,7 @@ public class GameGraphics {
     private final @NotNull Game game;
     protected final @NotNull GameWindow window;
 
-    private @Range(from = 1, to = 1000) int framesPerSecond = 60;
+    private @Range(from = 1, to = 1000) int maxFps = 60;
 
     protected @NotNull GraphicsThread graphicsThread;
 
@@ -45,12 +45,12 @@ public class GameGraphics {
         return window;
     }
 
-    public @Range(from = 1, to = 1000) int getFramesPerSecond() {
-        return framesPerSecond;
+    public @Range(from = 1, to = 1000) int getMaxFps() {
+        return maxFps;
     }
 
-    public void setFramesPerSecond(@Range(from = 1, to = 1000) int framesPerSecond) {
-        this.framesPerSecond = framesPerSecond;
+    public void setMaxFps(@Range(from = 1, to = 1000) int maxFps) {
+        this.maxFps = maxFps;
     }
 
 }

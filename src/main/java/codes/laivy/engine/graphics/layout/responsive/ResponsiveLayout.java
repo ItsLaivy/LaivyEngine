@@ -3,8 +3,9 @@ package codes.laivy.engine.graphics.layout.responsive;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
+import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.responsive.disposition.ResponsiveDisposition;
-import codes.laivy.engine.graphics.window.GameWindow;
+import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -19,11 +20,11 @@ public class ResponsiveLayout extends GameLayout {
     private boolean cubicResizing = true;
     private boolean autoMove = true;
 
-    public ResponsiveLayout(@NotNull GameWindow window) {
-        this(window, new Dimension(800, 600));
+    public ResponsiveLayout(@NotNull GamePanel panel) {
+        this(panel, new Dimension(800, 600));
     }
-    public ResponsiveLayout(@NotNull GameWindow window, @NotNull Dimension referenceSize) {
-        super(window);
+    public ResponsiveLayout(@NotNull GamePanel panel, @NotNull Dimension referenceSize) {
+        super(panel);
         this.referenceSize = referenceSize;
     }
 
@@ -62,13 +63,13 @@ public class ResponsiveLayout extends GameLayout {
     }
 
     @Override
-    protected void render(@NotNull Graphics2D graphics) {
-        for (GameComponent component : getWindow().getPanel().getEngineComponents()) {
+    protected void render(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds) {
+        for (GameComponent component : getPanel().getEngineComponents()) {
             if (!(component.getDisposition() instanceof ResponsiveDisposition)) {
                 throw new IllegalStateException("The component '" + component + "' doesn't have the ResponsiveDisposition. All the components needs the ResponsiveDisposition when the ResponsiveLayout is active.");
             }
             ResponsiveDisposition disposition = (ResponsiveDisposition) component.getDisposition();
-            disposition.render(graphics);
+            disposition.render(graphics, bounds);
         }
     }
 

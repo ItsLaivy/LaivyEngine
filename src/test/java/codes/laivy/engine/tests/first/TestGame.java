@@ -25,9 +25,9 @@ public class TestGame extends Game {
     public void init() {
         new GameExecutionThread(this).start();
 
-        getGraphics().setFramesPerSecond(60);
+        getGraphics().setMaxFps(60);
 
-        getGraphics().getWindow().setLayout(new ResponsiveLayout(getGraphics().getWindow(), getWindow().getSize()));
+        getGraphics().getWindow().getPanel().setEngineLayout(new ResponsiveLayout(getGraphics().getWindow().getPanel(), getWindow().getSize()));
 
         //player = new ImagePlayer("ItsLaivy", Game.LAIVY_ENGINE_LOGO, new Location(getWindow().getSize().getWidth() / 2, getWindow().getSize().getHeight() / 2));
         player = new Entity(new Location(getWindow().getSize().getWidth() / 2, getWindow().getSize().getHeight() / 2), Color.RED) {

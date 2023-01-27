@@ -89,7 +89,7 @@ public class DefaultGameComponents implements GameWindow.Components {
     @Override
     @WindowThread
     public void add(@NotNull GameComponent component) {
-        if (!component.getPanel().equals(getPanel())) {
+        if (!component.getGamePanel().equals(getPanel())) {
             throw new IllegalArgumentException("This component's panel isn't the same as the Components panel");
         }
 

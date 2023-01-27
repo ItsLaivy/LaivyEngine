@@ -19,8 +19,8 @@ public class Player extends Entity {
         super(location, new Color(new Random().nextInt(255), new Random().nextInt(255), new Random().nextInt(255)));
 
         this.name = new TextComponent(TestGame.instance().getWindow().getPanel(), getLocation().clone(), -17, -15, 100, name, new Font("ARIAL", Font.PLAIN, 20), Color.WHITE);
-        this.name.setDisposition(new ResponsiveTextDisposition(this.name, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getLayout())));
-        getSquare().getPanel().getWindow().getGame().getGraphics().runWindowThreadLater(this.name::add);
+        this.name.setDisposition(new ResponsiveTextDisposition(this.name, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getPanel().getLayout())));
+        getSquare().getGamePanel().getWindow().getGame().getGraphics().runWindowThreadLater(this.name::add);
     }
 
     @Override

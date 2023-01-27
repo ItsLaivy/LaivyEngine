@@ -5,6 +5,7 @@ import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.TextComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
+import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.grid.GridLayout;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import codes.laivy.engine.utils.MathUtils;
@@ -12,10 +13,15 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class GridTextDisposition extends GridDisposition {
     public GridTextDisposition(@NotNull TextComponent component, @NotNull GridLayout layout, @NotNull GridColumn column) {
         super(component, layout, column);
+
+        if (!Objects.equals(this.component.getGamePanel().getEngineLayout(), layout)) {
+            throw new IllegalArgumentException("This game component's panel layout isn't the same as the disposition layout!");
+        }
     }
 
     @Override
@@ -25,7 +31,7 @@ public class GridTextDisposition extends GridDisposition {
     }
 
     @Override
-    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates) {
+    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates, @NotNull GameLayoutBounds bounds) {
         Dimension temp = coordinates.getClientDimension().clone();
 
         coordinates.setScreenLocation(coordinates.getClientLocation().clone());
@@ -39,15 +45,15 @@ public class GridTextDisposition extends GridDisposition {
     }
 
     @Override
-    public void drawObject(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension) {
-        Font font = getComponent().getFont().deriveFont((float) MathUtils.rthree(getComponent().getDimension().getWidth() * 8F, getComponent().getSize(), getLayout().getWindow().getAvailableSize().getWidth()));
+    public void drawObject(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayoutBounds bounds) {
+        Font font = getComponent().getFont().deriveFont((float) MathUtils.rthree(getComponent().getDimension().getWidth() * 8F, getComponent().getSize(), bounds.getAvailable().getWidth()));
 
         graphics.setFont(font);
         graphics.drawString(getComponent().getText(), location.getX(), location.getY() + dimension.getHeight());
     }
 
     @Override
-    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords) {
+    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords, @NotNull GameLayoutBounds bounds) {
         Dimension dimension = getComponent().getDimension();
 
         renderingGraphics.transform(alignment.getTransform());

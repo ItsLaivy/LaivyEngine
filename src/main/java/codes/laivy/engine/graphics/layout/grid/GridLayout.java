@@ -3,9 +3,10 @@ package codes.laivy.engine.graphics.layout.grid;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.layout.GameLayout;
+import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import codes.laivy.engine.graphics.layout.grid.disposition.GridDisposition;
-import codes.laivy.engine.graphics.window.GameWindow;
+import codes.laivy.engine.graphics.window.swing.GamePanel;
 import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -22,8 +23,8 @@ public class GridLayout extends GameLayout {
 
     private final @NotNull List<@NotNull GridRow> rows = new LinkedList<>();
 
-    public GridLayout(@NotNull GameWindow window) {
-        super(window);
+    public GridLayout(@NotNull GamePanel panel) {
+        super(panel);
     }
 
     @Contract(pure = true)
@@ -32,7 +33,7 @@ public class GridLayout extends GameLayout {
     }
 
     public final @NotNull GridSize getSize() {
-        Dimension screen = getWindow().getSize();
+        Dimension screen = getPanel().getWindow().getSize();
         for (GridSize size : GridSize.values()) {
             if (screen.getWidth() >= size.getMinimumWidth() && screen.getWidth() <= size.getMaximumWidth()) {
                 return size;
@@ -42,19 +43,21 @@ public class GridLayout extends GameLayout {
     }
 
     @Override
-    protected void render(@NotNull Graphics2D graphics) {
-        int screenWidth = getWindow().getSize().getWidth();
-        int screenHeight = getWindow().getAvailableSize().getHeight();
-
+    protected void render(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds) {
+        int screenWidth = bounds.getTotal().getWidth();
+        int screenHeight = bounds.getAvailable().getHeight();
 
         int totalRows = getRows().size();
         for (GridRow row : getRows()) {
             int rowIndex = getRows().indexOf(row);
 
             Dimension rowDim = new Dimension(screenWidth, (screenHeight / totalRows));
-            Location rowLoc = new Location(0, (screenHeight / totalRows) * rowIndex);
+            Location rowLoc = new Location(bounds.getLocation().getX(), bounds.getLocation().getY() + (screenHeight / totalRows) * rowIndex);
 
             GridColumn[][] matriz = row.getColumnsWithBreakpoint(getSize());
+
+            int rowWidth = rowDim.getWidth();
+            int rowHeight = rowDim.getHeight();
 
             int breakpoint = 0;
             for (GridColumn[] columns : matriz) {
@@ -68,10 +71,12 @@ public class GridLayout extends GameLayout {
                     int columnSpace = column.getBreakpoints().getSpacing(getSize());
                     int columnWidth, columnHeight, columnX, columnY;
 
-                    columnWidth = (rowDim.getWidth() / row.getMaxColumns()) * columnSpace;
-                    columnHeight = (rowDim.getHeight() / matriz.length);
-                    columnX = rowLoc.getX() + ((screenWidth - rowLoc.getX()) / row.getMaxColumns()) * walkedSpaces;
-                    columnY = rowLoc.getY() + (rowDim.getHeight() / matriz.length) * breakpoint;
+                    System.out.println("Row width: '" + rowWidth + "', Column spaces: '" + columnSpace + "'");
+                    System.out.println(Math.round((((float) rowWidth) / ((float) row.getMaxColumns())) * ((float) columnSpace)));
+                    columnWidth = (int) Math.ceil(((double) rowWidth * (double) columnSpace) / (row.getMaxColumns() + 0D));
+                    columnHeight = (rowHeight / matriz.length);
+                    columnX = rowLoc.getX() + (screenWidth / row.getMaxColumns()) * walkedSpaces;
+                    columnY = rowLoc.getY() + (rowHeight / matriz.length) * breakpoint;
 
                     walkedSpaces += columnSpace;
                     //
@@ -79,7 +84,16 @@ public class GridLayout extends GameLayout {
                     if (disposition != null) {
                         // Rendering Graphics
                         Graphics2D graphics2D = (Graphics2D) graphics.create();
-                        disposition.render(graphics2D, new LayoutCoordinates(new Location(columnX + calculateWidthOffset(disposition.getComponent().getOffsetX()), columnY + calculateHeightOffset(disposition.getComponent().getOffsetY())), new Location(columnX, columnY), new Dimension(columnWidth, columnHeight), new Dimension(columnWidth, columnHeight)));
+                        disposition.render(
+                                graphics2D,
+                                new LayoutCoordinates(
+                                        new Location(columnX + calculateWidthOffset(disposition.getComponent().getOffsetX(), bounds), columnY + calculateHeightOffset(disposition.getComponent().getOffsetY(), bounds)),
+                                        new Location(columnX, columnY),
+                                        new Dimension(columnWidth, columnHeight),
+                                        new Dimension(columnWidth, columnHeight)
+                                ),
+                                bounds
+                        );
                         graphics2D.dispose();
                         //
                     }
@@ -92,15 +106,15 @@ public class GridLayout extends GameLayout {
     // ---/-/--- //
     // Utilities //
     // ---/-/--- //
-    public final int calculateWidthOffset(int offsetX) {
+    public final int calculateWidthOffset(int offsetX, @NotNull GameLayoutBounds bounds) {
         if (offsetX != 0) {
-            offsetX = (int) MathUtils.rthree(new codes.laivy.engine.coordinates.dimension.Dimension(800, 600).getWidth() + new codes.laivy.engine.coordinates.dimension.Dimension(800, 600).getHeight(), offsetX, getWindow().getAvailableSize().getWidth() + getWindow().getAvailableSize().getHeight());
+            offsetX = (int) MathUtils.rthree(bounds.getAvailable().getWidth() + new codes.laivy.engine.coordinates.dimension.Dimension(800, 600).getHeight(), offsetX, bounds.getAvailable().getWidth() + bounds.getAvailable().getHeight());
         }
         return offsetX;
     }
-    public final int calculateHeightOffset(int offsetY) {
+    public final int calculateHeightOffset(int offsetY, @NotNull GameLayoutBounds bounds) {
         if (offsetY != 0) {
-            offsetY = (int) MathUtils.rthree(new codes.laivy.engine.coordinates.dimension.Dimension(800, 600).getWidth() + new codes.laivy.engine.coordinates.dimension.Dimension(800, 600).getHeight(), offsetY, getWindow().getAvailableSize().getWidth() + getWindow().getAvailableSize().getHeight());
+            offsetY = (int) MathUtils.rthree(bounds.getAvailable().getWidth() + new codes.laivy.engine.coordinates.dimension.Dimension(800, 600).getHeight(), offsetY, bounds.getAvailable().getWidth() + bounds.getAvailable().getHeight());
         }
         return offsetY;
     }

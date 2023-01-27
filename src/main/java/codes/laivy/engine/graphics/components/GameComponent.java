@@ -19,7 +19,7 @@ import java.util.Objects;
 
 public abstract class GameComponent implements Cloneable {
 
-    private final @NotNull GamePanel panel;
+    private final @NotNull GamePanel gamePanel;
 
     private @NotNull Location location;
 
@@ -43,12 +43,12 @@ public abstract class GameComponent implements Cloneable {
 
     protected @NotNull Background background;
 
-    private @Nullable ComponentDisposition disposition;
+    private @Nullable ComponentDisposition<?> disposition;
 
-    public GameComponent(@NotNull GamePanel panel, @NotNull Location location) {
-        this(panel, location, 0,0, 100);
+    public GameComponent(@NotNull GamePanel gamePanel, @NotNull Location location) {
+        this(gamePanel, location, 0,0, 100);
     }
-    public GameComponent(@NotNull GamePanel panel, @NotNull Location location, int offsetX, int offsetY, @Range(from = 0, to = 100) int opacity) {
+    public GameComponent(@NotNull GamePanel gamePanel, @NotNull Location location, int offsetX, int offsetY, @Range(from = 0, to = 100) int opacity) {
         this.location = location;
         this.opacity = opacity;
 
@@ -57,7 +57,7 @@ public abstract class GameComponent implements Cloneable {
 
         background = new Background(null, 100);
 
-        this.panel = panel;
+        this.gamePanel = gamePanel;
         this.align = Alignment.NORMAL;
 
         dimension = new Dimension(0, 0);
@@ -96,37 +96,37 @@ public abstract class GameComponent implements Cloneable {
 
     @WindowThread
     public boolean isAdded() {
-        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
+        if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        return getPanel().getEngineComponents().contains(this);
+        return getGamePanel().getEngineComponents().contains(this);
     }
     @WindowThread
     public void add() {
-        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
+        if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        getPanel().getEngineComponents().add(this);
+        getGamePanel().getEngineComponents().add(this);
     }
     @WindowThread
     public void remove() {
-        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
+        if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        getPanel().getEngineComponents().remove(this);
+        getGamePanel().getEngineComponents().remove(this);
     }
 
     /**
      * The {@link ComponentDisposition} of a component is the configuration of the layout. Some layouts needs extra information to render some components.
      * @return The disposition of that component
      */
-    public @Nullable ComponentDisposition getDisposition() {
+    public @Nullable ComponentDisposition<?> getDisposition() {
         return disposition;
     }
-    public void setDisposition(@Nullable ComponentDisposition disposition) {
+    public void setDisposition(@Nullable ComponentDisposition<?> disposition) {
         this.disposition = disposition;
     }
 
@@ -170,8 +170,8 @@ public abstract class GameComponent implements Cloneable {
     }
 
     @Contract(pure = true)
-    public @NotNull GamePanel getPanel() {
-        return panel;
+    public @NotNull GamePanel getGamePanel() {
+        return gamePanel;
     }
 
     public @Range(from = 0, to = 100) int getOpacity() {
@@ -190,7 +190,7 @@ public abstract class GameComponent implements Cloneable {
 
     @WindowThread
     public @Nullable Location getScreenLocation() {
-        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
+        if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
@@ -199,7 +199,7 @@ public abstract class GameComponent implements Cloneable {
 
     @WindowThread
     public void setScreenLocation(@Nullable Location screenLocation) {
-        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
+        if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
@@ -208,7 +208,7 @@ public abstract class GameComponent implements Cloneable {
 
     @WindowThread
     public @Nullable Dimension getScreenDimension() {
-        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
+        if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
@@ -217,7 +217,7 @@ public abstract class GameComponent implements Cloneable {
 
     @WindowThread
     public void setScreenDimension(@Nullable Dimension screenDimension) {
-        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
+        if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
         
@@ -226,7 +226,7 @@ public abstract class GameComponent implements Cloneable {
 
     @WindowThread
     public boolean isAtScreen() {
-        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
+        if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
@@ -236,7 +236,7 @@ public abstract class GameComponent implements Cloneable {
     @WindowThread
     @Contract("-> new")
     public @NotNull Rectangle getHitBox() {
-        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
+        if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
@@ -248,7 +248,7 @@ public abstract class GameComponent implements Cloneable {
 
     @WindowThread
     public @NotNull Dimension getDimension() {
-        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
+        if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
@@ -257,7 +257,7 @@ public abstract class GameComponent implements Cloneable {
     
     @WindowThread
     public void setDimension(@NotNull Dimension dimension) {
-        if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
+        if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
         

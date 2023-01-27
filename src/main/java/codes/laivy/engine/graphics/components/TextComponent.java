@@ -78,11 +78,6 @@ public class TextComponent extends GameComponent {
     @Override
     @Contract("-> new")
     public @NotNull TextComponent clone() {
-        TextComponent component = (TextComponent) super.clone();
-
-        component.setText(getText());
-        component.setFont(getFont());
-
-        return component;
+        return (TextComponent) super.clone();
     }
 }
