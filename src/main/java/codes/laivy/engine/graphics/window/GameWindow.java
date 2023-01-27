@@ -82,7 +82,7 @@ public class GameWindow {
 
         return new MouseLocation(getPanel(), loc);
     }
-    
+
     public void setBackground(@NotNull Color color) {
         panel.setBackground(color);
     }

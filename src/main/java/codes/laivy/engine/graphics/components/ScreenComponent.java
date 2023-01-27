@@ -27,8 +27,6 @@ public class ScreenComponent extends GameComponent {
 
         this.panel = panel;
         this.dimension = dimension;
-
-        this.getGamePanel().getWindow().getFrame().add(getPanel());
     }
 
     /**
@@ -40,7 +38,7 @@ public class ScreenComponent extends GameComponent {
             throw new IllegalStateException("The component needs to be active on screen to perform that method.");
         }
 
-            return new MouseLocation(
+        return new MouseLocation(
                 getPanel(),
                 new Location(
                         gameWindowLocation.getLocation().getX() - getScreenLocation().getX(),

@@ -2,12 +2,10 @@ package codes.laivy.engine.graphics.layout.grid;
 
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
-import codes.laivy.engine.graphics.components.ScreenComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import codes.laivy.engine.graphics.layout.grid.disposition.GridDisposition;
-import codes.laivy.engine.graphics.layout.grid.disposition.GridScreenDisposition;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
 import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
@@ -44,8 +42,6 @@ public class GridLayout extends GameLayout {
         throw new IllegalArgumentException("Couldn't get grid size for width: '" + screen.getWidth() + "'");
     }
 
-    private int r = 0;
-
     @Override
     protected void render(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds) {
         int screenWidth = bounds.getTotal().getWidth();
@@ -70,36 +66,36 @@ public class GridLayout extends GameLayout {
                 for (GridColumn column : columns) {
                     // Component
                     GridDisposition disposition = column.getDisposition();
+
+                    int columnSpace = column.getBreakpoints().getSpacing(getSize());
+                    walkedSpaces += columnSpace;
+
+                    if (disposition == null) continue;
                     //
 
                     // Coordinates
-                    int columnSpace = column.getBreakpoints().getSpacing(getSize());
                     int columnWidth, columnHeight, columnX, columnY;
 
                     columnWidth = (int) Math.ceil((double) (rowWidth * columnSpace) / row.getMaxColumns());
                     columnHeight = (rowHeight / matriz.length);
-                    columnX = (int) (rowLoc.getX() + Math.ceil((double) screenWidth * walkedSpaces / row.getMaxColumns()));
+                    columnX = (int) (rowLoc.getX() + Math.ceil((double) screenWidth * (walkedSpaces - columnSpace) / row.getMaxColumns()));
                     columnY = rowLoc.getY() + (rowHeight / matriz.length) * breakpoint;
-
-                    walkedSpaces += columnSpace;
                     //
 
-                    if (disposition != null) {
-                        // Rendering Graphics
-                        Graphics2D graphics2D = (Graphics2D) graphics.create();
-                        disposition.render(
-                                graphics2D,
-                                new LayoutCoordinates(
-                                        new Location(columnX + calculateWidthOffset(disposition.getComponent().getOffsetX(), bounds), columnY + calculateHeightOffset(disposition.getComponent().getOffsetY(), bounds)),
-                                        new Location(columnX + calculateWidthOffset(disposition.getComponent().getOffsetX(), bounds), columnY + calculateHeightOffset(disposition.getComponent().getOffsetY(), bounds)),
-                                        new Dimension(columnWidth, columnHeight),
-                                        new Dimension(columnWidth, columnHeight)
-                                ),
-                                bounds
-                        );
-                        graphics2D.dispose();
-                        //
-                    }
+                    // Rendering Graphics
+                    Graphics2D graphics2D = (Graphics2D) graphics.create();
+                    disposition.render(
+                            graphics2D,
+                            new LayoutCoordinates(
+                                    new Location(columnX + calculateWidthOffset(disposition.getComponent().getOffsetX(), bounds), columnY + calculateHeightOffset(disposition.getComponent().getOffsetY(), bounds)),
+                                    new Location(columnX + calculateWidthOffset(disposition.getComponent().getOffsetX(), bounds), columnY + calculateHeightOffset(disposition.getComponent().getOffsetY(), bounds)),
+                                    new Dimension(columnWidth, columnHeight),
+                                    new Dimension(columnWidth, columnHeight)
+                            ),
+                            bounds
+                    );
+                    graphics2D.dispose();
+                    //
                 }
                 breakpoint++;
             }

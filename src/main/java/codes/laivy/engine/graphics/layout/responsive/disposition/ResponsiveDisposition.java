@@ -21,6 +21,10 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
         super(component, layout);
     }
 
+    public @NotNull Dimension getReferenceSize(@NotNull GameLayoutBounds bounds) {
+        return getLayout().getReferenceSize();
+    }
+
     public void render(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds) {
         if (getComponent().isAntiAliasing()) {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -89,11 +93,11 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
         int offsetX = calculateWidthOffset(getComponent().getOffsetX(), bounds);
         int offsetY = calculateHeightOffset(getComponent().getOffsetY(), bounds);
 
-        if ((bounds.getAvailable().getWidth() != getLayout().getReferenceSize().getWidth() || bounds.getAvailable().getHeight() != getLayout().getReferenceSize().getHeight())) {
+        if ((bounds.getAvailable().getWidth() != getReferenceSize(bounds).getWidth() || bounds.getAvailable().getHeight() != getReferenceSize(bounds).getHeight())) {
             if (getLayout().isCubicResizing()) {
                 int ratio = defaultDim.getWidth() / defaultDim.getHeight();
 
-                int width = (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), defaultDim.getWidth(), bounds.getAvailable().getWidth());
+                int width = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth(), defaultDim.getWidth(), bounds.getAvailable().getWidth());
                 int height = (width / ratio);
 
                 coordinates.setDimension(new Dimension(
@@ -102,8 +106,8 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
                 ));
             } else {
                 coordinates.setDimension(new Dimension(
-                        (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), defaultDim.getWidth(), bounds.getAvailable().getWidth()),
-                        (int) MathUtils.rthree(getLayout().getReferenceSize().getHeight(), defaultDim.getHeight(), bounds.getAvailable().getHeight())
+                        (int) MathUtils.rthree(getReferenceSize(bounds).getWidth(), defaultDim.getWidth(), bounds.getAvailable().getWidth()),
+                        (int) MathUtils.rthree(getReferenceSize(bounds).getHeight(), defaultDim.getHeight(), bounds.getAvailable().getHeight())
                 ));
             }
         }
@@ -111,8 +115,8 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
         if (getLayout().isAutoMove()) {
             Location location;
             if (getLayout().isCubicResizing()) {
-                int x = (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), defaultLoc.getX(), bounds.getAvailable().getWidth());
-                int y = (int) MathUtils.rthree(getLayout().getReferenceSize().getHeight(), defaultLoc.getY(), bounds.getAvailable().getHeight());
+                int x = bounds.getLocation().getX() + (int) MathUtils.rthree(getReferenceSize(bounds).getWidth(), defaultLoc.getX(), bounds.getAvailable().getWidth());
+                int y = bounds.getLocation().getY() + (int) MathUtils.rthree(getReferenceSize(bounds).getHeight(), defaultLoc.getY(), bounds.getAvailable().getHeight());
 
                 location = new Location(
                         x,
@@ -120,8 +124,8 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
                 );
             } else {
                 location = new Location(
-                        (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), defaultLoc.getX(), bounds.getAvailable().getWidth()),
-                        (int) MathUtils.rthree(getLayout().getReferenceSize().getHeight(), defaultLoc.getY(), bounds.getAvailable().getHeight())
+                        (int) MathUtils.rthree(getReferenceSize(bounds).getWidth(), defaultLoc.getX(), bounds.getAvailable().getWidth()),
+                        (int) MathUtils.rthree(getReferenceSize(bounds).getHeight(), defaultLoc.getY(), bounds.getAvailable().getHeight())
                 );
             }
             coordinates.setLocation(new Location(offsetX + location.getX(), offsetY + location.getY()));
@@ -177,11 +181,11 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
     protected final int calculateWidthOffset(int offsetX, @NotNull GameLayoutBounds bounds) {
         if (getLayout().isCubicResizing()) {
             if (offsetX != 0) {
-                offsetX = (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), offsetX, bounds.getAvailable().getWidth() + bounds.getAvailable().getHeight());
+                offsetX = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth() + getReferenceSize(bounds).getHeight(), offsetX, bounds.getAvailable().getWidth() + bounds.getAvailable().getHeight());
             }
         } else {
             if (offsetX != 0) {
-                offsetX = (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), offsetX, bounds.getAvailable().getWidth());
+                offsetX = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth(), offsetX, bounds.getAvailable().getWidth());
             }
         }
         return offsetX;
@@ -189,11 +193,11 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
     protected final int calculateHeightOffset(int offsetY, @NotNull GameLayoutBounds bounds) {
         if (getLayout().isCubicResizing()) {
             if (offsetY != 0) {
-                offsetY = (int) MathUtils.rthree(getLayout().getReferenceSize().getWidth() + getLayout().getReferenceSize().getHeight(), offsetY, bounds.getAvailable().getWidth() + bounds.getAvailable().getHeight());
+                offsetY = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth() + getReferenceSize(bounds).getHeight(), offsetY, bounds.getAvailable().getWidth() + bounds.getAvailable().getHeight());
             }
         } else {
             if (offsetY != 0) {
-                offsetY = (int) MathUtils.rthree(getLayout().getReferenceSize().getHeight(), offsetY, bounds.getAvailable().getHeight());
+                offsetY = (int) MathUtils.rthree(getReferenceSize(bounds).getHeight(), offsetY, bounds.getAvailable().getHeight());
             }
         }
         return offsetY;
