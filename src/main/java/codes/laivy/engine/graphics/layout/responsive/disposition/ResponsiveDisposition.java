@@ -180,22 +180,14 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
     // ---/-/--- //
     protected final int calculateWidthOffset(int offsetX, @NotNull GameLayoutBounds bounds) {
         if (offsetX != 0) {
-            if (getLayout().isCubicResizing()) {
-                offsetX = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth() + getReferenceSize(bounds).getHeight(), offsetX, bounds.getTotal().getWidth() + bounds.getTotal().getHeight());
-            } else {
-                offsetX = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth(), offsetX, bounds.getAvailable().getWidth());
-            }
+            offsetX = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth(), offsetX, bounds.getTotal().getWidth());
         }
 
         return offsetX;
     }
     protected final int calculateHeightOffset(int offsetY, @NotNull GameLayoutBounds bounds) {
         if (offsetY != 0) {
-            if (getLayout().isCubicResizing()) {
-                offsetY = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth() + getReferenceSize(bounds).getHeight(), offsetY, bounds.getAvailable().getWidth() + bounds.getAvailable().getHeight());
-            } else {
-                offsetY = (int) MathUtils.rthree(getReferenceSize(bounds).getHeight(), offsetY, bounds.getAvailable().getHeight());
-            }
+            offsetY = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth(), offsetY, bounds.getTotal().getWidth());
         }
 
         return offsetY;

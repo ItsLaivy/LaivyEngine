@@ -2,12 +2,16 @@ package codes.laivy.engine.graphics.layout.grid.columns;
 
 import codes.laivy.engine.graphics.layout.grid.GridRow;
 import codes.laivy.engine.graphics.layout.grid.GridSize;
+import codes.laivy.engine.graphics.layout.grid.columns.configuration.GridColumnConfig;
 import codes.laivy.engine.graphics.layout.grid.disposition.GridDisposition;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class GridColumn {
 
@@ -16,10 +20,40 @@ public class GridColumn {
 
     private @NotNull ColumnBreakpoints breakpoints;
 
+    protected @NotNull Map<@NotNull GridSize, @NotNull Set<GridColumnConfig<?>>> configurations = new LinkedHashMap<>();
+
     public GridColumn(@NotNull GridRow row, @NotNull ColumnBreakpoints breakpoints) {
         this.row = row;
         this.breakpoints = breakpoints;
         getRow().addColumn(this);
+    }
+
+    /**
+     * This follows the same {@linkplain ColumnBreakpoints Column breakpoints hierarchy example}.
+     *
+     * @param size The grid size
+     * @return the configurations for that size
+     */
+    public final @NotNull GridColumnConfig<?>[] getConfigurations(@NotNull GridSize size) {
+        Set<GridColumnConfig<?>> value = configurations.get(size);
+        if (value != null) {
+            return value.toArray(new GridColumnConfig<?>[0]);
+        }
+
+        GridSize next = size.getNext();
+        GridSize prev = size.getPrevious();
+        while (next != null || prev != null) {
+            if (configurations.containsKey(next)) {
+                return configurations.get(next).toArray(new GridColumnConfig<?>[0]);
+            }
+            if (configurations.containsKey(prev)) {
+                return configurations.get(prev).toArray(new GridColumnConfig<?>[0]);
+            }
+            if (next != null) next = next.getNext();
+            if (prev != null) prev = prev.getPrevious();
+        }
+
+        return new GridColumnConfig<?>[0];
     }
 
     public @Nullable GridDisposition getDisposition() {

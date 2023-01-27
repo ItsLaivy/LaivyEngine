@@ -5,6 +5,7 @@ import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
+import codes.laivy.engine.graphics.layout.grid.columns.configuration.GridColumnConfig;
 import codes.laivy.engine.graphics.layout.grid.disposition.GridDisposition;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
 import codes.laivy.engine.utils.MathUtils;
@@ -71,6 +72,10 @@ public class GridLayout extends GameLayout {
                     walkedSpaces += columnSpace;
 
                     if (disposition == null) continue;
+
+                    for (GridColumnConfig<?> config : column.getConfigurations(getSize())) {
+                        System.out.println("Config found: '" + config + "'");
+                    }
                     //
 
                     // Coordinates

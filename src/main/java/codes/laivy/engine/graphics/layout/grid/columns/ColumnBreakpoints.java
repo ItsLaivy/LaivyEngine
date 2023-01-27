@@ -78,7 +78,7 @@ public class ColumnBreakpoints {
      * @return The size between 1 and 12
      */
     public @Range(from = 1, to = 12) int getSpacing(@NotNull GridSize size) {
-        Integer value = breakpoints.get(size);
+        @NotNull Integer value = breakpoints.get(size);
         if (value != null) {
             return value;
         }

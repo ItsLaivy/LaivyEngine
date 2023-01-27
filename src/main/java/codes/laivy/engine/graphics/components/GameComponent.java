@@ -7,6 +7,7 @@ import codes.laivy.engine.coordinates.dimension.Rectangle;
 import codes.laivy.engine.exceptions.LaivyEngineException;
 import codes.laivy.engine.exceptions.UnsupportedThreadException;
 import codes.laivy.engine.graphics.layout.ComponentDisposition;
+import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.*;
 
@@ -137,10 +138,10 @@ public abstract class GameComponent implements Cloneable {
      * The {@link ComponentDisposition} of a component is the configuration of the layout. Some layouts needs extra information to render some components.
      * @return The disposition of that component
      */
-    public @Nullable ComponentDisposition<?> getDisposition() {
+    public @Nullable ComponentDisposition<? extends GameLayout> getDisposition() {
         return disposition;
     }
-    public void setDisposition(@Nullable ComponentDisposition<?> disposition) {
+    public void setDisposition(@Nullable ComponentDisposition<? extends GameLayout> disposition) {
         this.disposition = disposition;
     }
 
