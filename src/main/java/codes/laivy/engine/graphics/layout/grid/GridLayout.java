@@ -80,7 +80,7 @@ public class GridLayout extends GameLayout {
                     columnHeight = (rowHeight / matriz.length);
                     columnX = (int) (rowLoc.getX() + Math.ceil((double) screenWidth * walkedSpaces / row.getMaxColumns()));
                     columnY = rowLoc.getY() + (rowHeight / matriz.length) * breakpoint;
-                    
+
                     walkedSpaces += columnSpace;
                     //
 

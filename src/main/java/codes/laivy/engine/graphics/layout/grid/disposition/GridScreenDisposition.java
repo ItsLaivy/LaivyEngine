@@ -4,15 +4,14 @@ import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.ScreenComponent;
 import codes.laivy.engine.graphics.layout.GameLayoutBounds;
-import codes.laivy.engine.graphics.layout.grid.GridLayout;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
 public class GridScreenDisposition extends GridDisposition {
-    public GridScreenDisposition(@NotNull ScreenComponent component, @NotNull GridLayout layout, @NotNull GridColumn column) {
-        super(component, layout, column);
+    public GridScreenDisposition(@NotNull ScreenComponent component, @NotNull GridColumn column) {
+        super(component, column.getRow().getLayout(), column);
     }
 
     @Override
