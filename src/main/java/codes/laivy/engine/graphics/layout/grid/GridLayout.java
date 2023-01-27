@@ -48,7 +48,11 @@ public class GridLayout extends GameLayout {
         int screenHeight = bounds.getAvailable().getHeight();
 
         int totalRows = getRows().size();
+
+        int rows = 0;
         for (GridRow row : getRows()) {
+            rows++;
+
             int rowIndex = getRows().indexOf(row);
 
             Dimension rowDim = new Dimension(screenWidth, (screenHeight / totalRows));
@@ -71,12 +75,15 @@ public class GridLayout extends GameLayout {
                     int columnSpace = column.getBreakpoints().getSpacing(getSize());
                     int columnWidth, columnHeight, columnX, columnY;
 
-                    System.out.println("Row width: '" + rowWidth + "', Column spaces: '" + columnSpace + "'");
-                    System.out.println(Math.round((((float) rowWidth) / ((float) row.getMaxColumns())) * ((float) columnSpace)));
-                    columnWidth = (int) Math.ceil(((double) rowWidth * (double) columnSpace) / (row.getMaxColumns() + 0D));
+                    columnWidth = (int) Math.ceil((double) (rowWidth * columnSpace) / row.getMaxColumns()) - 1;
                     columnHeight = (rowHeight / matriz.length);
-                    columnX = rowLoc.getX() + (screenWidth / row.getMaxColumns()) * walkedSpaces;
+                    columnX = (int) (rowLoc.getX() + Math.ceil((double) screenWidth * walkedSpaces / row.getMaxColumns())) - 1;
                     columnY = rowLoc.getY() + (rowHeight / matriz.length) * breakpoint;
+
+//                    Debugging
+//                    if (rows == 2) {
+//                        System.out.println("Row width: '" + rowWidth + "', Column spaces: '" + columnSpace + "', Column width: '" + columnWidth + " (" + columnWidth * row.getColumns().size() + ")', Screen width: '" + screenWidth + "', Walked spaces: '" + walkedSpaces + "', Column x: '" + columnX + "'");
+//                    }
 
                     walkedSpaces += columnSpace;
                     //

@@ -18,7 +18,6 @@ public class GridScreenDisposition extends GridDisposition {
     @Override
     public void drawObject(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayoutBounds bounds) {
         if (getComponent().getPanel().getEngineLayout() != null) {
-            System.out.println("Bounds dim: '" + dimension + "', Bounds location: '" + location + "'");
             getComponent().getPanel().getEngineLayout().callLayout(renderingGraphics, new GameLayoutBounds(location, dimension, dimension));
         }
     }
