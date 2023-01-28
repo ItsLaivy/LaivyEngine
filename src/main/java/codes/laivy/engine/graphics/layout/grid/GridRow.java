@@ -68,6 +68,8 @@ public class GridRow {
 
         Map<Integer, Set<GridColumn>> map = new LinkedHashMap<>();
         for (GridColumn column : getColumns()) {
+            if (!column.canDisplay(size)) continue;
+
             count -= column.getBreakpoints().getSpacing(size);
             if (count < 0) {
                 count = getMaxColumns() - Math.abs(count);

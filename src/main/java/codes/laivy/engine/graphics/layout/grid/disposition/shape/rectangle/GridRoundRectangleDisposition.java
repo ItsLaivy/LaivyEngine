@@ -1,13 +1,13 @@
-package codes.laivy.engine.graphics.layout.grid.disposition;
+package codes.laivy.engine.graphics.layout.grid.disposition.shape.rectangle;
 
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
-import codes.laivy.engine.graphics.components.shape.RoundRectangleComponent;
+import codes.laivy.engine.graphics.components.shape.rectangle.RoundRectangleComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.GameLayoutBounds;
-import codes.laivy.engine.graphics.layout.grid.GridLayout;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
+import codes.laivy.engine.graphics.layout.grid.disposition.shape.GridShapeDisposition;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

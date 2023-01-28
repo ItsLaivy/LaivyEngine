@@ -1,7 +1,8 @@
-package codes.laivy.engine.graphics.components.shape;
+package codes.laivy.engine.graphics.components.shape.rectangle;
 
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
+import codes.laivy.engine.graphics.components.shape.ShapeComponent;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

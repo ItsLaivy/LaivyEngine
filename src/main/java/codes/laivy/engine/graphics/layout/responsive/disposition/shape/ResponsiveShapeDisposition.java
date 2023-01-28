@@ -1,10 +1,11 @@
-package codes.laivy.engine.graphics.layout.responsive.disposition;
+package codes.laivy.engine.graphics.layout.responsive.disposition.shape;
 
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.shape.ShapeComponent;
 import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
+import codes.laivy.engine.graphics.layout.responsive.disposition.ResponsiveDisposition;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

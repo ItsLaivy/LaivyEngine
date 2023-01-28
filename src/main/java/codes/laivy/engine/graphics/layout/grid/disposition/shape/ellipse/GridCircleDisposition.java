@@ -1,7 +1,6 @@
-package codes.laivy.engine.graphics.layout.grid.disposition;
+package codes.laivy.engine.graphics.layout.grid.disposition.shape.ellipse;
 
-import codes.laivy.engine.graphics.components.shape.CircleComponent;
-import codes.laivy.engine.graphics.layout.grid.GridLayout;
+import codes.laivy.engine.graphics.components.shape.ellipse.CircleComponent;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

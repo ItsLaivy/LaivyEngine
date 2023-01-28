@@ -1,6 +1,6 @@
-package codes.laivy.engine.graphics.layout.responsive.disposition;
+package codes.laivy.engine.graphics.layout.responsive.disposition.shape.ellipse;
 
-import codes.laivy.engine.graphics.components.shape.CircleComponent;
+import codes.laivy.engine.graphics.components.shape.ellipse.CircleComponent;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;

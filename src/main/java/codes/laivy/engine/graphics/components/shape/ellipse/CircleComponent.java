@@ -1,4 +1,4 @@
-package codes.laivy.engine.graphics.components.shape;
+package codes.laivy.engine.graphics.components.shape.ellipse;
 
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;

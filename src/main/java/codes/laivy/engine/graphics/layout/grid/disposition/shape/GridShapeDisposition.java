@@ -1,10 +1,11 @@
-package codes.laivy.engine.graphics.layout.grid.disposition;
+package codes.laivy.engine.graphics.layout.grid.disposition.shape;
 
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.shape.ShapeComponent;
 import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
+import codes.laivy.engine.graphics.layout.grid.disposition.GridDisposition;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

@@ -3,6 +3,7 @@ package codes.laivy.engine.graphics.layout.grid.columns;
 import codes.laivy.engine.graphics.layout.grid.GridRow;
 import codes.laivy.engine.graphics.layout.grid.GridSize;
 import codes.laivy.engine.graphics.layout.grid.columns.configuration.GridColumnConfig;
+import codes.laivy.engine.graphics.layout.grid.columns.configuration.GridColumnDisplay;
 import codes.laivy.engine.graphics.layout.grid.disposition.GridDisposition;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -66,6 +67,19 @@ public class GridColumn {
         if (configurations.get(size).isEmpty()) {
             configurations.remove(size);
         }
+    }
+
+    /**
+     * Checks if the column is able to display
+     * @return true if the column is able to display
+     */
+    public boolean canDisplay(@NotNull GridSize size) {
+        for (GridColumnConfig<?> config : getConfigurations(size)) {
+            if (config instanceof GridColumnDisplay) {
+                return ((GridColumnDisplay) config).getValue();
+            }
+        }
+        return true;
     }
 
     public @Nullable GridDisposition getDisposition() {

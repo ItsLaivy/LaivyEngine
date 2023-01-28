@@ -6,7 +6,6 @@ import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import codes.laivy.engine.graphics.layout.grid.columns.configuration.GridColumnConfig;
-import codes.laivy.engine.graphics.layout.grid.columns.configuration.GridColumnDisplay;
 import codes.laivy.engine.graphics.layout.grid.disposition.GridDisposition;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
 import codes.laivy.engine.utils.MathUtils;
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 
 /**
@@ -71,18 +70,12 @@ public class GridLayout extends GameLayout {
                     // Component
                     GridDisposition disposition = column.getDisposition();
 
-                    for (GridColumnConfig<?> config : column.getConfigurations(getSize())) {
-                        if (config instanceof GridColumnDisplay) {
-                            if (!((GridColumnDisplay) config).getValue()) {
-                                continue columnsFor;
-                            }
-                        }
+                    if (!column.canDisplay(getSize())) {
+                        continue;
                     }
 
                     int columnSpace = column.getBreakpoints().getSpacing(getSize());
                     walkedSpaces += columnSpace;
-
-                    if (disposition == null) continue;
                     //
 
                     // Coordinates
@@ -93,6 +86,18 @@ public class GridLayout extends GameLayout {
                     columnX = (int) (rowLoc.getX() + Math.ceil((double) screenWidth * (walkedSpaces - columnSpace) / row.getMaxColumns()));
                     columnY = rowLoc.getY() + (rowHeight / matriz.length) * breakpoint;
                     //
+
+                    for (GridColumnConfig<?> config : column.getConfigurations(getSize())) {
+                        // GridColumn#canDisplay method already do this.
+//                        if (config instanceof GridColumnDisplay) {
+//                            if (!((GridColumnDisplay) config).getValue()) {
+//                                continue columnsFor;
+//                            }
+//                        }
+
+                    }
+
+                    if (disposition == null) continue;
 
                     // Rendering Graphics
                     Graphics2D graphics2D = (Graphics2D) graphics.create();
