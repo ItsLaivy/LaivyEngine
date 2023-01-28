@@ -12,7 +12,10 @@ import java.awt.*;
 public class RectangleComponent extends ShapeComponent {
 
     public RectangleComponent(@NotNull GamePanel panel, boolean filled, @NotNull Location location, @NotNull Dimension dimension) {
-        super(panel, new Rectangle(location.toPoint(), dimension.toSwing()), filled, location);
+        this(panel, filled, location, dimension, 0, 0, 100);
+    }
+    public RectangleComponent(@NotNull GamePanel panel, boolean filled, @NotNull Location location, @NotNull Dimension dimension, int offsetX, int offsetY, int opacity) {
+        super(panel, new Rectangle(location.toPoint(), dimension.toSwing()), filled, location, offsetX, offsetY, opacity);
     }
     @Override
     @Contract("_, _ -> new")

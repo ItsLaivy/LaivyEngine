@@ -19,7 +19,10 @@ public class ScreenComponent extends GameComponent {
     private @NotNull GamePanel panel;
 
     public ScreenComponent(@NotNull GamePanel gamePanel, @NotNull Location location, @NotNull GamePanel panel, @NotNull Dimension dimension) {
-        super(gamePanel, location);
+        this(gamePanel, location, panel, dimension, 0, 0, 100);
+    }
+    public ScreenComponent(@NotNull GamePanel gamePanel, @NotNull Location location, @NotNull GamePanel panel, @NotNull Dimension dimension, int offsetX, int offsetY, int opacity) {
+        super(gamePanel, location, offsetX, offsetY, opacity);
 
         if (gamePanel.equals(panel)) {
             throw new IllegalArgumentException("The 'panel' couldn't be the same as 'gamePanel'!");

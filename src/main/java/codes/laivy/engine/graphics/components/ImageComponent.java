@@ -13,10 +13,10 @@ public class ImageComponent extends GameComponent {
     private @NotNull ImageAsset asset;
 
     public ImageComponent(@NotNull GamePanel panel, @NotNull Location location, @NotNull ImageAsset asset) {
-        this(panel, location, null, 0, 0, asset);
+        this(panel, location, asset, null, 0, 0, 100);
     }
-    public ImageComponent(@NotNull GamePanel panel, @NotNull Location location, @Nullable Dimension defaultDimension, int offsetX, int offsetY, @NotNull ImageAsset asset) {
-        super(panel, location, offsetX, offsetY, 100);
+    public ImageComponent(@NotNull GamePanel panel, @NotNull Location location, @NotNull ImageAsset asset, @Nullable Dimension defaultDimension, int offsetX, int offsetY, int opacity) {
+        super(panel, location, offsetX, offsetY, opacity);
 
         this.asset = asset;
 

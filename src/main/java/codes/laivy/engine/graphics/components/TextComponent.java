@@ -21,9 +21,9 @@ public class TextComponent extends GameComponent {
     private @NotNull Font font;
 
     public TextComponent(@NotNull GamePanel panel, @NotNull Location location, @NotNull String text, @NotNull Font font, @Nullable Color color) {
-        this(panel, location, 0, 0, 100, text, font, color);
+        this(panel, location, text, font, color, 0, 0, 100);
     }
-    public TextComponent(@NotNull GamePanel panel, @NotNull Location location, int offsetX, int offsetY, int opacity, @NotNull String text, @NotNull Font font, @Nullable Color color) {
+    public TextComponent(@NotNull GamePanel panel, @NotNull Location location, @NotNull String text, @NotNull Font font, @Nullable Color color, int offsetX, int offsetY, int opacity) {
         super(panel, location, offsetX, offsetY, opacity);
 
         this.text = text;

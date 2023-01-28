@@ -9,7 +9,10 @@ import org.jetbrains.annotations.NotNull;
 public class CircleComponent extends EllipseComponent {
 
     public CircleComponent(@NotNull GamePanel panel, boolean filled, @NotNull Location location, int diameter) {
-        super(panel, filled, location, new Dimension(diameter, diameter));
+        this(panel, filled, location, diameter, 0, 0, 100);
+    }
+    public CircleComponent(@NotNull GamePanel panel, boolean filled, @NotNull Location location, int diameter, int offsetX, int offsetY, int opacity) {
+        super(panel, filled, location, new Dimension(diameter, diameter), offsetX, offsetY, opacity);
     }
 
     @Override

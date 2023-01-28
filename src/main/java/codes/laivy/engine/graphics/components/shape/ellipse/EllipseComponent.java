@@ -13,7 +13,10 @@ import java.util.Objects;
 public class EllipseComponent extends ShapeComponent {
 
     public EllipseComponent(@NotNull GamePanel panel, boolean filled, @NotNull Location location, @NotNull Dimension dimension) {
-        super(panel, new Ellipse2D.Float(location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight()), filled, location);
+        this(panel, filled, location, dimension, 0, 0, 100);
+    }
+    public EllipseComponent(@NotNull GamePanel panel, boolean filled, @NotNull Location location, @NotNull Dimension dimension, int offsetX, int offsetY, int opacity) {
+        super(panel, new Ellipse2D.Float(location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight()), filled, location, offsetX, offsetY, opacity);
     }
 
     @Override

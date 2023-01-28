@@ -15,8 +15,8 @@ public abstract class ShapeComponent extends GameComponent {
     private @NotNull Shape shape;
     private boolean filled;
 
-    public ShapeComponent(@NotNull GamePanel panel, @NotNull Shape shape, boolean filled, @NotNull Location location) {
-        super(panel, location);
+    public ShapeComponent(@NotNull GamePanel panel, @NotNull Shape shape, boolean filled, @NotNull Location location, int offsetX, int offsetY, int opacity) {
+        super(panel, location, offsetX, offsetY, opacity);
 
         this.shape = shape;
         this.filled = filled;

@@ -16,7 +16,10 @@ public class RoundRectangleComponent extends ShapeComponent {
     private @NotNull Dimension arc;
 
     public RoundRectangleComponent(@NotNull GamePanel panel, boolean filled, @NotNull Location location, @NotNull Dimension dimension, @NotNull Dimension arc) {
-        super(panel, new RoundRectangle2D.Float(location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight(), arc.getWidth(), arc.getWidth()), filled, location);
+        this(panel, filled, location, dimension, arc, 0, 0, 100);
+    }
+    public RoundRectangleComponent(@NotNull GamePanel panel, boolean filled, @NotNull Location location, @NotNull Dimension dimension, @NotNull Dimension arc, int offsetX, int offsetY, int opacity) {
+        super(panel, new RoundRectangle2D.Float(location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight(), arc.getWidth(), arc.getWidth()), filled, location, offsetX, offsetY, opacity);
         this.arc = arc;
     }
     @Override
