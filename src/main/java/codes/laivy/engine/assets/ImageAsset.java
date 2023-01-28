@@ -5,18 +5,28 @@ import org.jetbrains.annotations.NotNull;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URL;
 
 public class ImageAsset extends Asset {
 
     private final @NotNull BufferedImage image;
 
-    public ImageAsset(@NotNull InputStream stream) throws IOException {
-        BufferedImage bufferedImage = ImageIO.read(stream);
+    public ImageAsset(@NotNull URL url) throws IOException {
+        BufferedImage bufferedImage = ImageIO.read(url);
         if (bufferedImage == null) {
-            throw new IllegalArgumentException("This ResourceFile isn't a image!");
+            throw new IllegalArgumentException("This URL isn't a image!");
         }
 
         this.image = bufferedImage;
+    }
+    public ImageAsset(@NotNull InputStream stream) throws IOException {
+        BufferedImage bufferedImage = ImageIO.read(stream);
+        if (bufferedImage == null) {
+            throw new IllegalArgumentException("This InputStream isn't a image!");
+        }
+
+        this.image = bufferedImage;
+        stream.close();
     }
 
     public ImageAsset(@NotNull ResourceFile file) throws IOException {
