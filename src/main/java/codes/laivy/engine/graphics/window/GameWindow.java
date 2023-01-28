@@ -61,7 +61,7 @@ public class GameWindow {
     }
 
     @WindowThread
-    public void setPanel(@NotNull GamePanel panel) {
+    public final void setPanel(@NotNull GamePanel panel) {
         if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }

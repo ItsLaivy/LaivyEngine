@@ -45,7 +45,7 @@ public abstract class GameComponent implements Cloneable {
 
     private @Nullable ComponentDisposition<?> disposition;
 
-    public GameComponent(@NotNull GamePanel gamePanel, @NotNull Location location, int offsetX, int offsetY, @Range(from = 0, to = 100) int opacity) {
+    protected GameComponent(@NotNull GamePanel gamePanel, @NotNull Location location, int offsetX, int offsetY, @Range(from = 0, to = 100) int opacity) {
         this.location = location;
         this.opacity = opacity;
 

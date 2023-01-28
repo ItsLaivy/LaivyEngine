@@ -23,7 +23,7 @@ public class ImageComponent extends GameComponent {
         // Define o valor da dimensão padrão
         Dimension dimension = defaultDimension;
         if (dimension == null) {
-            dimension = new Dimension(asset.toBuffered().getWidth(null), asset.toBuffered().getHeight(null));
+            dimension = new Dimension(asset.getBufferedImage().getWidth(null), asset.getBufferedImage().getHeight(null));
         }
         this.dimension = dimension;
         // Define o valor da dimensão padrão

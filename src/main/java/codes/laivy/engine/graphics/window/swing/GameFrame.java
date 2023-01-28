@@ -32,7 +32,7 @@ public class GameFrame extends JFrame {
         this.icon = icon;
 
         if (icon != null) {
-            super.setIconImage(icon.toBuffered());
+            super.setIconImage(icon.getBufferedImage());
         } else {
             super.setIconImage(null);
         }

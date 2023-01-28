@@ -25,7 +25,7 @@ public class ResponsiveImageDisposition extends ResponsiveDisposition {
 
     @Override
     public void drawObject(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayoutBounds bounds) {
-        graphics.drawImage(getComponent().getAsset().toBuffered(), location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight(), getLayout().getPanel().getWindow().getPanel());
+        graphics.drawImage(getComponent().getAsset().getBufferedImage(), location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight(), getLayout().getPanel().getWindow().getPanel());
     }
 
     @Override

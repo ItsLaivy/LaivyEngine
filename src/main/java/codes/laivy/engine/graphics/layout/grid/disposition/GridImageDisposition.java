@@ -6,7 +6,6 @@ import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.ImageComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.GameLayoutBounds;
-import codes.laivy.engine.graphics.layout.grid.GridLayout;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +30,7 @@ public class GridImageDisposition extends GridDisposition {
 
     @Override
     public void drawObject(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayoutBounds bounds) {
-        renderingGraphics.drawImage(getComponent().getAsset().toBuffered(), location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight(), getLayout().getPanel());
+        renderingGraphics.drawImage(getComponent().getAsset().getBufferedImage(), location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight(), getLayout().getPanel());
     }
 
     @Override

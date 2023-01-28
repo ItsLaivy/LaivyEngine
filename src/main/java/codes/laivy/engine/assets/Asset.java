@@ -1,44 +1,38 @@
 package codes.laivy.engine.assets;
 
-import codes.laivy.engine.exceptions.LaivyEngineException;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
-public class Asset {
+/**
+ * The main assets class
+ *
+ * @author ItsLaivy
+ * @since 1.0 build 0 (28/01/2023), Originally written on 02/07/2022.
+ */
+public abstract class Asset {
 
-    // Name + Extension, Asset - Respectively
-    public static final @NotNull Map<@NotNull String, @NotNull Asset> ASSETS = new LinkedHashMap<>();
-
-    protected @Nullable ResourceFile file;
-    protected @Nullable BufferedImage bufferedImage;
-
-    public Asset(@NotNull InputStream file) throws IOException {
-        bufferedImage = ImageIO.read(file);
-    }
-    public Asset(@NotNull ResourceFile file) throws IOException {
-        this.file = file;
-        bufferedImage = ImageIO.read(file);
-
-        if (ASSETS.containsKey(file.getName())) {
-            throw new LaivyEngineException(new IllegalStateException("An asset with that name already is loaded! (Name: " + file.getName() + ", Total assets loaded: \"" + ASSETS.size() + "\")"), "Asset's constructor");
-        }
-        ASSETS.put(file.getName(), this);
-    }
+    // Name + Format, Asset - Respectively
+    private static final @NotNull List<@NotNull Asset> assets = new LinkedList<>();
 
     /**
-     * Creating assets with that constructor will not save the asset into the RAM and will not be able to be got using {@link #get(String)}
+     * Gets the original list of all the loaded assets
+     * @return the loaded assets list
+     *
+     * @author ItsLaivy
+     * @since 1.0 build 0 (28/01/2023)
      */
-    public Asset(@NotNull BufferedImage image) {
-        this.file = null;
-        this.bufferedImage = image;
+    public static @NotNull List<@NotNull Asset> getAssets() {
+        return assets;
+    }
+
+    // ---/-/--- //
+
+    protected Asset() {
     }
 
     /**
@@ -48,39 +42,7 @@ public class Asset {
      * @author ItsLaivy
      */
     public void dispose() {
-        BufferedImage buff = toBuffered();
-        if (buff != null) buff.flush();
-
-        ASSETS.values().remove(this);
-    }
-
-    /**
-     * @since 1.0 build 0 (02/07/2022)
-     * @author ItsLaivy
-     * @return The BufferedImage of the asset or null if the asset isn't an image
-     */
-    public @Nullable BufferedImage toBuffered() {
-        return bufferedImage;
-    }
-
-    public @Nullable ResourceFile getFile() {
-        return file;
-    }
-
-    /**
-     * Gets a loaded asset by it name
-     *
-     * @since 1.0 build 0 (02/07/2022)
-     * @author ItsLaivy
-     * @param name Name of the loaded asset
-     * @return Returns the asset with that name
-     */
-    @Contract(pure = true)
-    public static @NotNull Asset get(@NotNull String name) {
-        if (!ASSETS.containsKey(name)) {
-            throw new LaivyEngineException(new NullPointerException("Couldn't find a asset with that name"), "Asset#get(String) method");
-        }
-        return ASSETS.get(name);
+        assets.remove(this);
     }
 
 }
