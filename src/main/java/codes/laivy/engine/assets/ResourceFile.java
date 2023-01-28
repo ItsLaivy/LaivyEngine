@@ -9,6 +9,9 @@ import java.net.URI;
 
 /**
  * This class has created to block the {@link File#renameTo(File)}. File renaming can cause problems during the {@link Asset} mapping.
+ *
+ * @author ItsLaivy
+ * @since 1.0 build 0 (~03/07/2022)
  */
 public class ResourceFile extends File {
 

@@ -1,5 +1,6 @@
 package codes.laivy.engine.graphics.components.shape.ellipse;
 
+import codes.laivy.engine.coordinates.Coordinates;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.shape.ShapeComponent;
@@ -10,6 +11,10 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.geom.Ellipse2D;
 import java.util.Objects;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (22/01/2023)
+ */
 public class EllipseComponent extends ShapeComponent {
 
     public EllipseComponent(@NotNull GamePanel panel, boolean filled, @NotNull Location location, @NotNull Dimension dimension) {
@@ -32,14 +37,13 @@ public class EllipseComponent extends ShapeComponent {
     @Override
     public boolean collides(@NotNull Location location) {
         if (isAtScreen()) {
-            @NotNull Location sLoc = Objects.requireNonNull(getScreenLocation());
-            @NotNull Dimension sDim = Objects.requireNonNull(getScreenDimension());
+            @NotNull Coordinates sCoords = Objects.requireNonNull(getScreenCoordinates());
 
-            int centerX = sLoc.getX() + (sDim.getWidth() / 2);
-            int centerY = sLoc.getY() + (sDim.getHeight() / 2);
+            int centerX = sCoords.getLocation().getX() + (sCoords.getDimension().getWidth() / 2);
+            int centerY = sCoords.getLocation().getY() + (sCoords.getDimension().getHeight() / 2);
 
-            double a = sDim.getWidth() / 2D; // Semi eixo maior
-            double b = sDim.getHeight() / 2D; // Semi eixo menor
+            double a = sCoords.getDimension().getWidth() / 2D; // Semi eixo maior
+            double b = sCoords.getDimension().getHeight() / 2D; // Semi eixo menor
 
             return ((Math.pow(location.getX() - centerX, 2))/(Math.pow(a, 2)) + (Math.pow(location.getY() - centerY, 2))/(Math.pow(b, 2))) <= 1;
         }

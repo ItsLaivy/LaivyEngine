@@ -6,6 +6,10 @@ import org.jetbrains.annotations.Range;
 
 import java.util.Objects;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (~01/07/2022)
+ */
 public class Dimension implements Cloneable, IDimension {
 
     private int width, height;

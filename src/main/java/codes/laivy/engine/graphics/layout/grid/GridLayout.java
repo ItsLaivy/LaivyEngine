@@ -3,7 +3,6 @@ package codes.laivy.engine.graphics.layout.grid;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.layout.GameLayout;
-import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import codes.laivy.engine.graphics.layout.grid.columns.configuration.GridColumnConfig;
 import codes.laivy.engine.graphics.layout.grid.disposition.GridDisposition;
@@ -44,7 +43,7 @@ public class GridLayout extends GameLayout {
     }
 
     @Override
-    protected void render(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds) {
+    protected void render(@NotNull Graphics2D graphics, @NotNull GameLayout.Bounds bounds) {
         int screenWidth = bounds.getTotal().getWidth();
         int screenHeight = bounds.getAvailable().getHeight();
 
@@ -96,13 +95,15 @@ public class GridLayout extends GameLayout {
                     columnY = rowLoc.getY() + (rowHeight / matriz.length) * breakpoint;
                     //
 
+                    column.setScreenCoordinates(new codes.laivy.engine.coordinates.Coordinates(getPanel(), new Location(columnX, columnY), new Dimension(columnWidth, columnHeight)));
+
                     if (disposition == null) continue;
 
                     // Rendering Graphics
                     Graphics2D graphics2D = (Graphics2D) graphics.create();
                     disposition.render(
                             graphics2D,
-                            new LayoutCoordinates(
+                            new Coordinates(
                                     new Location(columnX + calculateWidthOffset(disposition.getComponent().getOffsetX(), bounds), columnY + calculateHeightOffset(disposition.getComponent().getOffsetY(), bounds)),
                                     new Location(columnX + calculateWidthOffset(disposition.getComponent().getOffsetX(), bounds), columnY + calculateHeightOffset(disposition.getComponent().getOffsetY(), bounds)),
                                     new Dimension(columnWidth, columnHeight),
@@ -121,13 +122,13 @@ public class GridLayout extends GameLayout {
     // ---/-/--- //
     // Utilities //
     // ---/-/--- //
-    public final int calculateWidthOffset(int offsetX, @NotNull GameLayoutBounds bounds) {
+    public final int calculateWidthOffset(int offsetX, @NotNull GameLayout.Bounds bounds) {
         if (offsetX != 0) {
             offsetX = (int) MathUtils.rthree(bounds.getAvailable().getWidth() + new codes.laivy.engine.coordinates.dimension.Dimension(800, 600).getHeight(), offsetX, bounds.getAvailable().getWidth() + bounds.getAvailable().getHeight());
         }
         return offsetX;
     }
-    public final int calculateHeightOffset(int offsetY, @NotNull GameLayoutBounds bounds) {
+    public final int calculateHeightOffset(int offsetY, @NotNull GameLayout.Bounds bounds) {
         if (offsetY != 0) {
             offsetY = (int) MathUtils.rthree(bounds.getAvailable().getWidth() + new codes.laivy.engine.coordinates.dimension.Dimension(800, 600).getHeight(), offsetY, bounds.getAvailable().getWidth() + bounds.getAvailable().getHeight());
         }

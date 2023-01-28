@@ -6,6 +6,10 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (~01/07/2022)
+ */
 public class LaivyEngineException extends Error {
 
     /**

@@ -6,6 +6,10 @@ import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (22/01/2023)
+ */
 public class CircleComponent extends EllipseComponent {
 
     public CircleComponent(@NotNull GamePanel panel, boolean filled, @NotNull Location location, int diameter) {

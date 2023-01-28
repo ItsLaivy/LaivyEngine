@@ -27,7 +27,7 @@ public abstract class GameLayout {
     }
 
     @WindowThread
-    public synchronized void callLayout(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds) {
+    public synchronized void callLayout(@NotNull Graphics2D graphics, @NotNull GameLayout.Bounds bounds) {
         if (!getPanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
@@ -43,13 +43,13 @@ public abstract class GameLayout {
      * It's called when the layout needs to be reconfigured. Commonly called a lot of times per second.
      */
     @WindowThread
-    protected abstract void render(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds);
+    protected abstract void render(@NotNull Graphics2D graphics, @NotNull GameLayout.Bounds bounds);
 
     /**
-     * On a layout rendering, the screen location will be the {@link GameComponent#getScreenLocation()} and the screen dimensions will be the {@link GameComponent#getScreenDimension()}
-     * The client location and dimension will be the location/dimension where will be rendered on the screen of the client
+     * On a layout rendering, the screen location/dimension will be the {@link GameComponent#getScreenCoordinates()}
+     * The client location/dimension will be the one where will be rendered on the screen of the client
      */
-    public static class LayoutCoordinates {
+    public static class Coordinates {
 
         private @NotNull Location clientLayoutLocation;
         private @NotNull Location screenLayoutLocation;
@@ -57,10 +57,10 @@ public abstract class GameLayout {
         private @NotNull Dimension clientDimension;
         private @NotNull Dimension screenDimension;
 
-        public LayoutCoordinates(@NotNull Location location, @NotNull Dimension dimension) {
+        public Coordinates(@NotNull Location location, @NotNull Dimension dimension) {
             this(location, location, dimension, dimension);
         }
-        public LayoutCoordinates(@NotNull Location clientLayoutLocation, @NotNull Location screenLayoutLocation, @NotNull Dimension clientDimension, @NotNull Dimension screenDimension) {
+        public Coordinates(@NotNull Location clientLayoutLocation, @NotNull Location screenLayoutLocation, @NotNull Dimension clientDimension, @NotNull Dimension screenDimension) {
             this.clientLayoutLocation = clientLayoutLocation;
             this.screenLayoutLocation = screenLayoutLocation;
             this.clientDimension = clientDimension;
@@ -109,4 +109,28 @@ public abstract class GameLayout {
         }
     }
 
+    public static class Bounds {
+
+        private final @NotNull Location location;
+        private final @NotNull Dimension total;
+        private final @NotNull Dimension available;
+
+        public Bounds(@NotNull Location location, @NotNull Dimension total, @NotNull Dimension available) {
+            this.location = location;
+            this.total = total;
+            this.available = available;
+        }
+
+        public @NotNull Location getLocation() {
+            return location;
+        }
+
+        public @NotNull Dimension getTotal() {
+            return total;
+        }
+
+        public @NotNull Dimension getAvailable() {
+            return available;
+        }
+    }
 }

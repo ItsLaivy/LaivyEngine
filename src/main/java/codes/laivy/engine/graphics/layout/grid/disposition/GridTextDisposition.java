@@ -5,7 +5,6 @@ import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.TextComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
-import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
@@ -30,7 +29,7 @@ public class GridTextDisposition extends GridDisposition {
     }
 
     @Override
-    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates, @NotNull GameLayoutBounds bounds) {
+    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull Coordinates coordinates, @NotNull GameLayout.Bounds bounds) {
         Dimension temp = coordinates.getClientDimension().clone();
 
         coordinates.setScreenLocation(coordinates.getClientLocation().clone());
@@ -44,7 +43,7 @@ public class GridTextDisposition extends GridDisposition {
     }
 
     @Override
-    public void drawObject(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayoutBounds bounds) {
+    public void drawObject(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayout.Bounds bounds) {
         Font font = getComponent().getFont().deriveFont((float) MathUtils.rthree(getComponent().getDimension().getWidth() * 8F, getComponent().getSize(), bounds.getAvailable().getWidth()));
 
         graphics.setFont(font);
@@ -52,7 +51,7 @@ public class GridTextDisposition extends GridDisposition {
     }
 
     @Override
-    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords, @NotNull GameLayoutBounds bounds) {
+    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.Coordinates coords, @NotNull GameLayout.Bounds bounds) {
         Dimension dimension = getComponent().getDimension();
 
         renderingGraphics.transform(alignment.getTransform());

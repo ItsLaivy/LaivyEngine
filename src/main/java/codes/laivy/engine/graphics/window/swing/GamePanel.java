@@ -5,7 +5,6 @@ import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.exceptions.UnsupportedThreadException;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
-import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.window.DefaultGameComponents;
 import codes.laivy.engine.graphics.window.GameWindow;
 import codes.laivy.engine.graphics.window.listeners.GameKeyManager;
@@ -120,7 +119,7 @@ public class GamePanel extends JPanel {
 
         // The layout will do the work :)
         if (getWindow().getPanel().getEngineLayout() != null && getWindow().getFrame().isVisible()) {
-            getWindow().getPanel().getEngineLayout().callLayout((Graphics2D) g, new GameLayoutBounds(new Location(0, 0), window.getSize(), window.getAvailableSize()));
+            getWindow().getPanel().getEngineLayout().callLayout((Graphics2D) g, new GameLayout.Bounds(new Location(0, 0), window.getSize(), window.getAvailableSize()));
         }
 
         g.dispose();

@@ -4,6 +4,10 @@ import codes.laivy.engine.threads.GameThread;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (20/01/2023)
+ */
 public class UnsupportedThreadException extends LaivyEngineException {
     public UnsupportedThreadException(@NotNull Class<? extends GameThread> threadClass) {
         this(threadClass, null);

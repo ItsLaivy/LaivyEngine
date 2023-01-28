@@ -4,6 +4,10 @@ import codes.laivy.engine.coordinates.Location;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (~01/07/2022)
+ */
 public interface IDimension {
     
     int getWidth();

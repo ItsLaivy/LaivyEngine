@@ -3,7 +3,6 @@ package codes.laivy.engine.graphics.layout.responsive;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
-import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.responsive.disposition.ResponsiveDisposition;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.ApiStatus;
@@ -63,7 +62,7 @@ public class ResponsiveLayout extends GameLayout {
     }
 
     @Override
-    protected void render(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds) {
+    protected void render(@NotNull Graphics2D graphics, @NotNull GameLayout.Bounds bounds) {
         for (GameComponent component : getPanel().getEngineComponents()) {
             if (!(component.getDisposition() instanceof ResponsiveDisposition)) {
                 throw new IllegalStateException("The component '" + component + "' doesn't have the ResponsiveDisposition. All the components needs the ResponsiveDisposition when the ResponsiveLayout is active.");

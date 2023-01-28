@@ -10,6 +10,10 @@ import java.awt.*;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (~01/07/2022)
+ */
 public class Location implements Cloneable {
 
     protected int x, y;

@@ -6,6 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (~01/07/2022)
+ */
 public class Rectangle implements IDimension {
 
     private int x, y, width, height;

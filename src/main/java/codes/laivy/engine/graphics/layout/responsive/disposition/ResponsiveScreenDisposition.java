@@ -5,13 +5,11 @@ import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.ScreenComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
-import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
-import java.util.Objects;
 
 @ApiStatus.Experimental
 public class ResponsiveScreenDisposition extends ResponsiveDisposition {
@@ -24,14 +22,14 @@ public class ResponsiveScreenDisposition extends ResponsiveDisposition {
     }
 
     @Override
-    public void drawObject(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayoutBounds bounds) {
+    public void drawObject(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayout.Bounds bounds) {
         if (getComponent().getPanel().getEngineLayout() != null) {
-            getComponent().getPanel().getEngineLayout().callLayout(renderingGraphics, new GameLayoutBounds(location.clone(), dimension.clone(), dimension.clone()));
+            getComponent().getPanel().getEngineLayout().callLayout(renderingGraphics, new GameLayout.Bounds(location.clone(), dimension.clone(), dimension.clone()));
         }
     }
 
     @Override
-    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords, @NotNull GameLayoutBounds bounds) {
+    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.Coordinates coords, @NotNull GameLayout.Bounds bounds) {
         Dimension dimension = coords.getScreenDimension();
 
         renderingGraphics.transform(alignment.getTransform());

@@ -10,6 +10,10 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (~03/07/2023)
+ */
 public class SpriteSheetAsset extends Asset {
 
     private final @NotNull ImageAsset asset;

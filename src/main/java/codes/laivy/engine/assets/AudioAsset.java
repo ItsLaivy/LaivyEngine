@@ -9,6 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (28/01/2023)
+ */
 public class AudioAsset extends Asset {
 
     private final @NotNull Clip clip;

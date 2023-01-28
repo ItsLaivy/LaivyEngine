@@ -5,7 +5,6 @@ import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.ImageComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
-import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -24,12 +23,12 @@ public class ResponsiveImageDisposition extends ResponsiveDisposition {
     }
 
     @Override
-    public void drawObject(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayoutBounds bounds) {
+    public void drawObject(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayout.Bounds bounds) {
         graphics.drawImage(getComponent().getAsset().getBufferedImage(), location.getX(), location.getY(), dimension.getWidth(), dimension.getHeight(), getLayout().getPanel().getWindow().getPanel());
     }
 
     @Override
-    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords, @NotNull GameLayoutBounds bounds) {
+    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.Coordinates coords, @NotNull GameLayout.Bounds bounds) {
         Dimension dimension = getComponent().getDimension();
 
         renderingGraphics.transform(alignment.getTransform());
@@ -44,7 +43,7 @@ public class ResponsiveImageDisposition extends ResponsiveDisposition {
     }
 
     @Override
-    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates, @NotNull GameLayoutBounds bounds) {
+    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull Coordinates coordinates, @NotNull GameLayout.Bounds bounds) {
         Dimension temp = coordinates.getClientDimension().clone();
 
         Location location = coordinates.getClientLocation().clone();

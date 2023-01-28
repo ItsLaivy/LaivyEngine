@@ -1,6 +1,7 @@
 package codes.laivy.engine.graphics.components;
 
 import codes.laivy.engine.annotations.WindowThread;
+import codes.laivy.engine.coordinates.Coordinates;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.coordinates.dimension.Rectangle;
@@ -17,14 +18,17 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (~01/07/2022)
+ */
 public abstract class GameComponent implements Cloneable {
 
     private final @NotNull GamePanel gamePanel;
 
     private @NotNull Location location;
 
-    protected @Nullable Location screenLocation;
-    protected @Nullable Dimension screenDimension;
+    protected @Nullable Coordinates screenCoordinates;
     protected @NotNull Dimension dimension;
 
     public boolean antiAliasing = true;
@@ -100,6 +104,7 @@ public abstract class GameComponent implements Cloneable {
      */
     @WindowThread
     public boolean collides(@NotNull Location location) {
+        // TODO: 28/01/2023 Delete that method and fix the GameComponent#getHitBox() method.
         if (isAtScreen()) {
             return getHitBox().contains(location);
         }
@@ -201,39 +206,20 @@ public abstract class GameComponent implements Cloneable {
     }
 
     @WindowThread
-    public @Nullable Location getScreenLocation() {
+    public @Nullable Coordinates getScreenCoordinates() {
         if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        return screenLocation;
+        return screenCoordinates;
     }
-
     @WindowThread
-    public void setScreenLocation(@Nullable Location screenLocation) {
+    public void setScreenCoordinates(@Nullable Coordinates screenCoordinates) {
         if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        this.screenLocation = screenLocation;
-    }
-
-    @WindowThread
-    public @Nullable Dimension getScreenDimension() {
-        if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
-            throw new UnsupportedThreadException("GameWindow");
-        }
-
-        return screenDimension;
-    }
-
-    @WindowThread
-    public void setScreenDimension(@Nullable Dimension screenDimension) {
-        if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
-            throw new UnsupportedThreadException("GameWindow");
-        }
-        
-        this.screenDimension = screenDimension;
+        this.screenCoordinates = screenCoordinates;
     }
 
     @WindowThread
@@ -242,18 +228,21 @@ public abstract class GameComponent implements Cloneable {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        return getScreenLocation() != null && getScreenDimension() != null;
+        return getScreenCoordinates() != null;
     }
 
     @WindowThread
     @Contract("-> new")
     public @NotNull Rectangle getHitBox() {
+        // TODO: 28/01/2023 Change this return to a Shape, a hitbox could be a circle, or a round rectangle.
+
         if (!getGamePanel().getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
 
         if (isAtScreen()) {
-            return new Rectangle(Objects.requireNonNull(getScreenLocation()), Objects.requireNonNull(getScreenDimension()));
+            @NotNull Coordinates screenCoordinate = Objects.requireNonNull(getScreenCoordinates());
+            return new Rectangle(screenCoordinate.getLocation(), screenCoordinate.getDimension());
         }
         throw new LaivyEngineException(new IllegalStateException("The component's hitbox doesn't exists at that screen"), "Gets the hitbox of a component on the screen");
     }
@@ -284,8 +273,7 @@ public abstract class GameComponent implements Cloneable {
             clone.setLocation(clone.getLocation().clone());
             clone.dimension = clone.dimension.clone();
 
-            clone.screenLocation = null;
-            clone.screenDimension = null;
+            clone.screenCoordinates = null;
 
             return clone;
         } catch (CloneNotSupportedException e) {

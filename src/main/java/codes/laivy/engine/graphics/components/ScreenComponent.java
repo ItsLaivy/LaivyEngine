@@ -13,6 +13,9 @@ import java.util.Set;
 
 /**
  * A {@link ScreenComponent ScreenComponent} is used to print a GamePanel on an existent GamePanel.
+ *
+ * @author ItsLaivy
+ * @since 1.0 build 0 (26/01/2023)
  */
 public class ScreenComponent extends GameComponent {
 
@@ -37,15 +40,15 @@ public class ScreenComponent extends GameComponent {
      * @return the converted location from {@link GameWindow}
      */
     public @NotNull MouseLocation convertLocation(@NotNull MouseLocation gameWindowLocation) {
-        if (!isAtScreen() || gameWindowLocation.getLocation() == null || getScreenLocation() == null) {
+        if (!isAtScreen() || gameWindowLocation.getLocation() == null || getScreenCoordinates() == null) {
             throw new IllegalStateException("The component needs to be active on screen to perform that method.");
         }
 
         return new MouseLocation(
                 getPanel(),
                 new Location(
-                        gameWindowLocation.getLocation().getX() - getScreenLocation().getX(),
-                        gameWindowLocation.getLocation().getY() - getScreenLocation().getY()
+                        gameWindowLocation.getLocation().getX() - getScreenCoordinates().getLocation().getX(),
+                        gameWindowLocation.getLocation().getY() - getScreenCoordinates().getLocation().getY()
                 )
         );
     }

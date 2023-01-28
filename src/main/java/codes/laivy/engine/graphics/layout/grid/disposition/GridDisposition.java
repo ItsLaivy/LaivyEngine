@@ -1,10 +1,10 @@
 package codes.laivy.engine.graphics.layout.grid.disposition;
 
+import codes.laivy.engine.coordinates.Coordinates;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.layout.ComponentDisposition;
 import codes.laivy.engine.graphics.layout.GameLayout;
-import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import codes.laivy.engine.graphics.layout.grid.GridLayout;
 import org.jetbrains.annotations.Contract;
@@ -34,10 +34,10 @@ public abstract class GridDisposition extends ComponentDisposition<GridLayout> {
         return column;
     }
 
-    public void postResolutionFix(@NotNull Graphics2D renderingGraphics, @NotNull Graphics2D backgroundGraphics, @NotNull GameLayout.LayoutCoordinates coordinates, @NotNull GameLayoutBounds bounds) {
+    public void postResolutionFix(@NotNull Graphics2D renderingGraphics, @NotNull Graphics2D backgroundGraphics, @NotNull GameLayout.Coordinates coordinates, @NotNull GameLayout.Bounds bounds) {
     }
 
-    public void render(@NotNull Graphics2D graphics, @NotNull GameLayout.LayoutCoordinates coordinates, @NotNull GameLayoutBounds bounds) {
+    public void render(@NotNull Graphics2D graphics, @NotNull GameLayout.Coordinates coordinates, @NotNull GameLayout.Bounds bounds) {
         if (getComponent().isAntiAliasing()) {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
@@ -77,12 +77,11 @@ public abstract class GridDisposition extends ComponentDisposition<GridLayout> {
         //
 
         // Hitbox defining
-        getComponent().setScreenLocation(coordinates.getScreenLocation());
-        getComponent().setScreenDimension(coordinates.getScreenDimension());
+        getComponent().setScreenCoordinates(new Coordinates(getLayout().getPanel(), coordinates.getScreenLocation(), coordinates.getScreenDimension()));
         //
     }
 
-    public void drawBackground(@NotNull Graphics2D backgroundGraphics, @NotNull GameLayout.LayoutCoordinates coordinates, @NotNull GameLayoutBounds bounds) {
+    public void drawBackground(@NotNull Graphics2D backgroundGraphics, @NotNull GameLayout.Coordinates coordinates, @NotNull GameLayout.Bounds bounds) {
         Color color = getComponent().getBackground().getFinalColor();
         if (color != null) {
             backgroundGraphics.setColor(color);
@@ -90,9 +89,9 @@ public abstract class GridDisposition extends ComponentDisposition<GridLayout> {
         }
     }
 
-    public abstract void drawObject(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayoutBounds bounds);
+    public abstract void drawObject(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayout.Bounds bounds);
 
-    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords, @NotNull GameLayoutBounds bounds) {
+    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.Coordinates coords, @NotNull GameLayout.Bounds bounds) {
         renderingGraphics.transform(alignment.getTransform());
         if (alignment == GameComponent.Alignment.FLIPPED_HORIZONTALLY) {
             coords.getClientLocation().setX(coords.getScreenLocation().getX());

@@ -5,7 +5,6 @@ import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.TextComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
-import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
@@ -25,7 +24,7 @@ public class ResponsiveTextDisposition extends ResponsiveDisposition {
     }
 
     @Override
-    public void postResolutionFix(@NotNull Graphics2D renderingGraphics, @NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates, @NotNull GameLayoutBounds bounds) {
+    public void postResolutionFix(@NotNull Graphics2D renderingGraphics, @NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull Coordinates coordinates, @NotNull GameLayout.Bounds bounds) {
         // Text resolution fix
         float size = (float) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), getComponent().getSize(), bounds.getAvailable().getWidth());
         Font font = getComponent().getFont().deriveFont(size);
@@ -40,7 +39,7 @@ public class ResponsiveTextDisposition extends ResponsiveDisposition {
     }
 
     @Override
-    public void drawObject(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayoutBounds bounds) {
+    public void drawObject(@NotNull Graphics2D graphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayout.Bounds bounds) {
         Font font = getComponent().getFont().deriveFont((float) MathUtils.rthree(getLayout().getReferenceSize().getWidth(), getComponent().getSize(), bounds.getAvailable().getWidth()));
 
         graphics.setFont(font);
@@ -48,7 +47,7 @@ public class ResponsiveTextDisposition extends ResponsiveDisposition {
     }
 
     @Override
-    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords, @NotNull GameLayoutBounds bounds) {
+    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.Coordinates coords, @NotNull GameLayout.Bounds bounds) {
         Dimension dimension = getComponent().getDimension(alignment.getTransform());
 
         renderingGraphics.transform(alignment.getTransform());
@@ -63,7 +62,7 @@ public class ResponsiveTextDisposition extends ResponsiveDisposition {
     }
 
     @Override
-    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates, @NotNull GameLayoutBounds bounds) {
+    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull Coordinates coordinates, @NotNull GameLayout.Bounds bounds) {
         Dimension temp = coordinates.getClientDimension().clone();
 
         Location location = coordinates.getClientLocation().clone();

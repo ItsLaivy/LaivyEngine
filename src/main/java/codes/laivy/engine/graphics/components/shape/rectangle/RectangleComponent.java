@@ -9,6 +9,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (22/01/2023)
+ */
 public class RectangleComponent extends ShapeComponent {
 
     public RectangleComponent(@NotNull GamePanel panel, boolean filled, @NotNull Location location, @NotNull Dimension dimension) {

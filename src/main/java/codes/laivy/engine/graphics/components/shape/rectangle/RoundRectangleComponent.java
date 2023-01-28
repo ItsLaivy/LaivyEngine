@@ -1,6 +1,7 @@
 package codes.laivy.engine.graphics.components.shape.rectangle;
 
 import codes.laivy.engine.annotations.WindowThread;
+import codes.laivy.engine.coordinates.Coordinates;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.shape.ShapeComponent;
@@ -11,6 +12,10 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.geom.RoundRectangle2D;
 import java.util.Objects;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (22/01/2023)
+ */
 public class RoundRectangleComponent extends ShapeComponent {
 
     private @NotNull Dimension arc;
@@ -32,22 +37,21 @@ public class RoundRectangleComponent extends ShapeComponent {
     @WindowThread
     public boolean collides(@NotNull Location location) {
         if (isAtScreen()) {
-            @NotNull Location sLoc = Objects.requireNonNull(getScreenLocation());
-            @NotNull Dimension sDim = Objects.requireNonNull(getScreenDimension());
+            @NotNull Coordinates sCoords = Objects.requireNonNull(getScreenCoordinates());
 
             double x = location.getX();
             double y = location.getY();
 
-            double rectX = sLoc.getX();
-            double rectY = sLoc.getY();
-            double rrx1 = rectX + sDim.getWidth();
-            double rry1 = rectY + sDim.getHeight();
+            double rectX = sCoords.getLocation().getX();
+            double rectY = sCoords.getLocation().getY();
+            double rrx1 = rectX + sCoords.getDimension().getWidth();
+            double rry1 = rectY + sCoords.getDimension().getHeight();
 
             if (x < rectX || y < rectY || x >= rrx1 || y >= rry1) {
                 return false;
             }
-            double aw = Math.min(sDim.getWidth(), Math.abs(getArc().getWidth())) / 2.0;
-            double ah = Math.min(sDim.getHeight(), Math.abs(getArc().getHeight())) / 2.0;
+            double aw = Math.min(sCoords.getDimension().getWidth(), Math.abs(getArc().getWidth())) / 2.0;
+            double ah = Math.min(sCoords.getDimension().getHeight(), Math.abs(getArc().getHeight())) / 2.0;
 
             if (x >= (rectX += aw) && x < (rectX = rrx1 - aw)) {
                 return true;

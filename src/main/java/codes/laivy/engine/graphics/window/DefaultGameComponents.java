@@ -115,8 +115,7 @@ public class DefaultGameComponents implements GameWindow.Components {
             if (components.get(location).size() == 0) components.remove(location);
         }
 
-        component.setScreenDimension(null);
-        component.setScreenLocation(null);
+        component.setScreenCoordinates(null);
     }
 
     @Override

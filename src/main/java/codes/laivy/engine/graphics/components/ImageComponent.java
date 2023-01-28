@@ -8,6 +8,12 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Used to print images on the screen
+ *
+ * @author ItsLaivy
+ * @since 1.0 build 0 (21/01/2023)
+ */
 public class ImageComponent extends GameComponent {
 
     private @NotNull ImageAsset asset;

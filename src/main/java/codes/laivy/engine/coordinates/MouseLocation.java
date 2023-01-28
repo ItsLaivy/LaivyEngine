@@ -4,6 +4,10 @@ import codes.laivy.engine.graphics.window.swing.GamePanel;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (20/01/2023)
+ */
 public final class MouseLocation {
 
     private final @Nullable GamePanel panel;

@@ -10,6 +10,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (21/01/2023)
+ */
 public abstract class ShapeComponent extends GameComponent {
 
     private @NotNull Shape shape;

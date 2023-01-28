@@ -1,5 +1,6 @@
 package codes.laivy.engine.graphics.layout.grid.columns;
 
+import codes.laivy.engine.coordinates.Coordinates;
 import codes.laivy.engine.graphics.layout.grid.GridRow;
 import codes.laivy.engine.graphics.layout.grid.GridSize;
 import codes.laivy.engine.graphics.layout.grid.columns.configuration.GridColumnConfig;
@@ -22,6 +23,8 @@ public class GridColumn {
     private @NotNull ColumnBreakpoints breakpoints;
 
     protected @NotNull Map<@NotNull GridSize, @NotNull Set<GridColumnConfig<?>>> configurations = new LinkedHashMap<>();
+
+    private @Nullable Coordinates screenCoordinates;
 
     public GridColumn(@NotNull GridRow row, @NotNull ColumnBreakpoints breakpoints) {
         this.row = row;
@@ -55,6 +58,27 @@ public class GridColumn {
         }
 
         return new GridColumnConfig<?>[0];
+    }
+
+    /**
+     * This is the screen coordinates. A column with a {@link GridColumnDisplayConfig.Display#BLOCK} display will never be on the screen, It will never have a screen coordinates then.
+     *
+     * @return the screen coordinates or null if the column isn't displaying
+     * @author ItsLaivy
+     * @since 1.0 build 0 (28/01/2023)
+     */
+    public @Nullable Coordinates getScreenCoordinates() {
+        return screenCoordinates;
+    }
+
+    /**
+     * @author ItsLaivy
+     * @since 1.0 build 0 (28/01/2023)
+     *
+     * @param screenCoordinates The screen coordinates
+     */
+    public void setScreenCoordinates(@Nullable Coordinates screenCoordinates) {
+        this.screenCoordinates = screenCoordinates;
     }
 
     /**

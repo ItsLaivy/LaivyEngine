@@ -7,6 +7,10 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
 
+/**
+ * @author ItsLaivy
+ * @since 1.0 build 0 (~02/07/2022)
+ */
 public class ImageAsset extends Asset {
 
     private final @NotNull BufferedImage image;

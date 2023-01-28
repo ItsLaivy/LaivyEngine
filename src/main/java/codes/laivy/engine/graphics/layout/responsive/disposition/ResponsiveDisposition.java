@@ -1,12 +1,12 @@
 package codes.laivy.engine.graphics.layout.responsive.disposition;
 
+import codes.laivy.engine.coordinates.Coordinates;
 import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.GameComponent.Alignment;
 import codes.laivy.engine.graphics.layout.ComponentDisposition;
 import codes.laivy.engine.graphics.layout.GameLayout;
-import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -21,11 +21,11 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
         super(component, layout);
     }
 
-    public @NotNull Dimension getReferenceSize(@NotNull GameLayoutBounds bounds) {
+    public @NotNull Dimension getReferenceSize(@NotNull GameLayout.Bounds bounds) {
         return new Dimension(getLayout().getReferenceSize().getWidth(), getLayout().getReferenceSize().getHeight());
     }
 
-    public void render(@NotNull Graphics2D graphics, @NotNull GameLayoutBounds bounds) {
+    public void render(@NotNull Graphics2D graphics, @NotNull GameLayout.Bounds bounds) {
         if (getComponent().isAntiAliasing()) {
             graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         }
@@ -35,7 +35,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
         Graphics2D backgroundGraphics = (Graphics2D) graphics.create();
 
         // Coordinates
-        GameLayout.LayoutCoordinates coordinates = resolutionFix(bounds);
+        GameLayout.Coordinates coordinates = resolutionFix(bounds);
         //
 
         // Post
@@ -69,23 +69,22 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
         //
 
         // Hitbox defining
-        getComponent().setScreenLocation(coordinates.getScreenLocation());
-        getComponent().setScreenDimension(coordinates.getScreenDimension());
+        getComponent().setScreenCoordinates(new Coordinates(getLayout().getPanel(), coordinates.getScreenLocation(), coordinates.getScreenDimension()));
         //
     }
 
-    public void postResolutionFix(@NotNull Graphics2D renderingGraphics, @NotNull Graphics2D backgroundGraphics, @NotNull GameLayout.LayoutCoordinates coordinates, @NotNull GameLayoutBounds bounds) {
+    public void postResolutionFix(@NotNull Graphics2D renderingGraphics, @NotNull Graphics2D backgroundGraphics, @NotNull GameLayout.Coordinates coordinates, @NotNull GameLayout.Bounds bounds) {
     }
 
     /**
      * This method is responsible to generate the layout coordinates
      * @return the layout coordinates
      */
-    public @NotNull GameLayout.LayoutCoordinates resolutionFix(@NotNull GameLayoutBounds bounds) {
+    public @NotNull GameLayout.Coordinates resolutionFix(@NotNull GameLayout.Bounds bounds) {
         Dimension defaultDim = component.getDimension().clone();
         Location defaultLoc = component.getLocation().clone();
 
-        GameLayout.LayoutCoordinates coordinates = new GameLayout.LayoutCoordinates(
+        GameLayout.Coordinates coordinates = new GameLayout.Coordinates(
                 defaultLoc,
                 defaultDim.clone()
         );
@@ -141,7 +140,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
      * @param location the sreen location of the component
      * @param dimension the screen dimension of the component
      */
-    public abstract void drawObject(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayoutBounds bounds);
+    public abstract void drawObject(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayout.Bounds bounds);
 
     /**
      * That's the alignment method for components
@@ -151,7 +150,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
      * @param alignment The alignment position
      * @param coords The coordinates of the component
      */
-    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords, @NotNull GameLayoutBounds bounds) {
+    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull Alignment alignment, @NotNull GameLayout.Coordinates coords, @NotNull GameLayout.Bounds bounds) {
         renderingGraphics.transform(alignment.getTransform());
         if (alignment == Alignment.FLIPPED_HORIZONTALLY) {
             coords.getClientLocation().setX(coords.getScreenLocation().getX());
@@ -167,7 +166,7 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
      * @param backgroundGraphics A copy of the original graphics, separated from the rendering graphics.
      * @param coordinates the coordinates
      */
-    public void drawBackground(@NotNull Graphics2D backgroundGraphics, @NotNull GameLayout.LayoutCoordinates coordinates, @NotNull GameLayoutBounds bounds) {
+    public void drawBackground(@NotNull Graphics2D backgroundGraphics, @NotNull GameLayout.Coordinates coordinates, @NotNull GameLayout.Bounds bounds) {
         Color color = getComponent().getBackground().getFinalColor();
         if (color != null) {
             backgroundGraphics.setColor(color);
@@ -178,14 +177,14 @@ public abstract class ResponsiveDisposition extends ComponentDisposition<Respons
     // ---/-/--- //
     // Utilities //
     // ---/-/--- //
-    protected final int calculateWidthOffset(int offsetX, @NotNull GameLayoutBounds bounds) {
+    protected final int calculateWidthOffset(int offsetX, @NotNull GameLayout.Bounds bounds) {
         if (offsetX != 0) {
             offsetX = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth(), offsetX, bounds.getTotal().getWidth());
         }
 
         return offsetX;
     }
-    protected final int calculateHeightOffset(int offsetY, @NotNull GameLayoutBounds bounds) {
+    protected final int calculateHeightOffset(int offsetY, @NotNull GameLayout.Bounds bounds) {
         if (offsetY != 0) {
             offsetY = (int) MathUtils.rthree(getReferenceSize(bounds).getWidth(), offsetY, bounds.getTotal().getWidth());
         }

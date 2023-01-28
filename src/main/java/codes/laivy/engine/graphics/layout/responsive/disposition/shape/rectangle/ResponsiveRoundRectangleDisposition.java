@@ -5,7 +5,6 @@ import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.shape.rectangle.RoundRectangleComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
-import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.responsive.ResponsiveLayout;
 import codes.laivy.engine.graphics.layout.responsive.disposition.shape.ResponsiveShapeDisposition;
 import org.jetbrains.annotations.Contract;
@@ -26,16 +25,16 @@ public class ResponsiveRoundRectangleDisposition extends ResponsiveShapeDisposit
     }
 
     @Override
-    public void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull codes.laivy.engine.coordinates.dimension.Dimension dimension, @NotNull GameLayoutBounds bounds) {
+    public void fill(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull codes.laivy.engine.coordinates.dimension.Dimension dimension, @NotNull GameLayout.Bounds bounds) {
         renderingGraphics.fill(shape(location, dimension, bounds));
     }
 
     @Override
-    public void shape(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull codes.laivy.engine.coordinates.dimension.Dimension dimension, @NotNull GameLayoutBounds bounds) {
+    public void shape(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull codes.laivy.engine.coordinates.dimension.Dimension dimension, @NotNull GameLayout.Bounds bounds) {
         renderingGraphics.draw(shape(location, dimension, bounds));
     }
 
-    private @NotNull RoundRectangle2D.Float shape(@NotNull Location location, @NotNull codes.laivy.engine.coordinates.dimension.Dimension dimension, @NotNull GameLayoutBounds bounds) {
+    private @NotNull RoundRectangle2D.Float shape(@NotNull Location location, @NotNull codes.laivy.engine.coordinates.dimension.Dimension dimension, @NotNull GameLayout.Bounds bounds) {
         RoundRectangle2D.Float shape = getComponent().getShape(location, dimension);
         shape.archeight = calculateHeightOffset(getComponent().getArc().getHeight(), bounds);
         shape.arcwidth = calculateWidthOffset(getComponent().getArc().getWidth(), bounds);
@@ -44,7 +43,7 @@ public class ResponsiveRoundRectangleDisposition extends ResponsiveShapeDisposit
     }
 
     @Override
-    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull LayoutCoordinates coordinates, @NotNull GameLayoutBounds bounds) {
+    public void drawBackground(@NotNull Graphics2D backgroundGraphics, GameLayout.@NotNull Coordinates coordinates, @NotNull GameLayout.Bounds bounds) {
         codes.laivy.engine.coordinates.dimension.Dimension temp = coordinates.getClientDimension().clone();
         Location location = coordinates.getClientLocation().clone();
 
@@ -64,7 +63,7 @@ public class ResponsiveRoundRectangleDisposition extends ResponsiveShapeDisposit
     }
 
     @Override
-    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.LayoutCoordinates coords, @NotNull GameLayoutBounds bounds) {
+    public void alignment(@NotNull Graphics2D renderingGraphics, @NotNull GameComponent.Alignment alignment, @NotNull GameLayout.Coordinates coords, @NotNull GameLayout.Bounds bounds) {
         Dimension dimension = coords.getScreenDimension();
 
         renderingGraphics.transform(alignment.getTransform());

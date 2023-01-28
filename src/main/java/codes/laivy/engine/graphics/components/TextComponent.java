@@ -14,6 +14,9 @@ import java.awt.geom.Rectangle2D;
 
 /**
  * A {@link TextComponent TextComponent} is used to write something on the screen.
+ *
+ * @author ItsLaivy
+ * @since 1.0 build 0 (21/01/2023)
  */
 public class TextComponent extends GameComponent {
 
