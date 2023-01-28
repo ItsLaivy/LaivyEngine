@@ -63,7 +63,7 @@ public class ResponsiveLayout extends GameLayout {
 
     @Override
     protected void render(@NotNull Graphics2D graphics, @NotNull GameLayout.Bounds bounds) {
-        for (GameComponent component : getPanel().getEngineComponents()) {
+        for (GameComponent component : getPanel().getComponents()) {
             if (!(component.getDisposition() instanceof ResponsiveDisposition)) {
                 throw new IllegalStateException("The component '" + component + "' doesn't have the ResponsiveDisposition. All the components needs the ResponsiveDisposition when the ResponsiveLayout is active.");
             }

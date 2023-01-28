@@ -14,15 +14,15 @@ public class GridScreenDisposition extends GridDisposition {
     public GridScreenDisposition(@NotNull ScreenComponent component, @NotNull GridColumn column) {
         super(component, column.getRow().getLayout(), column);
 
-        if (!Objects.equals(getComponent().getGamePanel().getEngineLayout(), getLayout())) {
+        if (!Objects.equals(getComponent().getGamePanel().getLayout(), getLayout())) {
             throw new IllegalArgumentException("This game component's panel layout isn't the same as the disposition layout!");
         }
     }
 
     @Override
     public void drawObject(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayout.Bounds bounds) {
-        if (getComponent().getPanel().getEngineLayout() != null) {
-            getComponent().getPanel().getEngineLayout().callLayout(renderingGraphics, new GameLayout.Bounds(location.clone(), dimension.clone(), dimension.clone()));
+        if (getComponent().getPanel().getLayout() != null) {
+            getComponent().getPanel().getLayout().callLayout(renderingGraphics, new GameLayout.Bounds(location.clone(), dimension.clone(), dimension.clone()));
         }
     }
 

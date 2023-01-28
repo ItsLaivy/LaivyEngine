@@ -16,7 +16,7 @@ public class GridImageDisposition extends GridDisposition {
     public GridImageDisposition(@NotNull ImageComponent component, @NotNull GridColumn column) {
         super(component, column.getRow().getLayout(), column);
 
-        if (!Objects.equals(getComponent().getGamePanel().getEngineLayout(), getLayout())) {
+        if (!Objects.equals(getComponent().getGamePanel().getLayout(), getLayout())) {
             throw new IllegalArgumentException("This game component's panel layout isn't the same as the disposition layout!");
         }
     }

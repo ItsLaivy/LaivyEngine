@@ -23,8 +23,8 @@ public class ResponsiveScreenDisposition extends ResponsiveDisposition {
 
     @Override
     public void drawObject(@NotNull Graphics2D renderingGraphics, @NotNull Location location, @NotNull Dimension dimension, @NotNull GameLayout.Bounds bounds) {
-        if (getComponent().getPanel().getEngineLayout() != null) {
-            getComponent().getPanel().getEngineLayout().callLayout(renderingGraphics, new GameLayout.Bounds(location.clone(), dimension.clone(), dimension.clone()));
+        if (getComponent().getPanel().getLayout() != null) {
+            getComponent().getPanel().getLayout().callLayout(renderingGraphics, new GameLayout.Bounds(location.clone(), dimension.clone(), dimension.clone()));
         }
     }
 

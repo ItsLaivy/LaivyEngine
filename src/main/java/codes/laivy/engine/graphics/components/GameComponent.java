@@ -117,7 +117,7 @@ public abstract class GameComponent implements Cloneable {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        return getGamePanel().getEngineComponents().contains(this);
+        return getGamePanel().getComponents().contains(this);
     }
     @WindowThread
     public void add() {
@@ -125,7 +125,7 @@ public abstract class GameComponent implements Cloneable {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        getGamePanel().getEngineComponents().add(this);
+        getGamePanel().getComponents().add(this);
     }
     @WindowThread
     public void remove() {
@@ -133,7 +133,7 @@ public abstract class GameComponent implements Cloneable {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        getGamePanel().getEngineComponents().remove(this);
+        getGamePanel().getComponents().remove(this);
     }
 
     /**

@@ -13,13 +13,12 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class GamePanel extends JPanel {
+public class GamePanel extends Component {
 
     private final @NotNull GameWindow window;
 
@@ -43,10 +42,10 @@ public class GamePanel extends JPanel {
         keyManager = new GameKeyManager(this);
     }
 
-    public @Nullable GameLayout getEngineLayout() {
+    public @Nullable GameLayout getLayout() {
         return layout;
     }
-    public void setEngineLayout(@Nullable GameLayout layout) {
+    public void setLayout(@Nullable GameLayout layout) {
         this.layout = layout;
     }
 
@@ -59,7 +58,7 @@ public class GamePanel extends JPanel {
             throw new UnsupportedThreadException("GameWindow");
         }
 
-        getEngineComponents().clear();
+        getComponents().clear();
     }
 
     @Contract(pure = true)
@@ -84,7 +83,7 @@ public class GamePanel extends JPanel {
     }
 
     @WindowThread
-    public @NotNull GameWindow.Components getEngineComponents() {
+    public @NotNull GameWindow.Components getComponents() {
         if (!getWindow().getGame().getGraphics().isWindowThread()) {
             throw new UnsupportedThreadException("GameWindow");
         }
@@ -99,7 +98,7 @@ public class GamePanel extends JPanel {
 
         Set<GameComponent> set = new LinkedHashSet<>();
 
-        Map<Location, Set<GameComponent>> components = getEngineComponents().map();
+        Map<Location, Set<GameComponent>> components = getComponents().map();
         for (Map.Entry<Location, Set<GameComponent>> map : components.entrySet()) {
             for (GameComponent component : map.getValue()) {
                 if (component.isAtScreen() && component.collides(location)) {
@@ -112,17 +111,22 @@ public class GamePanel extends JPanel {
     }
 
     @Override
-    public void paint(Graphics g) {
+    public void paint(Graphics graphics) {
         getWindow().getGame().render();
 
-        super.paint(g);
+        super.paint(graphics);
 
-        // The layout will do the work :)
-        if (getWindow().getPanel().getEngineLayout() != null && getWindow().getFrame().isVisible()) {
-            getWindow().getPanel().getEngineLayout().callLayout((Graphics2D) g, new GameLayout.Bounds(new Location(0, 0), window.getSize(), window.getAvailableSize()));
+        // Panel Graphics
+        Graphics2D panelGraphics = (Graphics2D) graphics.create();
+        panelGraphics.setColor(getBackground());
+        panelGraphics.fill(new Rectangle(new Location(0, 0).toPoint(), window.getAvailableSize().toSwing()));
+        panelGraphics.dispose();
+        // Now it's the layout time :)
+        if (getWindow().getPanel().getLayout() != null && getWindow().getFrame().isVisible()) {
+            getWindow().getPanel().getLayout().callLayout((Graphics2D) graphics, new GameLayout.Bounds(new Location(0, 0), window.getSize(), window.getAvailableSize()));
         }
 
-        g.dispose();
+        graphics.dispose();
     }
     
 }
