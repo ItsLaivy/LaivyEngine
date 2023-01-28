@@ -10,11 +10,11 @@ public abstract class GridColumnConfig<T> {
         this.value = value;
     }
 
-    public @NotNull T getValue() {
+    public @NotNull T get() {
         return value;
     }
 
-    public void setValue(@NotNull T value) {
+    public void set(@NotNull T value) {
         this.value = value;
     }
 

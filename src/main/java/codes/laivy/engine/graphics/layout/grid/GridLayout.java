@@ -63,7 +63,7 @@ public class GridLayout extends GameLayout {
 
             int breakpoint = 0;
             for (GridColumn[] columns : matriz) {
-                int walkedSpaces = 0;
+                int walkedSpaces = 0; // Only columns that could display
 
                 columnsFor:
                 for (GridColumn column : columns) {
@@ -72,6 +72,15 @@ public class GridLayout extends GameLayout {
 
                     if (!column.canDisplay(getSize())) {
                         continue;
+                    }
+
+                    for (GridColumnConfig<?> config : column.getConfigurations(getSize())) {
+                        // GridColumn#canDisplay method already do this.
+//                        if (config instanceof GridColumnDisplayConfig) {
+//                            if (!((GridColumnDisplayConfig) config).getValue()) {
+//                                continue columnsFor;
+//                            }
+//                        }
                     }
 
                     int columnSpace = column.getBreakpoints().getSpacing(getSize());
@@ -86,16 +95,6 @@ public class GridLayout extends GameLayout {
                     columnX = (int) (rowLoc.getX() + Math.ceil((double) screenWidth * (walkedSpaces - columnSpace) / row.getMaxColumns()));
                     columnY = rowLoc.getY() + (rowHeight / matriz.length) * breakpoint;
                     //
-
-                    for (GridColumnConfig<?> config : column.getConfigurations(getSize())) {
-                        // GridColumn#canDisplay method already do this.
-//                        if (config instanceof GridColumnDisplay) {
-//                            if (!((GridColumnDisplay) config).getValue()) {
-//                                continue columnsFor;
-//                            }
-//                        }
-
-                    }
 
                     if (disposition == null) continue;
 

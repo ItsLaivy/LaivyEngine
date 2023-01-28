@@ -1,6 +1,7 @@
 package codes.laivy.engine.graphics.layout.grid;
 
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Range;
 
@@ -43,6 +44,13 @@ public enum GridSize {
         int ordinal = this.ordinal();
         GridSize[] values = GridSize.values();
         return ordinal < values.length - 1 ? values[ordinal + 1] : null;
+    }
+
+    public static @NotNull GridSize getLowerGridSize() {
+        return XS;
+    }
+    public static @NotNull GridSize getHigherGridSize() {
+        return XXL;
     }
 
 }

@@ -85,10 +85,10 @@ public class ColumnBreakpoints {
         GridSize next = size.getNext();
         GridSize prev = size.getPrevious();
         while (next != null || prev != null) {
-            if (breakpoints.containsKey(next)) {
+            if (next != null && breakpoints.containsKey(next)) {
                 return breakpoints.get(next);
             }
-            if (breakpoints.containsKey(prev)) {
+            if (prev != null && breakpoints.containsKey(prev)) {
                 return breakpoints.get(prev);
             }
             if (next != null) next = next.getNext();

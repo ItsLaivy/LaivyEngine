@@ -3,7 +3,7 @@ package codes.laivy.engine.graphics.layout.grid.columns;
 import codes.laivy.engine.graphics.layout.grid.GridRow;
 import codes.laivy.engine.graphics.layout.grid.GridSize;
 import codes.laivy.engine.graphics.layout.grid.columns.configuration.GridColumnConfig;
-import codes.laivy.engine.graphics.layout.grid.columns.configuration.GridColumnDisplay;
+import codes.laivy.engine.graphics.layout.grid.columns.configuration.GridColumnDisplayConfig;
 import codes.laivy.engine.graphics.layout.grid.disposition.GridDisposition;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -36,8 +36,6 @@ public class GridColumn {
      * @return the configurations for that size
      */
     public final @NotNull GridColumnConfig<?>[] getConfigurations(@NotNull GridSize size) {
-        System.out.println("Configurations '" + configurations.size() + "'");
-
         Set<GridColumnConfig<?>> value = configurations.get(size);
         if (value != null) {
             return value.toArray(new GridColumnConfig<?>[0]);
@@ -46,10 +44,10 @@ public class GridColumn {
         GridSize next = size.getNext();
         GridSize prev = size.getPrevious();
         while (next != null || prev != null) {
-            if (configurations.containsKey(next)) {
+            if (next != null && configurations.containsKey(next)) {
                 return configurations.get(next).toArray(new GridColumnConfig<?>[0]);
             }
-            if (configurations.containsKey(prev)) {
+            if (prev != null && configurations.containsKey(prev)) {
                 return configurations.get(prev).toArray(new GridColumnConfig<?>[0]);
             }
             if (next != null) next = next.getNext();
@@ -58,10 +56,19 @@ public class GridColumn {
 
         return new GridColumnConfig<?>[0];
     }
+
+    /**
+     * Adds the configuration for all grid sizes
+     * @param config the configuration
+     */
+    public void addConfiguration(@NotNull GridColumnConfig<?> config) {
+        this.addConfiguration(GridSize.getHigherGridSize(), config);
+    }
     public void addConfiguration(@NotNull GridSize size, @NotNull GridColumnConfig<?> config) {
         configurations.putIfAbsent(size, new LinkedHashSet<>());
         configurations.get(size).add(config);
     }
+
     public void removeConfiguration(@NotNull GridSize size, @NotNull GridColumnConfig<?> config) {
         configurations.get(size).remove(config);
         if (configurations.get(size).isEmpty()) {
@@ -75,8 +82,8 @@ public class GridColumn {
      */
     public boolean canDisplay(@NotNull GridSize size) {
         for (GridColumnConfig<?> config : getConfigurations(size)) {
-            if (config instanceof GridColumnDisplay) {
-                return ((GridColumnDisplay) config).getValue();
+            if (config instanceof GridColumnDisplayConfig) {
+                return ((GridColumnDisplayConfig) config).get() == GridColumnDisplayConfig.Display.NONE;
             }
         }
         return true;

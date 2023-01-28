@@ -19,7 +19,7 @@ public class ImagePlayer extends Player {
     public ImagePlayer(@NotNull String name, @NotNull ImageAsset asset, @NotNull Location location) {
         super(name, location);
 
-        this.image = new ImageComponent(TestGame.instance().getWindow().getPanel(), getLocation().clone(), new Dimension(35, 35), 0, 0, asset);
+        this.image = new ImageComponent(TestGame.instance().getWindow().getPanel(), getLocation().clone(), asset, new Dimension(35, 35), 0, 0, 100);
         this.image.setDisposition(new ResponsiveImageDisposition(this.image, (ResponsiveLayout) Objects.requireNonNull(TestGame.instance().getWindow().getPanel().getLayout())));
         this.image.getBackground().setColor(Color.RED);
         this.image.getBackground().setOpacity(20);
