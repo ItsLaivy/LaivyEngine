@@ -6,7 +6,6 @@ import codes.laivy.engine.graphics.components.GameComponent;
 import codes.laivy.engine.graphics.components.TextComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.GameLayoutBounds;
-import codes.laivy.engine.graphics.layout.grid.GridLayout;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import codes.laivy.engine.utils.MathUtils;
 import org.jetbrains.annotations.Contract;
@@ -16,10 +15,10 @@ import java.awt.*;
 import java.util.Objects;
 
 public class GridTextDisposition extends GridDisposition {
-    public GridTextDisposition(@NotNull TextComponent component, @NotNull GridLayout layout, @NotNull GridColumn column) {
-        super(component, layout, column);
+    public GridTextDisposition(@NotNull TextComponent component, @NotNull GridColumn column) {
+        super(component, column.getRow().getLayout(), column);
 
-        if (!Objects.equals(this.component.getGamePanel().getEngineLayout(), layout)) {
+        if (!Objects.equals(getComponent().getGamePanel().getEngineLayout(), getLayout())) {
             throw new IllegalArgumentException("This game component's panel layout isn't the same as the disposition layout!");
         }
     }

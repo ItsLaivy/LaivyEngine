@@ -15,8 +15,8 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
 public class GridRoundRectangleDisposition extends GridShapeDisposition {
-    public GridRoundRectangleDisposition(@NotNull RoundRectangleComponent component, @NotNull GridLayout layout, @NotNull GridColumn column) {
-        super(component, layout, column);
+    public GridRoundRectangleDisposition(@NotNull RoundRectangleComponent component, @NotNull GridColumn column) {
+        super(component, column);
     }
 
     @Override

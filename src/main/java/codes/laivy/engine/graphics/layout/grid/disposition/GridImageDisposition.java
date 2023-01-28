@@ -15,10 +15,10 @@ import java.awt.*;
 import java.util.Objects;
 
 public class GridImageDisposition extends GridDisposition {
-    public GridImageDisposition(@NotNull ImageComponent component, @NotNull GridLayout layout, @NotNull GridColumn column) {
-        super(component, layout, column);
+    public GridImageDisposition(@NotNull ImageComponent component, @NotNull GridColumn column) {
+        super(component, column.getRow().getLayout(), column);
 
-        if (!Objects.equals(this.component.getGamePanel().getEngineLayout(), layout)) {
+        if (!Objects.equals(getComponent().getGamePanel().getEngineLayout(), getLayout())) {
             throw new IllegalArgumentException("This game component's panel layout isn't the same as the disposition layout!");
         }
     }

@@ -12,10 +12,11 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class GridEllipseDisposition extends GridShapeDisposition {
-    public GridEllipseDisposition(@NotNull EllipseComponent component, @NotNull GridLayout layout, @NotNull GridColumn column) {
-        super(component, layout, column);
+    public GridEllipseDisposition(@NotNull EllipseComponent component, @NotNull GridColumn column) {
+        super(component, column);
     }
 
     @Override

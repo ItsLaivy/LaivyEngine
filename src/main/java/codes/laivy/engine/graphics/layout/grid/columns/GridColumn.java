@@ -35,6 +35,8 @@ public class GridColumn {
      * @return the configurations for that size
      */
     public final @NotNull GridColumnConfig<?>[] getConfigurations(@NotNull GridSize size) {
+        System.out.println("Configurations '" + configurations.size() + "'");
+
         Set<GridColumnConfig<?>> value = configurations.get(size);
         if (value != null) {
             return value.toArray(new GridColumnConfig<?>[0]);
@@ -54,6 +56,16 @@ public class GridColumn {
         }
 
         return new GridColumnConfig<?>[0];
+    }
+    public void addConfiguration(@NotNull GridSize size, @NotNull GridColumnConfig<?> config) {
+        configurations.putIfAbsent(size, new LinkedHashSet<>());
+        configurations.get(size).add(config);
+    }
+    public void removeConfiguration(@NotNull GridSize size, @NotNull GridColumnConfig<?> config) {
+        configurations.get(size).remove(config);
+        if (configurations.get(size).isEmpty()) {
+            configurations.remove(size);
+        }
     }
 
     public @Nullable GridDisposition getDisposition() {

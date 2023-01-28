@@ -7,15 +7,14 @@ import codes.laivy.engine.graphics.components.shape.RectangleComponent;
 import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
-import codes.laivy.engine.graphics.layout.grid.GridLayout;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
 public class GridRectangleDisposition extends GridShapeDisposition {
-    public GridRectangleDisposition(@NotNull RectangleComponent component, @NotNull GridLayout layout, @NotNull GridColumn column) {
-        super(component, layout, column);
+    public GridRectangleDisposition(@NotNull RectangleComponent component, @NotNull GridColumn column) {
+        super(component, column);
     }
 
     @Override

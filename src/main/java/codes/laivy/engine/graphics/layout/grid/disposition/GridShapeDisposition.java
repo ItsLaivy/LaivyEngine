@@ -4,7 +4,6 @@ import codes.laivy.engine.coordinates.Location;
 import codes.laivy.engine.coordinates.dimension.Dimension;
 import codes.laivy.engine.graphics.components.shape.ShapeComponent;
 import codes.laivy.engine.graphics.layout.GameLayoutBounds;
-import codes.laivy.engine.graphics.layout.grid.GridLayout;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -13,10 +12,10 @@ import java.awt.*;
 import java.util.Objects;
 
 public abstract class GridShapeDisposition extends GridDisposition {
-    public GridShapeDisposition(@NotNull ShapeComponent component, @NotNull GridLayout layout, @NotNull GridColumn column) {
-        super(component, layout, column);
+    public GridShapeDisposition(@NotNull ShapeComponent component, @NotNull GridColumn column) {
+        super(component, column.getRow().getLayout(), column);
 
-        if (!Objects.equals(this.component.getGamePanel().getEngineLayout(), layout)) {
+        if (!Objects.equals(getComponent().getGamePanel().getEngineLayout(), getLayout())) {
             throw new IllegalArgumentException("This game component's panel layout isn't the same as the disposition layout!");
         }
     }

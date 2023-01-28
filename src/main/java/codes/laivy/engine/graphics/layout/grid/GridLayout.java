@@ -6,6 +6,7 @@ import codes.laivy.engine.graphics.layout.GameLayout;
 import codes.laivy.engine.graphics.layout.GameLayoutBounds;
 import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import codes.laivy.engine.graphics.layout.grid.columns.configuration.GridColumnConfig;
+import codes.laivy.engine.graphics.layout.grid.columns.configuration.GridColumnDisplay;
 import codes.laivy.engine.graphics.layout.grid.disposition.GridDisposition;
 import codes.laivy.engine.graphics.window.swing.GamePanel;
 import codes.laivy.engine.utils.MathUtils;
@@ -64,18 +65,24 @@ public class GridLayout extends GameLayout {
             int breakpoint = 0;
             for (GridColumn[] columns : matriz) {
                 int walkedSpaces = 0;
+
+                columnsFor:
                 for (GridColumn column : columns) {
                     // Component
                     GridDisposition disposition = column.getDisposition();
+
+                    for (GridColumnConfig<?> config : column.getConfigurations(getSize())) {
+                        if (config instanceof GridColumnDisplay) {
+                            if (!((GridColumnDisplay) config).getValue()) {
+                                continue columnsFor;
+                            }
+                        }
+                    }
 
                     int columnSpace = column.getBreakpoints().getSpacing(getSize());
                     walkedSpaces += columnSpace;
 
                     if (disposition == null) continue;
-
-                    for (GridColumnConfig<?> config : column.getConfigurations(getSize())) {
-                        System.out.println("Config found: '" + config + "'");
-                    }
                     //
 
                     // Coordinates

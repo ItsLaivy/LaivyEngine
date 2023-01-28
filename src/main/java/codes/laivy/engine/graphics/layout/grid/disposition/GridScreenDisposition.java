@@ -8,10 +8,15 @@ import codes.laivy.engine.graphics.layout.grid.columns.GridColumn;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.util.Objects;
 
 public class GridScreenDisposition extends GridDisposition {
     public GridScreenDisposition(@NotNull ScreenComponent component, @NotNull GridColumn column) {
         super(component, column.getRow().getLayout(), column);
+
+        if (!Objects.equals(getComponent().getGamePanel().getEngineLayout(), getLayout())) {
+            throw new IllegalArgumentException("This game component's panel layout isn't the same as the disposition layout!");
+        }
     }
 
     @Override

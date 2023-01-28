@@ -7,8 +7,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 public class GridCircleDisposition extends GridEllipseDisposition {
-    public GridCircleDisposition(@NotNull CircleComponent component, @NotNull GridLayout layout, @NotNull GridColumn column) {
-        super(component, layout, column);
+    public GridCircleDisposition(@NotNull CircleComponent component, @NotNull GridColumn column) {
+        super(component, column);
     }
 
     @Override
