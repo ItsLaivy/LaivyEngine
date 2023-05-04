@@ -3,4 +3,4 @@ backups
 *.iml
 target
 *.jar
-src/test/java/codes/laivy/engine/tests/lands
+/old/
